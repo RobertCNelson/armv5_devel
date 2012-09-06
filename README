@@ -8,7 +8,7 @@ Weakly Support Boards:
 
 Dependencies: GCC ARM Cross ToolChain
 
-Ubuntu:
+Ubuntu
 sudo apt-get install gcc-arm-linux-gnueabi
 
 Linaro:
