@@ -22,7 +22,7 @@ config="at91_dt_defconfig"
 
 #Kernel/Build
 KERNEL_REL=3.6
-KERNEL_TAG=${KERNEL_REL}-rc3
+KERNEL_TAG=${KERNEL_REL}-rc5
 BUILD=v50
 
 #git branch
