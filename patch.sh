@@ -41,7 +41,7 @@ git_add () {
 }
 
 cleanup () {
-	git format-patch -18 -o ${DIR}/patches/
+	git format-patch -4 -o ${DIR}/patches/
 	exit
 }
 
@@ -50,6 +50,21 @@ distro () {
 	${git} "${DIR}/patches/distro/0001-kbuild-deb-pkg-set-host-machine-after-dpkg-gencontro.patch"
 }
 
+mainline_fixes () {
+	echo "Mainline Fixes"
+	${git} "${DIR}/patches/mainline_fixes/0001-arm-add-definition-of-strstr-to-decompress.c.patch"
+}
+
+atmel_mci () {
+	echo "Atmel: MCI"
+	${git} "${DIR}/patches/atmel_mci/0001-mmc-atmel-mci-add-device-tree-support.patch"
+	${git} "${DIR}/patches/atmel_mci/0002-ARM-at91-add-clocks-for-DT-entries.patch"
+	${git} "${DIR}/patches/atmel_mci/0003-ARM-dts-add-nodes-for-atmel-hsmci-controllers-for-at.patch"
+	${git} "${DIR}/patches/atmel_mci/0004-ARM-dts-add-nodes-for-atmel-hsmci-controllers-for-at.patch"
+}
+
 distro
+mainline_fixes
+atmel_mci
 
 echo "patch.sh ran successful"
