@@ -1,144 +1,160 @@
-From 294706b712ecb899670cb10156d2d8016a972b9f Mon Sep 17 00:00:00 2001
-From: Ludovic Desroches <ludovic.desroches at atmel.com>
-Date: Mon, 10 Sep 2012 15:02:28 -0500
-Subject: [PATCH 3/4] ARM: dts: add nodes for atmel hsmci controllers for
- atmel SOCs
+From e0567d003654bf58963e6b04baeb64c3b8b187fa Mon Sep 17 00:00:00 2001
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Thu, 24 May 2012 17:01:19 +0200
+Subject: [PATCH 3/9] ARM: dts: add nodes for atmel hsmci controllers for
+ atmel boards
 
-Add mci controller nodes to atmel SOCs.
+Add mci controller nodes to atmel boards.
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches at atmel.com>
-Acked-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj at jcrosoft.com>
+Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 ---
- arch/arm/boot/dts/at91sam9260.dtsi |    9 +++++++++
- arch/arm/boot/dts/at91sam9263.dtsi |   18 ++++++++++++++++++
- arch/arm/boot/dts/at91sam9g45.dtsi |   18 ++++++++++++++++++
- arch/arm/boot/dts/at91sam9n12.dtsi |    9 +++++++++
- arch/arm/boot/dts/at91sam9x5.dtsi  |   18 ++++++++++++++++++
- 5 files changed, 72 insertions(+)
+ arch/arm/boot/dts/at91sam9263ek.dts         |   10 ++++++++++
+ arch/arm/boot/dts/at91sam9g20ek_2mmc.dts    |   12 ++++++++++++
+ arch/arm/boot/dts/at91sam9g20ek_common.dtsi |    9 +++++++++
+ arch/arm/boot/dts/at91sam9g25ek.dts         |   18 ++++++++++++++++++
+ arch/arm/boot/dts/at91sam9m10g45ek.dts      |   19 +++++++++++++++++++
+ arch/arm/boot/dts/at91sam9n12ek.dts         |    9 +++++++++
+ 6 files changed, 77 insertions(+)
 
-diff --git a/arch/arm/boot/dts/at91sam9260.dtsi b/arch/arm/boot/dts/at91sam9260.dtsi
-index 66389c1..d6412c7 100644
---- a/arch/arm/boot/dts/at91sam9260.dtsi
-+++ b/arch/arm/boot/dts/at91sam9260.dtsi
-@@ -199,6 +199,15 @@
- 				status = "disabled";
+diff --git a/arch/arm/boot/dts/at91sam9263ek.dts b/arch/arm/boot/dts/at91sam9263ek.dts
+index f86ac4b..05028ed 100644
+--- a/arch/arm/boot/dts/at91sam9263ek.dts
++++ b/arch/arm/boot/dts/at91sam9263ek.dts
+@@ -50,6 +50,16 @@
+ 				atmel,vbus-gpio = <&pioA 25 0>;
+ 				status = "okay";
  			};
++
++			mmc0: mmc@fff80000 {
++				status = "okay";
++				slot@0 {
++					reg = <0>;
++					bus-width = <4>;
++					cd-gpios = <&pioE 18 0>;
++					wp-gpios = <&pioE 19 0>;
++				};
++			};
+ 		};
  
+ 		nand0: nand@40000000 {
+diff --git a/arch/arm/boot/dts/at91sam9g20ek_2mmc.dts b/arch/arm/boot/dts/at91sam9g20ek_2mmc.dts
+index f1b2e14..684b229 100644
+--- a/arch/arm/boot/dts/at91sam9g20ek_2mmc.dts
++++ b/arch/arm/boot/dts/at91sam9g20ek_2mmc.dts
+@@ -12,6 +12,18 @@
+ 	model = "Atmel at91sam9g20ek 2 mmc";
+ 	compatible = "atmel,at91sam9g20ek_2mmc", "atmel,at91sam9g20", "atmel,at91sam9";
+ 
++	ahb {
++		apb{
 +			mmc0: mmc@fffa8000 {
-+				compatible = "atmel,hsmci";
-+				reg = <0xfffa800 0x600>;
-+				interrupts = <9 4>;
-+				status = "disabled";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
++				slot@0 {
++					reg = <0>;
++					bus-width = <4>;
++					cd-gpios = <&pioC 2 0>;
++				};
 +			};
++		};
++	};
 +
- 			adc0: adc@fffe0000 {
- 				compatible = "atmel,at91sam9260-adc";
- 				reg = <0xfffe0000 0x100>;
-diff --git a/arch/arm/boot/dts/at91sam9263.dtsi b/arch/arm/boot/dts/at91sam9263.dtsi
-index b460d6c..8b966e9 100644
---- a/arch/arm/boot/dts/at91sam9263.dtsi
-+++ b/arch/arm/boot/dts/at91sam9263.dtsi
-@@ -180,6 +180,24 @@
- 				interrupts = <24 4 2>;
- 				status = "disabled";
+ 	leds {
+ 		compatible = "gpio-leds";
+ 
+diff --git a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
+index b06c0db..7da326a 100644
+--- a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
++++ b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
+@@ -51,6 +51,15 @@
+ 				atmel,vbus-gpio = <&pioC 5 0>;
+ 				status = "okay";
  			};
 +
-+			mmc0: mmc@fff80000 {
-+				compatible = "atmel,hsmci";
-+				reg = <0xfff80000 0x600>;
-+				interrupts = <10 4>;
-+				status = "disabled";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+			};
-+
-+			mmc1: mmc@fff84000 {
-+				compatible = "atmel,hsmci";
-+				reg = <0xfff84000 0x600>;
-+				interrupts = <11 4>;
-+				status = "disabled";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
++			mmc0: mmc@fffa8000 {
++				status = "okay";
++				slot@1 {
++					reg = <1>;
++					bus-width = <4>;
++					cd-gpios = <&pioC 9 0>;
++				};
 +			};
  		};
  
  		nand0: nand@40000000 {
-diff --git a/arch/arm/boot/dts/at91sam9g45.dtsi b/arch/arm/boot/dts/at91sam9g45.dtsi
-index bafa880..75a5e74 100644
---- a/arch/arm/boot/dts/at91sam9g45.dtsi
-+++ b/arch/arm/boot/dts/at91sam9g45.dtsi
-@@ -237,6 +237,24 @@
- 					trigger-value = <0x6>;
- 				};
- 			};
-+
-+			mmc0: mmc@fff80000 {
-+				compatible = "atmel,hsmci";
-+				reg = <0xfff80000 0x600>;
-+				interrupts = <11 4>;
-+				status = "disabled";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+			};
-+
-+			mmc1: mmc@fffd0000 {
-+				compatible = "atmel,hsmci";
-+				reg = <0xfffd0000 0x600>;
-+				interrupts = <29 4>;
-+				status = "disabled";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+			};
- 		};
- 
- 		nand0: nand@40000000 {
-diff --git a/arch/arm/boot/dts/at91sam9n12.dtsi b/arch/arm/boot/dts/at91sam9n12.dtsi
-index bfac0df..b2fde6f 100644
---- a/arch/arm/boot/dts/at91sam9n12.dtsi
-+++ b/arch/arm/boot/dts/at91sam9n12.dtsi
-@@ -82,6 +82,15 @@
- 				reg = <0xfffffe10 0x10>;
- 			};
- 
-+			mmc0: mmc@f0008000 {
-+				compatible = "atmel,hsmci";
-+				reg = <0xf0008000 0x600>;
-+				interrupts = <12 4>;
-+				status = "disabled";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+			};
-+
- 			tcb0: timer@f8008000 {
- 				compatible = "atmel,at91sam9x5-tcb";
- 				reg = <0xf8008000 0x100>;
-diff --git a/arch/arm/boot/dts/at91sam9x5.dtsi b/arch/arm/boot/dts/at91sam9x5.dtsi
-index 4a18c39..5053877 100644
---- a/arch/arm/boot/dts/at91sam9x5.dtsi
-+++ b/arch/arm/boot/dts/at91sam9x5.dtsi
-@@ -229,6 +229,24 @@
- 					trigger-value = <0x6>;
- 				};
+diff --git a/arch/arm/boot/dts/at91sam9g25ek.dts b/arch/arm/boot/dts/at91sam9g25ek.dts
+index 877c08f..8d6a7c2 100644
+--- a/arch/arm/boot/dts/at91sam9g25ek.dts
++++ b/arch/arm/boot/dts/at91sam9g25ek.dts
+@@ -44,6 +44,24 @@
+ 			i2c2: i2c@f8018000 {
+ 				status = "okay";
  			};
 +
 +			mmc0: mmc@f0008000 {
-+				compatible = "atmel,hsmci";
-+				reg = <0xf0008000 0x600>;
-+				interrupts = <12 4>;
-+				status = "disabled";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
++				status = "okay";
++				slot@0 {
++					reg = <0>;
++					bus-width = <4>;
++					cd-gpios = <&pioD 15 0>;
++				};
 +			};
 +
 +			mmc1: mmc@f000c000 {
-+				compatible = "atmel,hsmci";
-+				reg = <0xf000c000 0x600>;
-+				interrupts = <26 4>;
-+				status = "disabled";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
++				status = "okay";
++				slot@0 {
++					reg = <0>;
++					bus-width = <4>;
++					cd-gpios = <&pioD 14 0>;
++				};
++			};
+ 		};
+ 
+ 		usb0: ohci@00600000 {
+diff --git a/arch/arm/boot/dts/at91sam9m10g45ek.dts b/arch/arm/boot/dts/at91sam9m10g45ek.dts
+index 15e1dd4..73b71b2 100644
+--- a/arch/arm/boot/dts/at91sam9m10g45ek.dts
++++ b/arch/arm/boot/dts/at91sam9m10g45ek.dts
+@@ -54,6 +54,25 @@
+ 			i2c1: i2c@fff88000 {
+ 				status = "okay";
+ 			};
++
++			mmc0: mmc@fff80000 {
++				status = "okay";
++				slot@0 {
++					reg = <0>;
++					bus-width = <4>;
++					cd-gpios = <&pioD 10 0>;
++				};
++			};
++
++			mmc1: mmc@fffd0000 {
++				status = "okay";
++				slot@0 {
++					reg = <0>;
++					bus-width = <4>;
++					cd-gpios = <&pioD 11 0>;
++					wp-gpios = <&pioD 29 0>;
++				};
++			};
+ 		};
+ 
+ 		nand0: nand@40000000 {
+diff --git a/arch/arm/boot/dts/at91sam9n12ek.dts b/arch/arm/boot/dts/at91sam9n12ek.dts
+index 912b2c2..3d165bc 100644
+--- a/arch/arm/boot/dts/at91sam9n12ek.dts
++++ b/arch/arm/boot/dts/at91sam9n12ek.dts
+@@ -45,6 +45,15 @@
+ 			i2c1: i2c@f8014000 {
+ 				status = "okay";
+ 			};
++
++			mmc0: mmc@f0008000 {
++				status = "okay";
++				slot@0 {
++					reg = <0>;
++					bus-width = <4>;
++					cd-gpios = <&pioA 7 0>;
++				};
 +			};
  		};
  

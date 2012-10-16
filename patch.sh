@@ -57,10 +57,15 @@ mainline_fixes () {
 
 atmel_mci () {
 	echo "Atmel: MCI"
-#	${git} "${DIR}/patches/atmel_mci/0001-mmc-atmel-mci-add-device-tree-support.patch"
-#	${git} "${DIR}/patches/atmel_mci/0002-ARM-at91-add-clocks-for-DT-entries.patch"
-#	${git} "${DIR}/patches/atmel_mci/0003-ARM-dts-add-nodes-for-atmel-hsmci-controllers-for-at.patch"
-#	${git} "${DIR}/patches/atmel_mci/0004-ARM-dts-add-nodes-for-atmel-hsmci-controllers-for-at.patch"
+	${git} "${DIR}/patches/atmel_mci/0001-ARM-at91-add-clocks-for-DT-entries.patch"
+	${git} "${DIR}/patches/atmel_mci/0002-ARM-dts-add-nodes-for-atmel-hsmci-controllers-for-at.patch"
+	${git} "${DIR}/patches/atmel_mci/0003-ARM-dts-add-nodes-for-atmel-hsmci-controllers-for-at.patch"
+	${git} "${DIR}/patches/atmel_mci/0004-mmc-atmel-mci-remove-not-needed-DMA-capability-test.patch"
+	${git} "${DIR}/patches/atmel_mci/0005-ARM-at91-atmel-mci-remove-unused-setup_dma_addr-macr.patch"
+	${git} "${DIR}/patches/atmel_mci/0006-mmc-atmel-mci-remove-the-need-for-CONFIG_MMC_ATMELMC.patch"
+	${git} "${DIR}/patches/atmel_mci/0007-ARM-dts-fix-add-mmc-irq-priority.patch"
+	${git} "${DIR}/patches/atmel_mci/0008-mmc-atmel-mci-support-8-bit-buswidth.patch"
+	${git} "${DIR}/patches/atmel_mci/0009-mmc-atmel-mci-increase-dma-threshold.patch"
 }
 
 distro
