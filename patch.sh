@@ -57,10 +57,10 @@ mainline_fixes () {
 
 atmel_mci () {
 	echo "Atmel: MCI"
-	${git} "${DIR}/patches/atmel_mci/0001-mmc-atmel-mci-add-device-tree-support.patch"
-	${git} "${DIR}/patches/atmel_mci/0002-ARM-at91-add-clocks-for-DT-entries.patch"
-	${git} "${DIR}/patches/atmel_mci/0003-ARM-dts-add-nodes-for-atmel-hsmci-controllers-for-at.patch"
-	${git} "${DIR}/patches/atmel_mci/0004-ARM-dts-add-nodes-for-atmel-hsmci-controllers-for-at.patch"
+#	${git} "${DIR}/patches/atmel_mci/0001-mmc-atmel-mci-add-device-tree-support.patch"
+#	${git} "${DIR}/patches/atmel_mci/0002-ARM-at91-add-clocks-for-DT-entries.patch"
+#	${git} "${DIR}/patches/atmel_mci/0003-ARM-dts-add-nodes-for-atmel-hsmci-controllers-for-at.patch"
+#	${git} "${DIR}/patches/atmel_mci/0004-ARM-dts-add-nodes-for-atmel-hsmci-controllers-for-at.patch"
 }
 
 distro
