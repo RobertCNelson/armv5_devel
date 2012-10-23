@@ -70,6 +70,6 @@ atmel_mci () {
 
 distro
 mainline_fixes
-atmel_mci
+#atmel_mci
 
 echo "patch.sh ran successful"

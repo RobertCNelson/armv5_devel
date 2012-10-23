@@ -23,7 +23,7 @@ config="at91_dt_defconfig"
 #Kernel/Build
 KERNEL_REL=3.7
 KERNEL_TAG=${KERNEL_REL}-rc2
-BUILD=armv5-x0.2
+BUILD=armv5-x0.3
 
 #git branch
 #BRANCH=3.2.x
