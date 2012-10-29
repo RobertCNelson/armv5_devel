@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 3.7.0-rc2 Kernel Configuration
+# Linux/arm 3.7.0-rc3 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -369,7 +369,6 @@ CONFIG_ALIGNMENT_TRAP=y
 CONFIG_UACCESS_WITH_MEMCPY=y
 # CONFIG_SECCOMP is not set
 # CONFIG_CC_STACKPROTECTOR is not set
-# CONFIG_XEN is not set
 
 #
 # Boot options
@@ -830,6 +829,7 @@ CONFIG_PHYLIB=y
 #
 # MII PHY device drivers
 #
+# CONFIG_AT803X_PHY is not set
 # CONFIG_AMD_PHY is not set
 # CONFIG_MARVELL_PHY is not set
 CONFIG_DAVICOM_PHY=y
