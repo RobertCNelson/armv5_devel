@@ -69,8 +69,15 @@ atmel_mci () {
 	${git} "${DIR}/patches/atmel_mci/0010-atmel-mci-replace-flush_dcache_page-with-flush_kerne.patch"
 }
 
+atmel_aria () {
+	echo "Atmel: aria g25"
+	${git} "${DIR}/patches/atmel_aria/0001-arm-at91-sam9x5-enable-uart0-uart1.patch"
+	${git} "${DIR}/patches/atmel_aria/0002-arm-at91-add-ariag25-device-tree.patch"
+}
+
 distro
 mainline_fixes
 atmel_mci
+atmel_aria
 
 echo "patch.sh ran successful"

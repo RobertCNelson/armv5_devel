@@ -1,0 +1,27 @@
+From 4162243189d54e411b67d27bf9b1cf769bdf3126 Mon Sep 17 00:00:00 2001
+From: Robert Nelson <robertcnelson@gmail.com>
+Date: Wed, 31 Oct 2012 15:02:48 -0500
+Subject: [PATCH] arm: at91: sam9x5: enable uart0 & uart1
+
+Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+---
+ arch/arm/mach-at91/at91sam9x5.c |    2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/mach-at91/at91sam9x5.c b/arch/arm/mach-at91/at91sam9x5.c
+index 6ce1f94..0289454 100644
+--- a/arch/arm/mach-at91/at91sam9x5.c
++++ b/arch/arm/mach-at91/at91sam9x5.c
+@@ -227,6 +227,8 @@ static struct clk_lookup periph_clocks_lookups[] = {
+ 	CLKDEV_CON_DEV_ID("usart", "f8020000.serial", &usart1_clk),
+ 	CLKDEV_CON_DEV_ID("usart", "f8024000.serial", &usart2_clk),
+ 	CLKDEV_CON_DEV_ID("usart", "f8028000.serial", &usart3_clk),
++	CLKDEV_CON_DEV_ID("uart", "f8040000.serial", &uart0_clk),
++	CLKDEV_CON_DEV_ID("uart", "f8044000.serial", &uart1_clk),
+ 	CLKDEV_CON_DEV_ID("t0_clk", "f8008000.timer", &tcb0_clk),
+ 	CLKDEV_CON_DEV_ID("t0_clk", "f800c000.timer", &tcb0_clk),
+ 	CLKDEV_CON_DEV_ID("dma_clk", "ffffec00.dma-controller", &dma0_clk),
+-- 
+1.7.10.4
+
