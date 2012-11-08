@@ -1,7 +1,7 @@
 From f0013f5e211c7189c4ff9c9478c622114bb6430d Mon Sep 17 00:00:00 2001
 From: Robert Nelson <robertcnelson@gmail.com>
 Date: Wed, 31 Oct 2012 15:09:59 -0500
-Subject: [PATCH 2/2] arm: at91: add ariag25 device tree
+Subject: [PATCH 2/3] arm: at91: add ariag25 device tree
 
 Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
@@ -25,7 +25,7 @@ index f37cf9f..c7b86bf 100644
  	at91sam9g20ek.dtb \
 diff --git a/arch/arm/boot/dts/ariag25.dts b/arch/arm/boot/dts/ariag25.dts
 new file mode 100644
-index 0000000..864bd9f
+index 0000000..4275317
 --- /dev/null
 +++ b/arch/arm/boot/dts/ariag25.dts
 @@ -0,0 +1,103 @@
