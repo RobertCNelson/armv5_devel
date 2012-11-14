@@ -45,45 +45,15 @@ cleanup () {
 	exit
 }
 
-distro () {
-	echo "Distro Specific Patches"
-	${git} "${DIR}/patches/distro/0001-kbuild-deb-pkg-set-host-machine-after-dpkg-gencontro.patch"
+arm () {
+	echo "dir: arm"
+	${git} "${DIR}/patches/arm/0001-kbuild-deb-pkg-set-host-machine-after-dpkg-gencontro.patch"
+
+	#Status: v2 Review:
+	#http://lists.infradead.org/pipermail/linux-arm-kernel/2012-August/112440.html
+	${git} "${DIR}/patches/arm/0002-arm-add-definition-of-strstr-to-decompress.c.patch"
 }
 
-mainline_fixes () {
-	echo "Mainline Fixes"
-	${git} "${DIR}/patches/mainline_fixes/0001-arm-add-definition-of-strstr-to-decompress.c.patch"
-}
-
-atmel_fixes () {
-	echo "Atmel: fixes"
-	${git} "${DIR}/patches/atmel_fixes/0001-ARM-at91-tc-fix-typo-in-the-DT-document.patch"
-	${git} "${DIR}/patches/atmel_fixes/0002-ARM-at91-at91sam9g10-fix-SOC-type-detection.patch"
-	${git} "${DIR}/patches/atmel_fixes/0003-ARM-at91-fix-external-interrupts-in-non-DT-case.patch"
-	${git} "${DIR}/patches/atmel_fixes/0004-ARM-at91-fix-external-interrupt-specification-in-boa.patch"
-	${git} "${DIR}/patches/atmel_fixes/0005-ARM-at91-dts-at91sam9g20ek_common-Fix-typos-in-butto.patch"
-	${git} "${DIR}/patches/atmel_fixes/0006-ARM-at91-i2c-change-id-to-let-i2c-gpio-work.patch"
-	${git} "${DIR}/patches/atmel_fixes/0007-ARM-at91-i2c-change-id-to-let-i2c-at91-work.patch"
-	${git} "${DIR}/patches/atmel_fixes/0008-ARM-at91-drop-duplicated-config-SOC_AT91SAM9-entry.patch"
-}
-
-atmel_mci () {
-	echo "Atmel: MCI"
-	${git} "${DIR}/patches/atmel_mci/0001-ARM-at91-add-clocks-for-DT-entries.patch"
-	${git} "${DIR}/patches/atmel_mci/0002-ARM-dts-add-nodes-for-atmel-hsmci-controllers-for-at.patch"
-	${git} "${DIR}/patches/atmel_mci/0003-ARM-dts-add-nodes-for-atmel-hsmci-controllers-for-at.patch"
-	${git} "${DIR}/patches/atmel_mci/0004-mmc-atmel-mci-remove-not-needed-DMA-capability-test.patch"
-	${git} "${DIR}/patches/atmel_mci/0005-ARM-at91-atmel-mci-remove-unused-setup_dma_addr-macr.patch"
-	${git} "${DIR}/patches/atmel_mci/0006-mmc-atmel-mci-remove-the-need-for-CONFIG_MMC_ATMELMC.patch"
-	${git} "${DIR}/patches/atmel_mci/0007-ARM-dts-fix-add-mmc-irq-priority.patch"
-	${git} "${DIR}/patches/atmel_mci/0008-mmc-atmel-mci-support-8-bit-buswidth.patch"
-	${git} "${DIR}/patches/atmel_mci/0009-mmc-atmel-mci-increase-dma-threshold.patch"
-	${git} "${DIR}/patches/atmel_mci/0010-atmel-mci-replace-flush_dcache_page-with-flush_kerne.patch"
-}
-
-distro
-mainline_fixes
-atmel_fixes
-atmel_mci
+arm
 
 echo "patch.sh ran successful"

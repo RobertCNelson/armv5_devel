@@ -18,15 +18,15 @@ fi
 
 CCACHE=ccache
 
-config="at91_dt_defconfig"
+config="imx_v4_v5_defconfig"
 
 #Kernel/Build
 KERNEL_REL=3.7
-KERNEL_TAG=${KERNEL_REL}-rc2
-BUILD=armv5-x0.4
+KERNEL_TAG=${KERNEL_REL}-rc5
+BUILD=imxv5-x0
 
 #git branch
-#BRANCH=3.2.x
+BRANCH="v3.7.x-imxv5"
 
 BUILDREV=1.0
 DISTRO=cross
