@@ -53,6 +53,7 @@ distro () {
 mainline_fixes () {
 	echo "Mainline Fixes"
 	${git} "${DIR}/patches/mainline_fixes/0001-arm-add-definition-of-strstr-to-decompress.c.patch"
+	${git} "${DIR}/patches/mainline_fixes/0002-revert-breaks-mmc-on-at91.patch"
 }
 
 atmel_mci () {
