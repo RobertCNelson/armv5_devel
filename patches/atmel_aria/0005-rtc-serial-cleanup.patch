@@ -1,0 +1,566 @@
+From 7517e31a4758fe9aef78bf6203ac3b5b9ee6f224 Mon Sep 17 00:00:00 2001
+From: Robert Nelson <robertcnelson@gmail.com>
+Date: Mon, 3 Dec 2012 09:23:55 -0600
+Subject: [PATCH 5/5] rtc/serial cleanup
+
+Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+---
+ arch/arm/boot/dts/ariag25.dts       |   17 ++-
+ arch/arm/boot/dts/at91sam9g25ek.dts |    7 ++
+ drivers/mmc/host/atmel-mci.c        |    1 +
+ drivers/rtc/Kconfig                 |    3 +-
+ drivers/rtc/rtc-at91rm9200.c        |  233 ++++++++++++++++++++++++++++++++---
+ drivers/tty/serial/atmel_serial.c   |   20 ++-
+ 6 files changed, 258 insertions(+), 23 deletions(-)
+
+diff --git a/arch/arm/boot/dts/ariag25.dts b/arch/arm/boot/dts/ariag25.dts
+index bdde014..fb310be 100644
+--- a/arch/arm/boot/dts/ariag25.dts
++++ b/arch/arm/boot/dts/ariag25.dts
+@@ -1,7 +1,10 @@
+ /*
+  * ariag25.dts - Device Tree file for Acme Systems Aria G25 (AT91SAM9G25 based)
+  * Compile with dtc in <kernel_src/arch/arm/boot/dts> folder:
+- *  'dtc -O dtb -o ariag25.dtb ariag25.dts'                      [dpg 20121107]
++ *  'dtc -O dtb -o ariag25.dtb ariag25.dts'                      [dpg 20121113]
++ *
++ * N.B. The 'interrupts' entry explained in:
++ *     <kernel_src>/Documentation/devicetree/bindings/arm/atmel-aic.txt
+  */
+ /dts-v1/;
+ /include/ "at91sam9x5.dtsi"
+@@ -52,14 +55,14 @@
+                                 compatible = "atmel,at91sam9260-usart";
+                                 reg = <0xf8040000 0x200>;
+                                 interrupts = <15 4 5>;
+-                                status = "disabled";
++                                status = "okay";
+                         };
+ 
+ 			usart5: serial@f8044000 {
+                                 compatible = "atmel,at91sam9260-usart";
+                                 reg = <0xf8044000 0x200>;
+                                 interrupts = <16 4 5>;
+-                                status = "disabled";
++                                status = "okay";
+                         };
+ 
+ 			macb0: ethernet@f802c000 {
+@@ -121,4 +124,12 @@
+ 		/* bit banging w1 at PA21 with internl pull-up */
+ 		gpios = <&pioA 21 1>;
+ 	};
++
++	rtc {
++		compatible = "atmel,at91sam9x5-rtc";
++
++		reg = <0xfffffeb0 0x40>;
++		interrupts = <1 4 7>;
++	};
++
+ };
+diff --git a/arch/arm/boot/dts/at91sam9g25ek.dts b/arch/arm/boot/dts/at91sam9g25ek.dts
+index 8d6a7c2..05ebd49 100644
+--- a/arch/arm/boot/dts/at91sam9g25ek.dts
++++ b/arch/arm/boot/dts/at91sam9g25ek.dts
+@@ -76,4 +76,11 @@
+ 			status = "okay";
+ 		};
+ 	};
++
++	rtc {
++		compatible = "atmel,at91sam9x5-rtc";
++
++		reg = <0xfffffeb0 0x40>;
++		interrupts = <1 4 7>;
++	};
+ };
+diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
+index 3a1ef49..3cd1923 100644
+--- a/drivers/mmc/host/atmel-mci.c
++++ b/drivers/mmc/host/atmel-mci.c
+@@ -2350,6 +2350,7 @@ static int __init atmci_probe(struct platform_device *pdev)
+ 			dev_err(&pdev->dev, "platform data not available\n");
+ 			return PTR_ERR(pdata);
+ 		}
++		pdev->dev.platform_data = pdata;
+ 	}
+ 
+ 	irq = platform_get_irq(pdev, 0);
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 19c03ab..1866517 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -879,7 +879,8 @@ config RTC_DRV_AT91RM9200
+ 	help
+ 	  Driver for the internal RTC (Realtime Clock) module found on
+ 	  Atmel AT91RM9200's and some  AT91SAM9 chips. On AT91SAM9 chips
+-	  this is powered by the backup power supply.
++	  this is powered by the backup power supply (such as a small
++	  coin cell battery). Includes the AT91SAM9x5 family.
+ 
+ config RTC_DRV_AT91SAM9
+ 	tristate "AT91SAM9x/AT91CAP9 RTT as RTC"
+diff --git a/drivers/rtc/rtc-at91rm9200.c b/drivers/rtc/rtc-at91rm9200.c
+index fca9790..9c91f7e 100644
+--- a/drivers/rtc/rtc-at91rm9200.c
++++ b/drivers/rtc/rtc-at91rm9200.c
+@@ -10,6 +10,7 @@
+  *
+  *	Based on sa1100-rtc.c by Nils Faerber
+  *	Based on rtc.c by Paul Gortmaker
++ *	Extended to AT91SAM9x5 family by Douglas Gilbert 20121114
+  *
+  *	This program is free software; you can redistribute it and/or
+  *	modify it under the terms of the GNU General Public License
+@@ -28,6 +29,8 @@
+ #include <linux/ioctl.h>
+ #include <linux/completion.h>
+ #include <linux/io.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
+ 
+ #include <asm/uaccess.h>
+ 
+@@ -43,7 +46,41 @@
+ static DECLARE_COMPLETION(at91_rtc_updated);
+ static unsigned int at91_alarm_year = AT91_RTC_EPOCH;
+ static void __iomem *at91_rtc_regs;
+-static int irq;
++static int at91_rtc_irq;
++
++/* AT91SAM9G25 rev A manual has an Errata item that admits the RTC_IMR
++ * (interrupt mask register) is broken, always returning 0 ("fix: none").
++ * The rev B manual has dropped that errata item with no further
++ * information on whether it is fixed and if so how to detect MCUs with
++ * the fix. Assume all members of the AT91SAM9x5 family have the same
++ * bug, at least in a good number of MCUs already in the wild.
++ * Software solution: shadow the RTC_IMR value. */
++static bool a_broken_imr;
++static int shadow_rtc_imr;
++
++struct at91_rtc_pdata {
++	bool has_broken_imr;
++};
++
++struct at91_rtc_pdata at91rm9200_config = {
++	.has_broken_imr = false,
++};
++
++struct at91_rtc_pdata at91sam9x5_config = {
++	.has_broken_imr = true,
++};
++
++
++#ifdef CONFIG_OF
++static const struct of_device_id at91rm9200_rtc_dt_ids[] = {
++	{ .compatible = "atmel,at91rm9200-rtc", .data = &at91rm9200_config },
++	{ .compatible = "atmel,at91sam9x5-rtc", .data = &at91sam9x5_config },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, at91rm9200_rtc_dt_ids);
++#else
++#define at91rm9200_rtc_dt_ids NULL
++#endif	/* CONFIG_OF */
+ 
+ /*
+  * Decode time/date into rtc_time structure
+@@ -108,9 +145,13 @@ static int at91_rtc_settime(struct device *dev, struct rtc_time *tm)
+ 	cr = at91_rtc_read(AT91_RTC_CR);
+ 	at91_rtc_write(AT91_RTC_CR, cr | AT91_RTC_UPDCAL | AT91_RTC_UPDTIM);
+ 
++	if (a_broken_imr)
++		shadow_rtc_imr |= AT91_RTC_ACKUPD;
+ 	at91_rtc_write(AT91_RTC_IER, AT91_RTC_ACKUPD);
+ 	wait_for_completion(&at91_rtc_updated);	/* wait for ACKUPD interrupt */
+ 	at91_rtc_write(AT91_RTC_IDR, AT91_RTC_ACKUPD);
++	if (a_broken_imr)
++		shadow_rtc_imr &= ~AT91_RTC_ACKUPD;
+ 
+ 	at91_rtc_write(AT91_RTC_TIMR,
+ 			  bin2bcd(tm->tm_sec) << 0
+@@ -168,6 +209,8 @@ static int at91_rtc_setalarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 	tm.tm_sec = alrm->time.tm_sec;
+ 
+ 	at91_rtc_write(AT91_RTC_IDR, AT91_RTC_ALARM);
++	if (a_broken_imr)
++		shadow_rtc_imr &= ~AT91_RTC_ALARM;
+ 	at91_rtc_write(AT91_RTC_TIMALR,
+ 		  bin2bcd(tm.tm_sec) << 0
+ 		| bin2bcd(tm.tm_min) << 8
+@@ -180,6 +223,8 @@ static int at91_rtc_setalarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 
+ 	if (alrm->enabled) {
+ 		at91_rtc_write(AT91_RTC_SCCR, AT91_RTC_ALARM);
++		if (a_broken_imr)
++			shadow_rtc_imr |= AT91_RTC_ALARM;
+ 		at91_rtc_write(AT91_RTC_IER, AT91_RTC_ALARM);
+ 	}
+ 
+@@ -196,9 +241,14 @@ static int at91_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
+ 
+ 	if (enabled) {
+ 		at91_rtc_write(AT91_RTC_SCCR, AT91_RTC_ALARM);
++		if (a_broken_imr)
++			shadow_rtc_imr |= AT91_RTC_ALARM;
+ 		at91_rtc_write(AT91_RTC_IER, AT91_RTC_ALARM);
+-	} else
++	} else {
+ 		at91_rtc_write(AT91_RTC_IDR, AT91_RTC_ALARM);
++		if (a_broken_imr)
++			shadow_rtc_imr &= ~AT91_RTC_ALARM;
++	}
+ 
+ 	return 0;
+ }
+@@ -207,8 +257,9 @@ static int at91_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
+  */
+ static int at91_rtc_proc(struct device *dev, struct seq_file *seq)
+ {
+-	unsigned long imr = at91_rtc_read(AT91_RTC_IMR);
++	u32 imr;
+ 
++	imr = a_broken_imr ? shadow_rtc_imr : at91_rtc_read(AT91_RTC_IMR);
+ 	seq_printf(seq, "update_IRQ\t: %s\n",
+ 			(imr & AT91_RTC_ACKUPD) ? "yes" : "no");
+ 	seq_printf(seq, "periodic_IRQ\t: %s\n",
+@@ -226,8 +277,11 @@ static irqreturn_t at91_rtc_interrupt(int irq, void *dev_id)
+ 	struct rtc_device *rtc = platform_get_drvdata(pdev);
+ 	unsigned int rtsr;
+ 	unsigned long events = 0;
++	unsigned int sr, imr;
+ 
+-	rtsr = at91_rtc_read(AT91_RTC_SR) & at91_rtc_read(AT91_RTC_IMR);
++	sr = at91_rtc_read(AT91_RTC_SR);
++	imr = a_broken_imr ? shadow_rtc_imr : at91_rtc_read(AT91_RTC_IMR);
++	rtsr = sr & imr;
+ 	if (rtsr) {		/* this interrupt is shared!  Is it ours? */
+ 		if (rtsr & AT91_RTC_ALARM)
+ 			events |= (RTC_AF | RTC_IRQF);
+@@ -257,6 +311,116 @@ static const struct rtc_class_ops at91_rtc_ops = {
+ 	.alarm_irq_enable = at91_rtc_alarm_irq_enable,
+ };
+ 
++#ifdef CONFIG_OF
++
++static const struct at91_rtc_pdata * __devinit at91_rtc_get_driver_data(
++                                        struct platform_device *pdev)
++{
++        if (pdev->dev.of_node) {
++                const struct of_device_id *match;
++                match = of_match_node(at91rm9200_rtc_dt_ids,
++				      pdev->dev.of_node);
++                if (!match)
++                        return NULL;
++                return match->data;
++        }
++        return &at91rm9200_config;
++}
++
++/*
++ * Initialize and install RTC driver [OF]
++ */
++static int __devinit at91_rtc_probe(struct platform_device *pdev)
++{
++	struct rtc_device *rtc;
++	struct resource *regs;
++	const struct at91_rtc_pdata *pdp;
++	int ret = 0;
++
++	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!regs) {
++		dev_err(&pdev->dev, "no mmio resource defined\n");
++		return -ENXIO;
++	}
++
++	at91_rtc_irq = platform_get_irq(pdev, 0);
++	if (at91_rtc_irq < 0) {
++		dev_err(&pdev->dev, "no irq resource defined\n");
++		return -ENXIO;
++	}
++
++	at91_rtc_regs = ioremap(regs->start, resource_size(regs));
++	if (!at91_rtc_regs) {
++		dev_err(&pdev->dev, "failed to map registers, aborting.\n");
++		return -ENOMEM;
++	}
++	pdp = at91_rtc_get_driver_data(pdev);
++        if (!pdp)
++                return -ENODEV;
++	a_broken_imr = pdp->has_broken_imr;
++
++	at91_rtc_write(AT91_RTC_CR, 0);
++	at91_rtc_write(AT91_RTC_MR, 0);		/* 24 hour mode */
++
++	/* Disable all interrupts */
++	at91_rtc_write(AT91_RTC_IDR, AT91_RTC_ACKUPD | AT91_RTC_ALARM |
++					AT91_RTC_SECEV | AT91_RTC_TIMEV |
++					AT91_RTC_CALEV);
++	if (a_broken_imr)
++		shadow_rtc_imr = 0;
++
++	ret = request_irq(at91_rtc_irq, at91_rtc_interrupt,
++				IRQF_SHARED,
++				"at91_rtc", pdev);
++	if (ret) {
++		printk(KERN_ERR "at91_rtc: IRQ %d already in use.\n",
++				at91_rtc_irq);
++		return ret;
++	}
++
++	/* cpu init code should really have flagged this device as
++	 * being wake-capable; if it didn't, do that here.
++	 */
++	if (!device_can_wakeup(&pdev->dev))
++		device_init_wakeup(&pdev->dev, 1);
++
++	rtc = rtc_device_register(pdev->name, &pdev->dev,
++				&at91_rtc_ops, THIS_MODULE);
++	if (IS_ERR(rtc)) {
++		free_irq(at91_rtc_irq, pdev);
++		return PTR_ERR(rtc);
++	}
++	platform_set_drvdata(pdev, rtc);
++
++printk(KERN_ERR "at91_rtc_probe: started, irq=%d\n", at91_rtc_irq);
++printk(KERN_ERR "at91_rtc_probe: base=0x%x\n", (unsigned int)at91_rtc_regs);
++	printk(KERN_INFO "AT91 Real Time Clock driver.\n");
++	return 0;
++}
++
++/*
++ * Disable and remove the RTC driver
++ */
++static int __devexit at91_rtc_remove(struct platform_device *pdev)
++{
++	struct rtc_device *rtc = platform_get_drvdata(pdev);
++
++	/* Disable all interrupts */
++	at91_rtc_write(AT91_RTC_IDR, AT91_RTC_ACKUPD | AT91_RTC_ALARM |
++					AT91_RTC_SECEV | AT91_RTC_TIMEV |
++					AT91_RTC_CALEV);
++	if (a_broken_imr)
++		shadow_rtc_imr = 0;
++	free_irq(at91_rtc_irq, pdev);
++
++	rtc_device_unregister(rtc);
++	platform_set_drvdata(pdev, NULL);
++
++	return 0;
++}
++
++#else	/* non-device-tree (OF) */
++
+ /*
+  * Initialize and install RTC driver
+  */
+@@ -272,8 +436,8 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
+ 		return -ENXIO;
+ 	}
+ 
+-	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0) {
++	at91_rtc_irq = platform_get_irq(pdev, 0);
++	if (at91_rtc_irq < 0) {
+ 		dev_err(&pdev->dev, "no irq resource defined\n");
+ 		return -ENXIO;
+ 	}
+@@ -284,6 +448,8 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 	}
+ 
++	a_broken_imr = false;	/* assume SAM9x5 series will only use OF */
++
+ 	at91_rtc_write(AT91_RTC_CR, 0);
+ 	at91_rtc_write(AT91_RTC_MR, 0);		/* 24 hour mode */
+ 
+@@ -291,13 +457,15 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
+ 	at91_rtc_write(AT91_RTC_IDR, AT91_RTC_ACKUPD | AT91_RTC_ALARM |
+ 					AT91_RTC_SECEV | AT91_RTC_TIMEV |
+ 					AT91_RTC_CALEV);
++	if (a_broken_imr)
++		shadow_rtc_imr = 0;
+ 
+-	ret = request_irq(irq, at91_rtc_interrupt,
++	ret = request_irq(at91_rtc_irq, at91_rtc_interrupt,
+ 				IRQF_SHARED,
+ 				"at91_rtc", pdev);
+ 	if (ret) {
+ 		printk(KERN_ERR "at91_rtc: IRQ %d already in use.\n",
+-				irq);
++				at91_rtc_irq);
+ 		return ret;
+ 	}
+ 
+@@ -310,7 +478,7 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
+ 	rtc = rtc_device_register(pdev->name, &pdev->dev,
+ 				&at91_rtc_ops, THIS_MODULE);
+ 	if (IS_ERR(rtc)) {
+-		free_irq(irq, pdev);
++		free_irq(at91_rtc_irq, pdev);
+ 		return PTR_ERR(rtc);
+ 	}
+ 	platform_set_drvdata(pdev, rtc);
+@@ -330,7 +498,9 @@ static int __exit at91_rtc_remove(struct platform_device *pdev)
+ 	at91_rtc_write(AT91_RTC_IDR, AT91_RTC_ACKUPD | AT91_RTC_ALARM |
+ 					AT91_RTC_SECEV | AT91_RTC_TIMEV |
+ 					AT91_RTC_CALEV);
+-	free_irq(irq, pdev);
++	if (a_broken_imr)
++		shadow_rtc_imr = 0;
++	free_irq(at91_rtc_irq, pdev);
+ 
+ 	rtc_device_unregister(rtc);
+ 	platform_set_drvdata(pdev, NULL);
+@@ -338,6 +508,8 @@ static int __exit at91_rtc_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++#endif	/* CONFIG_OF */
++
+ #ifdef CONFIG_PM
+ 
+ /* AT91RM9200 RTC Power management control */
+@@ -349,13 +521,17 @@ static int at91_rtc_suspend(struct device *dev)
+ 	/* this IRQ is shared with DBGU and other hardware which isn't
+ 	 * necessarily doing PM like we are...
+ 	 */
+-	at91_rtc_imr = at91_rtc_read(AT91_RTC_IMR)
+-			& (AT91_RTC_ALARM|AT91_RTC_SECEV);
++	at91_rtc_imr = a_broken_imr ? shadow_rtc_imr :
++				      at91_rtc_read(AT91_RTC_IMR);
++	at91_rtc_imr &= (AT91_RTC_ALARM|AT91_RTC_SECEV);
+ 	if (at91_rtc_imr) {
+ 		if (device_may_wakeup(dev))
+-			enable_irq_wake(irq);
+-		else
++			enable_irq_wake(at91_rtc_irq);
++		else {
+ 			at91_rtc_write(AT91_RTC_IDR, at91_rtc_imr);
++			if (a_broken_imr)
++				shadow_rtc_imr &= ~at91_rtc_imr;
++		}
+ 	}
+ 	return 0;
+ }
+@@ -364,9 +540,12 @@ static int at91_rtc_resume(struct device *dev)
+ {
+ 	if (at91_rtc_imr) {
+ 		if (device_may_wakeup(dev))
+-			disable_irq_wake(irq);
+-		else
++			disable_irq_wake(at91_rtc_irq);
++		else {
++			if (a_broken_imr)
++				shadow_rtc_imr |= at91_rtc_imr;
+ 			at91_rtc_write(AT91_RTC_IER, at91_rtc_imr);
++		}
+ 	}
+ 	return 0;
+ }
+@@ -382,6 +561,26 @@ static const struct dev_pm_ops at91_rtc_pm = {
+ #define at91_rtc_pm_ptr	NULL
+ #endif
+ 
++#ifdef CONFIG_OF
++
++static struct platform_driver at91_rtc_driver = {
++        .probe          = at91_rtc_probe,
++        .remove         = __devexit_p(at91_rtc_remove),
++        .driver         = {
++                .name   = "at91_rtc",
++                .owner  = THIS_MODULE,
++                .of_match_table = at91rm9200_rtc_dt_ids,
++                .pm     = at91_rtc_pm_ptr,
++        },
++};
++
++static int __init at91_rtc_init(void)
++{
++	return platform_driver_register(&at91_rtc_driver);
++}
++
++#else	/* non-device-tree (OF) */
++
+ static struct platform_driver at91_rtc_driver = {
+ 	.remove		= __exit_p(at91_rtc_remove),
+ 	.driver		= {
+@@ -396,6 +595,8 @@ static int __init at91_rtc_init(void)
+ 	return platform_driver_probe(&at91_rtc_driver, at91_rtc_probe);
+ }
+ 
++#endif	/* CONFIG_OF */
++
+ static void __exit at91_rtc_exit(void)
+ {
+ 	platform_driver_unregister(&at91_rtc_driver);
+diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
+index 3d7e1ee..cc385e0 100644
+--- a/drivers/tty/serial/atmel_serial.c
++++ b/drivers/tty/serial/atmel_serial.c
+@@ -1457,8 +1457,9 @@ static void __devinit atmel_of_init_port(struct atmel_uart_port *atmel_port,
+ 
+ /*
+  * Configure the port from the platform device resource info.
++ * Returns 0 for success or 1 in case of error.
+  */
+-static void __devinit atmel_init_port(struct atmel_uart_port *atmel_port,
++static int __devinit atmel_init_port(struct atmel_uart_port *atmel_port,
+ 				      struct platform_device *pdev)
+ {
+ 	struct uart_port *port = &atmel_port->uart;
+@@ -1496,6 +1497,8 @@ static void __devinit atmel_init_port(struct atmel_uart_port *atmel_port,
+ 	/* for console, the clock could already be configured */
+ 	if (!atmel_port->clk) {
+ 		atmel_port->clk = clk_get(&pdev->dev, "usart");
++		if (IS_ERR(atmel_port->clk))
++			return 1;	/* peripheral clock not found */
+ 		clk_enable(atmel_port->clk);
+ 		port->uartclk = clk_get_rate(atmel_port->clk);
+ 		clk_disable(atmel_port->clk);
+@@ -1511,6 +1514,7 @@ static void __devinit atmel_init_port(struct atmel_uart_port *atmel_port,
+ 	} else {
+ 		atmel_port->tx_done_mask = ATMEL_US_TXRDY;
+ 	}
++	return 0;
+ }
+ 
+ /*
+@@ -1666,13 +1670,18 @@ static int __init atmel_console_init(void)
+ 		struct atmel_uart_data *pdata =
+ 			atmel_default_console_device->dev.platform_data;
+ 		int id = pdata->num;
++		int ret;
+ 		struct atmel_uart_port *port = &atmel_ports[id];
+ 
+ 		port->backup_imr = 0;
+ 		port->uart.line = id;
+ 
+ 		add_preferred_console(ATMEL_DEVICENAME, id, NULL);
+-		atmel_init_port(port, atmel_default_console_device);
++		ret = atmel_init_port(port, atmel_default_console_device);
++		if (ret) {
++			pr_err("No peripheral clock for Atmel console ??\n");
++			return -EINVAL;
++		}
+ 		register_console(&atmel_console);
+ 	}
+ 
+@@ -1803,7 +1812,12 @@ static int __devinit atmel_serial_probe(struct platform_device *pdev)
+ 	port->backup_imr = 0;
+ 	port->uart.line = ret;
+ 
+-	atmel_init_port(port, pdev);
++	ret = atmel_init_port(port, pdev);
++	if (ret) {
++		ret = -EINVAL;
++		pr_err("peripheral clock not found for serial port\n");
++		goto err;
++	}
+ 
+ 	if (!atmel_use_dma_rx(&port->uart)) {
+ 		ret = -ENOMEM;
+-- 
+1.7.10.4
+
