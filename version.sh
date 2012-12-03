@@ -26,6 +26,9 @@ KERNEL_REL=3.7
 KERNEL_TAG=${KERNEL_REL}-rc8
 BUILD=armv5-x0.14
 
+#v3.X-rcX + upto SHA
+#KERNEL_SHA=""
+
 #git branch
 BRANCH="v3.7.x-at91"
 
