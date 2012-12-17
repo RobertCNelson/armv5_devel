@@ -1,6 +1,7 @@
 #!/bin/bash
-
+#
 ARCH=$(uname -m)
+#DISABLE_MASTER_BRANCH=1
 
 CORES=1
 if [ "x${ARCH}" == "xx86_64" ] || [ "x${ARCH}" == "xi686" ] ; then
@@ -24,6 +25,9 @@ config="imx_v4_v5_defconfig"
 KERNEL_REL=3.7
 KERNEL_TAG=${KERNEL_REL}-rc5
 BUILD=imxv5-x0
+
+#v3.X-rcX + upto SHA
+#KERNEL_SHA="fa4c95bfdb85d568ae327d57aa33a4f55bab79c4"
 
 #git branch
 BRANCH="v3.7.x-imxv5"
