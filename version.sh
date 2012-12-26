@@ -30,7 +30,7 @@ BUILD=armv5-x0.16
 #KERNEL_SHA=""
 
 #git branch
-BRANCH="v3.7.x-at91"
+BRANCH="v3.8.x-at91"
 
 BUILDREV=1.0
 DISTRO=cross
