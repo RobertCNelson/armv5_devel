@@ -1,21 +1,21 @@
-From 7517e31a4758fe9aef78bf6203ac3b5b9ee6f224 Mon Sep 17 00:00:00 2001
+From 293399155a99c972ba12162ba65b349ee4c54aa9 Mon Sep 17 00:00:00 2001
 From: Robert Nelson <robertcnelson@gmail.com>
 Date: Mon, 3 Dec 2012 09:23:55 -0600
-Subject: [PATCH 5/5] rtc/serial cleanup
+Subject: [PATCH 4/4] rtc/serial cleanup
 
 Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
 ---
- arch/arm/boot/dts/ariag25.dts       |   17 ++-
+ arch/arm/boot/dts/ariag25.dts       |   13 +-
  arch/arm/boot/dts/at91sam9g25ek.dts |    7 ++
  drivers/mmc/host/atmel-mci.c        |    1 +
  drivers/rtc/Kconfig                 |    3 +-
  drivers/rtc/rtc-at91rm9200.c        |  233 ++++++++++++++++++++++++++++++++---
- drivers/tty/serial/atmel_serial.c   |   20 ++-
- 6 files changed, 258 insertions(+), 23 deletions(-)
+ drivers/tty/serial/atmel_serial.c   |   19 ++-
+ 6 files changed, 255 insertions(+), 21 deletions(-)
 
 diff --git a/arch/arm/boot/dts/ariag25.dts b/arch/arm/boot/dts/ariag25.dts
-index bdde014..fb310be 100644
+index 9df1b89..aa75bf9 100644
 --- a/arch/arm/boot/dts/ariag25.dts
 +++ b/arch/arm/boot/dts/ariag25.dts
 @@ -1,7 +1,10 @@
@@ -30,23 +30,6 @@ index bdde014..fb310be 100644
   */
  /dts-v1/;
  /include/ "at91sam9x5.dtsi"
-@@ -52,14 +55,14 @@
-                                 compatible = "atmel,at91sam9260-usart";
-                                 reg = <0xf8040000 0x200>;
-                                 interrupts = <15 4 5>;
--                                status = "disabled";
-+                                status = "okay";
-                         };
- 
- 			usart5: serial@f8044000 {
-                                 compatible = "atmel,at91sam9260-usart";
-                                 reg = <0xf8044000 0x200>;
-                                 interrupts = <16 4 5>;
--                                status = "disabled";
-+                                status = "okay";
-                         };
- 
- 			macb0: ethernet@f802c000 {
 @@ -121,4 +124,12 @@
  		/* bit banging w1 at PA21 with internl pull-up */
  		gpios = <&pioA 21 1>;
@@ -61,13 +44,13 @@ index bdde014..fb310be 100644
 +
  };
 diff --git a/arch/arm/boot/dts/at91sam9g25ek.dts b/arch/arm/boot/dts/at91sam9g25ek.dts
-index 8d6a7c2..05ebd49 100644
+index c5ab16f..8c6c77f 100644
 --- a/arch/arm/boot/dts/at91sam9g25ek.dts
 +++ b/arch/arm/boot/dts/at91sam9g25ek.dts
-@@ -76,4 +76,11 @@
- 			status = "okay";
- 		};
- 	};
+@@ -13,4 +13,11 @@
+ / {
+ 	model = "Atmel AT91SAM9G25-EK";
+ 	compatible = "atmel,at91sam9g25ek", "atmel,at91sam9x5ek", "atmel,at91sam9x5", "atmel,at91sam9";
 +
 +	rtc {
 +		compatible = "atmel,at91sam9x5-rtc";
@@ -77,7 +60,7 @@ index 8d6a7c2..05ebd49 100644
 +	};
  };
 diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
-index 3a1ef49..3cd1923 100644
+index d5cdf06..85d46bd 100644
 --- a/drivers/mmc/host/atmel-mci.c
 +++ b/drivers/mmc/host/atmel-mci.c
 @@ -2350,6 +2350,7 @@ static int __init atmci_probe(struct platform_device *pdev)
@@ -89,10 +72,10 @@ index 3a1ef49..3cd1923 100644
  
  	irq = platform_get_irq(pdev, 0);
 diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 19c03ab..1866517 100644
+index d0cea02..5c9b8d3 100644
 --- a/drivers/rtc/Kconfig
 +++ b/drivers/rtc/Kconfig
-@@ -879,7 +879,8 @@ config RTC_DRV_AT91RM9200
+@@ -900,7 +900,8 @@ config RTC_DRV_AT91RM9200
  	help
  	  Driver for the internal RTC (Realtime Clock) module found on
  	  Atmel AT91RM9200's and some  AT91SAM9 chips. On AT91SAM9 chips
@@ -103,7 +86,7 @@ index 19c03ab..1866517 100644
  config RTC_DRV_AT91SAM9
  	tristate "AT91SAM9x/AT91CAP9 RTT as RTC"
 diff --git a/drivers/rtc/rtc-at91rm9200.c b/drivers/rtc/rtc-at91rm9200.c
-index fca9790..9c91f7e 100644
+index b6469e2..019d165 100644
 --- a/drivers/rtc/rtc-at91rm9200.c
 +++ b/drivers/rtc/rtc-at91rm9200.c
 @@ -10,6 +10,7 @@
@@ -496,21 +479,19 @@ index fca9790..9c91f7e 100644
  {
  	platform_driver_unregister(&at91_rtc_driver);
 diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index 3d7e1ee..cc385e0 100644
+index 922e85a..69ff5a8 100644
 --- a/drivers/tty/serial/atmel_serial.c
 +++ b/drivers/tty/serial/atmel_serial.c
-@@ -1457,8 +1457,9 @@ static void __devinit atmel_of_init_port(struct atmel_uart_port *atmel_port,
- 
+@@ -1457,7 +1457,7 @@ static void atmel_of_init_port(struct atmel_uart_port *atmel_port,
  /*
   * Configure the port from the platform device resource info.
-+ * Returns 0 for success or 1 in case of error.
   */
--static void __devinit atmel_init_port(struct atmel_uart_port *atmel_port,
-+static int __devinit atmel_init_port(struct atmel_uart_port *atmel_port,
+-static void atmel_init_port(struct atmel_uart_port *atmel_port,
++static int atmel_init_port(struct atmel_uart_port *atmel_port,
  				      struct platform_device *pdev)
  {
  	struct uart_port *port = &atmel_port->uart;
-@@ -1496,6 +1497,8 @@ static void __devinit atmel_init_port(struct atmel_uart_port *atmel_port,
+@@ -1495,6 +1495,8 @@ static void atmel_init_port(struct atmel_uart_port *atmel_port,
  	/* for console, the clock could already be configured */
  	if (!atmel_port->clk) {
  		atmel_port->clk = clk_get(&pdev->dev, "usart");
@@ -519,15 +500,15 @@ index 3d7e1ee..cc385e0 100644
  		clk_enable(atmel_port->clk);
  		port->uartclk = clk_get_rate(atmel_port->clk);
  		clk_disable(atmel_port->clk);
-@@ -1511,6 +1514,7 @@ static void __devinit atmel_init_port(struct atmel_uart_port *atmel_port,
+@@ -1510,6 +1512,7 @@ static void atmel_init_port(struct atmel_uart_port *atmel_port,
  	} else {
  		atmel_port->tx_done_mask = ATMEL_US_TXRDY;
  	}
 +	return 0;
  }
  
- /*
-@@ -1666,13 +1670,18 @@ static int __init atmel_console_init(void)
+ struct platform_device *atmel_default_console_device;	/* the serial console device */
+@@ -1648,13 +1651,18 @@ static int __init atmel_console_init(void)
  		struct atmel_uart_data *pdata =
  			atmel_default_console_device->dev.platform_data;
  		int id = pdata->num;
@@ -547,7 +528,7 @@ index 3d7e1ee..cc385e0 100644
  		register_console(&atmel_console);
  	}
  
-@@ -1803,7 +1812,12 @@ static int __devinit atmel_serial_probe(struct platform_device *pdev)
+@@ -1786,7 +1794,12 @@ static int atmel_serial_probe(struct platform_device *pdev)
  	port->backup_imr = 0;
  	port->uart.line = ret;
  
@@ -559,8 +540,8 @@ index 3d7e1ee..cc385e0 100644
 +		goto err;
 +	}
  
- 	if (!atmel_use_dma_rx(&port->uart)) {
- 		ret = -ENOMEM;
+ 	pinctrl = devm_pinctrl_get_select_default(&pdev->dev);
+ 	if (IS_ERR(pinctrl)) {
 -- 
 1.7.10.4
 

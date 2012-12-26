@@ -1,7 +1,7 @@
-From 28bffdf7c441f5b00421736117f28bc07e211963 Mon Sep 17 00:00:00 2001
+From e2147f53faae85c85aa5d85401b57b485c83fe26 Mon Sep 17 00:00:00 2001
 From: Robert Nelson <robertcnelson@gmail.com>
 Date: Thu, 25 Oct 2012 14:34:07 -0500
-Subject: [PATCH 10/10] atmel mci: replace flush_dcache_page with
+Subject: [PATCH 4/4] atmel mci: replace flush_dcache_page with
  flush_kernel_dcache_page
 
 Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
@@ -10,7 +10,7 @@ Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
-index d2a8aec..3a1ef49 100644
+index 474898a..d5cdf06 100644
 --- a/drivers/mmc/host/atmel-mci.c
 +++ b/drivers/mmc/host/atmel-mci.c
 @@ -1826,7 +1826,7 @@ static void atmci_read_data_pio(struct atmel_mci *host)

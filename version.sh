@@ -22,9 +22,9 @@ CCACHE=ccache
 config="at91_dt_defconfig"
 
 #Kernel/Build
-KERNEL_REL=3.7
-KERNEL_TAG=${KERNEL_REL}-rc8
-BUILD=armv5-x0.16
+KERNEL_REL=3.8
+KERNEL_TAG=${KERNEL_REL}-rc1
+BUILD=armv5-x0
 
 #v3.X-rcX + upto SHA
 #KERNEL_SHA=""

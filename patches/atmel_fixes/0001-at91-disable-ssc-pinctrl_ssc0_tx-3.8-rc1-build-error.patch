@@ -1,0 +1,32 @@
+From 4403f6d7e36f80490bb5c954cdf082d61c17e34c Mon Sep 17 00:00:00 2001
+From: Robert Nelson <robertcnelson@gmail.com>
+Date: Wed, 26 Dec 2012 10:29:35 -0600
+Subject: [PATCH] at91: disable ssc: pinctrl_ssc0_tx: 3.8-rc1: build error
+
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+---
+ arch/arm/boot/dts/at91sam9g20ek_common.dtsi |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
+index da15e83..88e1ab2 100644
+--- a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
++++ b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
+@@ -92,10 +92,10 @@
+ 				};
+ 			};
+ 
+-			ssc0: ssc@fffbc000 {
+-				status = "okay";
+-				pinctrl-0 = <&pinctrl_ssc0_tx>;
+-			};
++//			ssc0: ssc@fffbc000 {
++//				status = "okay";
++//				pinctrl-0 = <&pinctrl_ssc0_tx>;
++//			};
+ 		};
+ 
+ 		nand0: nand@40000000 {
+-- 
+1.7.10.4
+

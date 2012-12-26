@@ -1,7 +1,7 @@
-From d0c280c4f3c0f5d2074060e97f340bb126509281 Mon Sep 17 00:00:00 2001
+From a700136f65adf234095a55392cd67e24fc03ac2b Mon Sep 17 00:00:00 2001
 From: Nicolas Ferre <nicolas.ferre@atmel.com>
 Date: Thu, 7 Jun 2012 10:54:33 +0200
-Subject: [PATCH 4/9] mmc: atmel-mci: remove not needed DMA capability test
+Subject: [PATCH 1/4] mmc: atmel-mci: remove not needed DMA capability test
 
 The test about DMA capability is not needed as it is
 performed in DMA-only functions: so remove it.
@@ -12,7 +12,7 @@ Signed-off-by: Nicolas Ferre <nicolas.ferre@atmel.com>
  1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
-index ddf096e..ea14497 100644
+index 722af1d..244aa36 100644
 --- a/drivers/mmc/host/atmel-mci.c
 +++ b/drivers/mmc/host/atmel-mci.c
 @@ -841,9 +841,8 @@ static void atmci_dma_complete(void *arg)

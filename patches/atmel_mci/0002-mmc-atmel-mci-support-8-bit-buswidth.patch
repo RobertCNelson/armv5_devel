@@ -1,7 +1,7 @@
-From 2eff20499ed0b702cdabab416db83a2a6013b5cb Mon Sep 17 00:00:00 2001
+From f5596b8efcee622e393847e70a4698e37ee3ab48 Mon Sep 17 00:00:00 2001
 From: Nicolas Ferre <nicolas.ferre@atmel.com>
 Date: Tue, 6 Sep 2011 17:49:35 +0200
-Subject: [PATCH 8/9] mmc: atmel-mci: support 8-bit buswidth
+Subject: [PATCH 2/4] mmc: atmel-mci: support 8-bit buswidth
 
 This patch adds support for 8-bit buswidth.
 Relevant SDCR value modified.
@@ -14,7 +14,7 @@ Signed-off-by: Nicolas Ferre <nicolas.ferre@atmel.com>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
-index 2739987..a6f885c 100644
+index 244aa36..a1d917e 100644
 --- a/drivers/mmc/host/atmel-mci.c
 +++ b/drivers/mmc/host/atmel-mci.c
 @@ -1270,6 +1270,9 @@ static void atmci_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
