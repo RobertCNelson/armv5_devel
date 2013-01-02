@@ -73,6 +73,7 @@ atmel_aria () {
 	${git} "${DIR}/patches/atmel_aria/0002-arm-at91-add-ariag25-device-tree.patch"
 	${git} "${DIR}/patches/atmel_aria/0003-arm-at91-ariag25-add-leds-onewire.patch"
 	${git} "${DIR}/patches/atmel_aria/0004-rtc-serial-cleanup.patch"
+	${git} "${DIR}/patches/atmel_aria/0005-atmel-at91-ariag25-u-s-art-and-spi-cleanup.patch"
 
 #	${git} "${DIR}/patches/atmel_aria/0006-at91-sam9x-enable-nand.patch"
 }
