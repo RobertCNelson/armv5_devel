@@ -114,7 +114,7 @@ function make_bootlets {
 	echo "-----------------------------"
 
 	make CROSS_COMPILE=${ARM_NONE_CC} clean 2>/dev/null
-	cat ${DIR}/KERNEL/arch/arm/boot/zImage ${DIR}/KERNEL/arch/arm/boot/${imx_bootlets_target}.dtb > ${DIR}/ignore/imx-bootlets/zImage
+	cat ${DIR}/KERNEL/arch/arm/boot/zImage ${DIR}/KERNEL/arch/arm/boot/dts/${imx_bootlets_target}.dtb > ${DIR}/ignore/imx-bootlets/zImage
 	make CROSS_COMPILE=${ARM_NONE_CC} 2>/dev/null
 
 	if [ -f ${DIR}/ignore/imx-bootlets/sd_mmc_bootstream.raw ] ; then

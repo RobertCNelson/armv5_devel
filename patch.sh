@@ -54,6 +54,12 @@ arm () {
 	${git} "${DIR}/patches/arm/0002-arm-add-definition-of-strstr-to-decompress.c.patch"
 }
 
+freescale_mxs () {
+	echo "dir: freescale_mxs"
+	${git} "${DIR}/patches/freescale_mxs/0001-ARM-mxs-select-USB_ARCH_HAS_EHCI.patch"
+}
+
 arm
+freescale_mxs
 
 echo "patch.sh ran successful"

@@ -25,9 +25,9 @@ imx_bootlets_tag="imx233-olinuxino-10.05.02"
 imx_bootlets_target="imx23-olinuxino"
 
 #Kernel/Build
-KERNEL_REL=3.7
-KERNEL_TAG=${KERNEL_REL}.2
-BUILD=imxv5-x0.4
+KERNEL_REL=3.8
+KERNEL_TAG=${KERNEL_REL}-rc3
+BUILD=imxv5-x0
 
 #v3.X-rcX + upto SHA
 #KERNEL_SHA="fa4c95bfdb85d568ae327d57aa33a4f55bab79c4"
