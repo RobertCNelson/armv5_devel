@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 3.8.0-rc1 Kernel Configuration
+# Linux/arm 3.8.0-rc4 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -1813,7 +1813,7 @@ CONFIG_RTC_INTF_DEV=y
 #
 # on-CPU RTC drivers
 #
-CONFIG_RTC_DRV_AT91RM9200=y
+# CONFIG_RTC_DRV_AT91RM9200 is not set
 CONFIG_RTC_DRV_AT91SAM9=y
 CONFIG_RTC_DRV_AT91SAM9_RTT=0
 CONFIG_RTC_DRV_AT91SAM9_GPBR=0
