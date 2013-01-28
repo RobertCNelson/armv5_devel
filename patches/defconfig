@@ -1506,10 +1506,10 @@ CONFIG_USB_OHCI_LITTLE_ENDIAN=y
 #
 # USB Device Class drivers
 #
-CONFIG_USB_ACM=y
-# CONFIG_USB_PRINTER is not set
-# CONFIG_USB_WDM is not set
-# CONFIG_USB_TMC is not set
+CONFIG_USB_ACM=m
+CONFIG_USB_PRINTER=m
+CONFIG_USB_WDM=m
+CONFIG_USB_TMC=m
 
 #
 # NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may
@@ -1813,7 +1813,7 @@ CONFIG_RTC_INTF_DEV=y
 #
 # on-CPU RTC drivers
 #
-# CONFIG_RTC_DRV_AT91RM9200 is not set
+CONFIG_RTC_DRV_AT91RM9200=y
 CONFIG_RTC_DRV_AT91SAM9=y
 CONFIG_RTC_DRV_AT91SAM9_RTT=0
 CONFIG_RTC_DRV_AT91SAM9_GPBR=0
@@ -1866,7 +1866,91 @@ CONFIG_CLKDEV_LOOKUP=y
 # CONFIG_PM_DEVFREQ is not set
 # CONFIG_EXTCON is not set
 # CONFIG_MEMORY is not set
-# CONFIG_IIO is not set
+CONFIG_IIO=y
+CONFIG_IIO_BUFFER=y
+# CONFIG_IIO_BUFFER_CB is not set
+CONFIG_IIO_KFIFO_BUF=y
+CONFIG_IIO_TRIGGERED_BUFFER=y
+CONFIG_IIO_TRIGGER=y
+CONFIG_IIO_CONSUMERS_PER_TRIGGER=2
+
+#
+# Accelerometers
+#
+
+#
+# Analog to digital converters
+#
+# CONFIG_AD7266 is not set
+# CONFIG_AD7298 is not set
+# CONFIG_AD7791 is not set
+# CONFIG_AD7793 is not set
+# CONFIG_AD7476 is not set
+# CONFIG_AD7887 is not set
+CONFIG_AT91_ADC=y
+# CONFIG_MAX1363 is not set
+# CONFIG_TI_ADC081C is not set
+
+#
+# Amplifiers
+#
+# CONFIG_AD8366 is not set
+
+#
+# Hid Sensor IIO Common
+#
+
+#
+# Digital to analog converters
+#
+# CONFIG_AD5064 is not set
+# CONFIG_AD5360 is not set
+# CONFIG_AD5380 is not set
+# CONFIG_AD5421 is not set
+# CONFIG_AD5624R_SPI is not set
+# CONFIG_AD5446 is not set
+# CONFIG_AD5449 is not set
+# CONFIG_AD5504 is not set
+# CONFIG_AD5755 is not set
+# CONFIG_AD5764 is not set
+# CONFIG_AD5791 is not set
+# CONFIG_AD5686 is not set
+# CONFIG_MAX517 is not set
+# CONFIG_MCP4725 is not set
+
+#
+# Frequency Synthesizers DDS/PLL
+#
+
+#
+# Clock Generator/Distribution
+#
+# CONFIG_AD9523 is not set
+
+#
+# Phase-Locked Loop (PLL) frequency synthesizers
+#
+# CONFIG_ADF4350 is not set
+
+#
+# Digital gyroscope sensors
+#
+# CONFIG_ADIS16136 is not set
+
+#
+# Inertial measurement units
+#
+# CONFIG_ADIS16480 is not set
+
+#
+# Light sensors
+#
+# CONFIG_ADJD_S311 is not set
+# CONFIG_VCNL4000 is not set
+
+#
+# Magnetometer sensors
+#
 CONFIG_PWM=y
 # CONFIG_IPACK_BUS is not set
 

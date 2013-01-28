@@ -12,7 +12,7 @@ Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
  create mode 100644 arch/arm/boot/dts/ariag25.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index e44da40..ebe5d4c 100644
+index 5ebb44f..53d2cd0 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
 @@ -26,6 +26,7 @@ dtb-$(CONFIG_ARCH_AT91) += pm9g45.dtb
