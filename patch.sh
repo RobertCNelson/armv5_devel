@@ -56,7 +56,7 @@ arm () {
 
 atmel_fixes () {
 	echo "Atmel: fixes"
-	${git} "${DIR}/patches/atmel_fixes/0001-at91-disable-ssc-pinctrl_ssc0_tx-3.8-rc1-build-error.patch"
+#	${git} "${DIR}/patches/atmel_fixes/0001-at91-disable-ssc-pinctrl_ssc0_tx-3.8-rc1-build-error.patch"
 }
 
 atmel_mci () {
