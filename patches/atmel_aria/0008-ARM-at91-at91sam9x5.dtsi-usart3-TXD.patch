@@ -1,0 +1,31 @@
+From 6b6fbd65332d49f6700b59e3228f53bbb90dc3c2 Mon Sep 17 00:00:00 2001
+From: Douglas Gilbert <dgilbert@interlog.com>
+Date: Tue, 29 Jan 2013 22:09:04 +0100
+Subject: [PATCH 8/8] ARM: at91: at91sam9x5.dtsi:usart3 TXD
+
+Comment for usart3 TXD (TXD3) is correct, dt code is wrong.
+
+The patch is against lk 3.8.0-rc5 .
+
+Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+---
+ arch/arm/boot/dts/at91sam9x5.dtsi |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/at91sam9x5.dtsi b/arch/arm/boot/dts/at91sam9x5.dtsi
+index 0833ab8..f29a7d3 100644
+--- a/arch/arm/boot/dts/at91sam9x5.dtsi
++++ b/arch/arm/boot/dts/at91sam9x5.dtsi
+@@ -199,7 +199,7 @@
+ 				usart3 {
+ 					pinctrl_usart3: usart3-0 {
+ 						atmel,pins =
+-							<2 23 0x2 0x1	/* PC22 periph B with pullup */
++							<2 22 0x2 0x1	/* PC22 periph B with pullup */
+ 							 2 23 0x2 0x0>;	/* PC23 periph B */
+ 					};
+ 
+-- 
+1.7.10.4
+
