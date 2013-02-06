@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 3.8.0-rc3 Kernel Configuration
+# Linux/arm 3.8.0-rc6 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_HAVE_PWM=y
@@ -1466,7 +1466,7 @@ CONFIG_USB_HID=y
 #
 # CONFIG_I2C_HID is not set
 # CONFIG_USB_ARCH_HAS_OHCI is not set
-# CONFIG_USB_ARCH_HAS_EHCI is not set
+CONFIG_USB_ARCH_HAS_EHCI=y
 # CONFIG_USB_ARCH_HAS_XHCI is not set
 CONFIG_USB_SUPPORT=y
 CONFIG_USB_COMMON=y
@@ -1486,6 +1486,7 @@ CONFIG_USB=y
 # USB Host Controller Drivers
 #
 # CONFIG_USB_C67X00_HCD is not set
+# CONFIG_USB_EHCI_HCD is not set
 # CONFIG_USB_OXU210HP_HCD is not set
 # CONFIG_USB_ISP116X_HCD is not set
 # CONFIG_USB_ISP1760_HCD is not set

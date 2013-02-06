@@ -23,14 +23,14 @@ config="mxs_defconfig"
 
 #Kernel/Build
 KERNEL_REL=3.8
-KERNEL_TAG=${KERNEL_REL}-rc3
-BUILD=imxv5-x0
+KERNEL_TAG=${KERNEL_REL}-rc6
+BUILD=imxv5-x0.1
 
 #v3.X-rcX + upto SHA
 #KERNEL_SHA="fa4c95bfdb85d568ae327d57aa33a4f55bab79c4"
 
 #git branch
-BRANCH="v3.7.x-imxv5"
+BRANCH="v3.8.x-imxv5"
 
 BUILDREV=1.0
 DISTRO=cross
