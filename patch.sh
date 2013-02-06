@@ -60,6 +60,6 @@ freescale_mxs () {
 }
 
 arm
-freescale_mxs
+#freescale_mxs
 
 echo "patch.sh ran successful"
