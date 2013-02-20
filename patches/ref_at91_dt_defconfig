@@ -1805,6 +1805,7 @@ CONFIG_CLKDEV_LOOKUP=y
 #
 # Hardware Spinlock drivers
 #
+# CONFIG_MAILBOX is not set
 # CONFIG_IOMMU_SUPPORT is not set
 
 #

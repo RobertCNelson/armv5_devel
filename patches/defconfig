@@ -562,6 +562,9 @@ CONFIG_EXTRA_FIRMWARE=""
 # CONFIG_DEBUG_DEVRES is not set
 # CONFIG_SYS_HYPERVISOR is not set
 # CONFIG_GENERIC_CPU_DEVICES is not set
+CONFIG_REGMAP=y
+CONFIG_REGMAP_I2C=m
+CONFIG_REGMAP_SPI=m
 # CONFIG_DMA_SHARED_BUFFER is not set
 # CONFIG_CMA is not set
 
@@ -1849,12 +1852,154 @@ CONFIG_DMA_ENGINE=y
 #
 # Microsoft Hyper-V guest support
 #
-# CONFIG_STAGING is not set
+CONFIG_STAGING=y
+CONFIG_USBIP_CORE=m
+CONFIG_USBIP_VHCI_HCD=m
+CONFIG_USBIP_HOST=m
+# CONFIG_USBIP_DEBUG is not set
+# CONFIG_ECHO is not set
+# CONFIG_ASUS_OLED is not set
+# CONFIG_RTS5139 is not set
+# CONFIG_TRANZPORT is not set
+# CONFIG_USB_SERIAL_QUATECH2 is not set
+
+#
+# IIO staging drivers
+#
+# CONFIG_IIO_SW_RING is not set
+
+#
+# Accelerometers
+#
+# CONFIG_ADIS16201 is not set
+# CONFIG_ADIS16203 is not set
+# CONFIG_ADIS16204 is not set
+# CONFIG_ADIS16209 is not set
+# CONFIG_ADIS16220 is not set
+# CONFIG_ADIS16240 is not set
+# CONFIG_KXSD9 is not set
+# CONFIG_LIS3L02DQ is not set
+# CONFIG_SCA3000 is not set
+
+#
+# Analog to digital converters
+#
+# CONFIG_AD7291 is not set
+# CONFIG_AD7606 is not set
+# CONFIG_AD799X is not set
+# CONFIG_AD7780 is not set
+# CONFIG_AD7816 is not set
+# CONFIG_AD7192 is not set
+# CONFIG_ADT7410 is not set
+# CONFIG_AD7280 is not set
+
+#
+# Analog digital bi-direction converters
+#
+# CONFIG_ADT7316 is not set
+
+#
+# Capacitance to digital converters
+#
+# CONFIG_AD7150 is not set
+# CONFIG_AD7152 is not set
+# CONFIG_AD7746 is not set
+
+#
+# Direct Digital Synthesis
+#
+# CONFIG_AD5930 is not set
+# CONFIG_AD9832 is not set
+# CONFIG_AD9834 is not set
+# CONFIG_AD9850 is not set
+# CONFIG_AD9852 is not set
+# CONFIG_AD9910 is not set
+# CONFIG_AD9951 is not set
+
+#
+# Digital gyroscope sensors
+#
+# CONFIG_ADIS16060 is not set
+# CONFIG_ADIS16080 is not set
+# CONFIG_ADIS16130 is not set
+# CONFIG_ADIS16260 is not set
+# CONFIG_ADXRS450 is not set
+
+#
+# Network Analyzer, Impedance Converters
+#
+# CONFIG_AD5933 is not set
+
+#
+# Inertial measurement units
+#
+# CONFIG_ADIS16400 is not set
+
+#
+# Light sensors
+#
+# CONFIG_SENSORS_ISL29018 is not set
+# CONFIG_SENSORS_ISL29028 is not set
+# CONFIG_SENSORS_TSL2563 is not set
+# CONFIG_TSL2583 is not set
+# CONFIG_TSL2x7x is not set
+
+#
+# Magnetometer sensors
+#
+# CONFIG_SENSORS_AK8975 is not set
+# CONFIG_SENSORS_HMC5843 is not set
+
+#
+# Active energy metering IC
+#
+# CONFIG_ADE7753 is not set
+# CONFIG_ADE7754 is not set
+# CONFIG_ADE7758 is not set
+# CONFIG_ADE7759 is not set
+# CONFIG_ADE7854 is not set
+
+#
+# Resolver to digital converters
+#
+# CONFIG_AD2S90 is not set
+# CONFIG_AD2S1200 is not set
+# CONFIG_AD2S1210 is not set
+
+#
+# Triggers - standalone
+#
+# CONFIG_IIO_PERIODIC_RTC_TRIGGER is not set
+# CONFIG_IIO_GPIO_TRIGGER is not set
+# CONFIG_IIO_SYSFS_TRIGGER is not set
+# CONFIG_IIO_SIMPLE_DUMMY is not set
+# CONFIG_ZSMALLOC is not set
+# CONFIG_USB_ENESTORAGE is not set
+# CONFIG_BCM_WIMAX is not set
+# CONFIG_FT1000 is not set
+
+#
+# Speakup console speech
+#
+# CONFIG_SPEAKUP is not set
+# CONFIG_TOUCHSCREEN_CLEARPAD_TM1217 is not set
+# CONFIG_TOUCHSCREEN_SYNAPTICS_I2C_RMI4 is not set
+# CONFIG_STAGING_MEDIA is not set
+
+#
+# Android
+#
+# CONFIG_ANDROID is not set
+# CONFIG_USB_WPAN_HCD is not set
+# CONFIG_WIMAX_GDM72XX is not set
+# CONFIG_CED1401 is not set
+# CONFIG_DGRP is not set
 CONFIG_CLKDEV_LOOKUP=y
 
 #
 # Hardware Spinlock drivers
 #
+# CONFIG_MAILBOX is not set
 # CONFIG_IOMMU_SUPPORT is not set
 
 #
@@ -1884,20 +2029,21 @@ CONFIG_IIO_CONSUMERS_PER_TRIGGER=2
 #
 # Analog to digital converters
 #
-# CONFIG_AD7266 is not set
-# CONFIG_AD7298 is not set
-# CONFIG_AD7791 is not set
-# CONFIG_AD7793 is not set
-# CONFIG_AD7476 is not set
-# CONFIG_AD7887 is not set
+CONFIG_AD_SIGMA_DELTA=m
+CONFIG_AD7266=m
+CONFIG_AD7298=m
+CONFIG_AD7791=m
+CONFIG_AD7793=m
+CONFIG_AD7476=m
+CONFIG_AD7887=m
 CONFIG_AT91_ADC=y
-# CONFIG_MAX1363 is not set
-# CONFIG_TI_ADC081C is not set
+CONFIG_MAX1363=m
+CONFIG_TI_ADC081C=m
 
 #
 # Amplifiers
 #
-# CONFIG_AD8366 is not set
+CONFIG_AD8366=m
 
 #
 # Hid Sensor IIO Common
@@ -1906,20 +2052,20 @@ CONFIG_AT91_ADC=y
 #
 # Digital to analog converters
 #
-# CONFIG_AD5064 is not set
-# CONFIG_AD5360 is not set
-# CONFIG_AD5380 is not set
-# CONFIG_AD5421 is not set
-# CONFIG_AD5624R_SPI is not set
-# CONFIG_AD5446 is not set
-# CONFIG_AD5449 is not set
-# CONFIG_AD5504 is not set
-# CONFIG_AD5755 is not set
-# CONFIG_AD5764 is not set
-# CONFIG_AD5791 is not set
-# CONFIG_AD5686 is not set
-# CONFIG_MAX517 is not set
-# CONFIG_MCP4725 is not set
+CONFIG_AD5064=m
+CONFIG_AD5360=m
+CONFIG_AD5380=m
+CONFIG_AD5421=m
+CONFIG_AD5624R_SPI=m
+CONFIG_AD5446=m
+CONFIG_AD5449=m
+CONFIG_AD5504=m
+CONFIG_AD5755=m
+CONFIG_AD5764=m
+CONFIG_AD5791=m
+CONFIG_AD5686=m
+CONFIG_MAX517=m
+CONFIG_MCP4725=m
 
 #
 # Frequency Synthesizers DDS/PLL
@@ -1928,28 +2074,30 @@ CONFIG_AT91_ADC=y
 #
 # Clock Generator/Distribution
 #
-# CONFIG_AD9523 is not set
+CONFIG_AD9523=m
 
 #
 # Phase-Locked Loop (PLL) frequency synthesizers
 #
-# CONFIG_ADF4350 is not set
+CONFIG_ADF4350=m
 
 #
 # Digital gyroscope sensors
 #
-# CONFIG_ADIS16136 is not set
+CONFIG_ADIS16136=m
 
 #
 # Inertial measurement units
 #
-# CONFIG_ADIS16480 is not set
+CONFIG_ADIS16480=m
+CONFIG_IIO_ADIS_LIB=m
+CONFIG_IIO_ADIS_LIB_BUFFER=y
 
 #
 # Light sensors
 #
-# CONFIG_ADJD_S311 is not set
-# CONFIG_VCNL4000 is not set
+CONFIG_ADJD_S311=m
+CONFIG_VCNL4000=m
 
 #
 # Magnetometer sensors
@@ -2054,7 +2202,10 @@ CONFIG_MISC_FILESYSTEMS=y
 # CONFIG_PSTORE is not set
 # CONFIG_SYSV_FS is not set
 # CONFIG_UFS_FS is not set
-# CONFIG_F2FS_FS is not set
+CONFIG_F2FS_FS=y
+CONFIG_F2FS_STAT_FS=y
+CONFIG_F2FS_FS_XATTR=y
+CONFIG_F2FS_FS_POSIX_ACL=y
 CONFIG_NETWORK_FILESYSTEMS=y
 CONFIG_NFS_FS=y
 CONFIG_NFS_V2=y
@@ -2365,6 +2516,7 @@ CONFIG_CRC7=y
 # CONFIG_CRC8 is not set
 CONFIG_ZLIB_INFLATE=y
 CONFIG_ZLIB_DEFLATE=m
+CONFIG_LZO_COMPRESS=y
 CONFIG_LZO_DECOMPRESS=y
 CONFIG_XZ_DEC=y
 CONFIG_XZ_DEC_X86=y
