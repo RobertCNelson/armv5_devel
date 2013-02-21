@@ -515,7 +515,6 @@ CONFIG_HAVE_NET_DSA=y
 # CONFIG_ATALK is not set
 # CONFIG_X25 is not set
 # CONFIG_LAPB is not set
-# CONFIG_WAN_ROUTER is not set
 # CONFIG_PHONET is not set
 # CONFIG_IEEE802154 is not set
 # CONFIG_NET_SCHED is not set
@@ -523,6 +522,7 @@ CONFIG_HAVE_NET_DSA=y
 CONFIG_DNS_RESOLVER=y
 # CONFIG_BATMAN_ADV is not set
 # CONFIG_OPENVSWITCH is not set
+# CONFIG_VSOCKETS is not set
 CONFIG_BQL=y
 # CONFIG_BPF_JIT is not set
 
