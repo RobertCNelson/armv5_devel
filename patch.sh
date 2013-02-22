@@ -73,9 +73,9 @@ atmel_aria () {
 	${git} "${DIR}/patches/atmel_aria/0003-arm-at91-ariag25-add-leds-onewire.patch"
 	${git} "${DIR}/patches/atmel_aria/0004-rtc-serial-cleanup.patch"
 	${git} "${DIR}/patches/atmel_aria/0005-atmel-at91-ariag25-u-s-art-and-spi-cleanup.patch"
-	${git} "${DIR}/patches/atmel_aria/0006-ARM-at91-at91sam9x5-fix-usart3-pinctrl-name.patch"
+#	${git} "${DIR}/patches/atmel_aria/0006-ARM-at91-at91sam9x5-fix-usart3-pinctrl-name.patch"
 	${git} "${DIR}/patches/atmel_aria/0007-atmel-at91-ariag25-rtc-fixes.patch"
-	${git} "${DIR}/patches/atmel_aria/0008-ARM-at91-at91sam9x5.dtsi-usart3-TXD.patch"
+#	${git} "${DIR}/patches/atmel_aria/0008-ARM-at91-at91sam9x5.dtsi-usart3-TXD.patch"
 
 #	${git} "${DIR}/patches/atmel_aria/0006-at91-sam9x-enable-nand.patch"
 }

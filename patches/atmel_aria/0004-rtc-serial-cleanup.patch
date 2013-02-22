@@ -10,9 +10,9 @@ Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
  arch/arm/boot/dts/at91sam9g25ek.dts |    7 ++
  drivers/mmc/host/atmel-mci.c        |    1 +
  drivers/rtc/Kconfig                 |    3 +-
- drivers/rtc/rtc-at91rm9200.c        |  233 ++++++++++++++++++++++++++++++++---
+ drivers/rtc/rtc-at91rm9200.c        |  234 ++++++++++++++++++++++++++++++++---
  drivers/tty/serial/atmel_serial.c   |   19 ++-
- 6 files changed, 255 insertions(+), 21 deletions(-)
+ 6 files changed, 256 insertions(+), 21 deletions(-)
 
 diff --git a/arch/arm/boot/dts/ariag25.dts b/arch/arm/boot/dts/ariag25.dts
 index 9df1b89..aa75bf9 100644
@@ -72,10 +72,10 @@ index d5cdf06..85d46bd 100644
  
  	irq = platform_get_irq(pdev, 0);
 diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index d0cea02..5c9b8d3 100644
+index e6ab071..5aea713 100644
 --- a/drivers/rtc/Kconfig
 +++ b/drivers/rtc/Kconfig
-@@ -900,7 +900,8 @@ config RTC_DRV_AT91RM9200
+@@ -960,7 +960,8 @@ config RTC_DRV_AT91RM9200
  	help
  	  Driver for the internal RTC (Realtime Clock) module found on
  	  Atmel AT91RM9200's and some  AT91SAM9 chips. On AT91SAM9 chips
@@ -86,7 +86,7 @@ index d0cea02..5c9b8d3 100644
  config RTC_DRV_AT91SAM9
  	tristate "AT91SAM9x/AT91CAP9 RTT as RTC"
 diff --git a/drivers/rtc/rtc-at91rm9200.c b/drivers/rtc/rtc-at91rm9200.c
-index b6469e2..019d165 100644
+index 434ebc3..6ca117c 100644
 --- a/drivers/rtc/rtc-at91rm9200.c
 +++ b/drivers/rtc/rtc-at91rm9200.c
 @@ -10,6 +10,7 @@
@@ -358,25 +358,24 @@ index b6469e2..019d165 100644
  	at91_rtc_write(AT91_RTC_CR, 0);
  	at91_rtc_write(AT91_RTC_MR, 0);		/* 24 hour mode */
  
-@@ -291,13 +457,15 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
- 	at91_rtc_write(AT91_RTC_IDR, AT91_RTC_ACKUPD | AT91_RTC_ALARM |
+@@ -292,11 +458,14 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
  					AT91_RTC_SECEV | AT91_RTC_TIMEV |
  					AT91_RTC_CALEV);
-+	if (a_broken_imr)
-+		shadow_rtc_imr = 0;
  
 -	ret = request_irq(irq, at91_rtc_interrupt,
++	if (a_broken_imr)
++		shadow_rtc_imr = 0;
++
 +	ret = request_irq(at91_rtc_irq, at91_rtc_interrupt,
  				IRQF_SHARED,
  				"at91_rtc", pdev);
  	if (ret) {
- 		printk(KERN_ERR "at91_rtc: IRQ %d already in use.\n",
--				irq);
-+				at91_rtc_irq);
+-		dev_err(&pdev->dev, "IRQ %d already in use.\n", irq);
++		dev_err(&pdev->dev, "IRQ %d already in use.\n", at91_rtc_irq);
  		return ret;
  	}
  
-@@ -310,7 +478,7 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
+@@ -309,7 +478,7 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
  	rtc = rtc_device_register(pdev->name, &pdev->dev,
  				&at91_rtc_ops, THIS_MODULE);
  	if (IS_ERR(rtc)) {
@@ -385,7 +384,7 @@ index b6469e2..019d165 100644
  		return PTR_ERR(rtc);
  	}
  	platform_set_drvdata(pdev, rtc);
-@@ -330,7 +498,9 @@ static int __exit at91_rtc_remove(struct platform_device *pdev)
+@@ -329,7 +498,9 @@ static int __exit at91_rtc_remove(struct platform_device *pdev)
  	at91_rtc_write(AT91_RTC_IDR, AT91_RTC_ACKUPD | AT91_RTC_ALARM |
  					AT91_RTC_SECEV | AT91_RTC_TIMEV |
  					AT91_RTC_CALEV);
@@ -396,7 +395,7 @@ index b6469e2..019d165 100644
  
  	rtc_device_unregister(rtc);
  	platform_set_drvdata(pdev, NULL);
-@@ -338,6 +508,8 @@ static int __exit at91_rtc_remove(struct platform_device *pdev)
+@@ -337,6 +508,8 @@ static int __exit at91_rtc_remove(struct platform_device *pdev)
  	return 0;
  }
  
@@ -405,7 +404,7 @@ index b6469e2..019d165 100644
  #ifdef CONFIG_PM
  
  /* AT91RM9200 RTC Power management control */
-@@ -349,13 +521,17 @@ static int at91_rtc_suspend(struct device *dev)
+@@ -348,13 +521,17 @@ static int at91_rtc_suspend(struct device *dev)
  	/* this IRQ is shared with DBGU and other hardware which isn't
  	 * necessarily doing PM like we are...
  	 */
@@ -427,7 +426,7 @@ index b6469e2..019d165 100644
  	}
  	return 0;
  }
-@@ -364,9 +540,12 @@ static int at91_rtc_resume(struct device *dev)
+@@ -363,9 +540,12 @@ static int at91_rtc_resume(struct device *dev)
  {
  	if (at91_rtc_imr) {
  		if (device_may_wakeup(dev))
@@ -442,7 +441,7 @@ index b6469e2..019d165 100644
  	}
  	return 0;
  }
-@@ -382,6 +561,26 @@ static const struct dev_pm_ops at91_rtc_pm = {
+@@ -381,6 +561,26 @@ static const struct dev_pm_ops at91_rtc_pm = {
  #define at91_rtc_pm_ptr	NULL
  #endif
  
@@ -469,7 +468,7 @@ index b6469e2..019d165 100644
  static struct platform_driver at91_rtc_driver = {
  	.remove		= __exit_p(at91_rtc_remove),
  	.driver		= {
-@@ -396,6 +595,8 @@ static int __init at91_rtc_init(void)
+@@ -395,6 +595,8 @@ static int __init at91_rtc_init(void)
  	return platform_driver_probe(&at91_rtc_driver, at91_rtc_probe);
  }
  
@@ -479,10 +478,10 @@ index b6469e2..019d165 100644
  {
  	platform_driver_unregister(&at91_rtc_driver);
 diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index 922e85a..69ff5a8 100644
+index d4a7c24..7177a6b 100644
 --- a/drivers/tty/serial/atmel_serial.c
 +++ b/drivers/tty/serial/atmel_serial.c
-@@ -1457,7 +1457,7 @@ static void atmel_of_init_port(struct atmel_uart_port *atmel_port,
+@@ -1458,7 +1458,7 @@ static void atmel_of_init_port(struct atmel_uart_port *atmel_port,
  /*
   * Configure the port from the platform device resource info.
   */
@@ -491,7 +490,7 @@ index 922e85a..69ff5a8 100644
  				      struct platform_device *pdev)
  {
  	struct uart_port *port = &atmel_port->uart;
-@@ -1495,6 +1495,8 @@ static void atmel_init_port(struct atmel_uart_port *atmel_port,
+@@ -1496,6 +1496,8 @@ static void atmel_init_port(struct atmel_uart_port *atmel_port,
  	/* for console, the clock could already be configured */
  	if (!atmel_port->clk) {
  		atmel_port->clk = clk_get(&pdev->dev, "usart");
@@ -500,7 +499,7 @@ index 922e85a..69ff5a8 100644
  		clk_enable(atmel_port->clk);
  		port->uartclk = clk_get_rate(atmel_port->clk);
  		clk_disable(atmel_port->clk);
-@@ -1510,6 +1512,7 @@ static void atmel_init_port(struct atmel_uart_port *atmel_port,
+@@ -1511,6 +1513,7 @@ static void atmel_init_port(struct atmel_uart_port *atmel_port,
  	} else {
  		atmel_port->tx_done_mask = ATMEL_US_TXRDY;
  	}
@@ -508,7 +507,7 @@ index 922e85a..69ff5a8 100644
  }
  
  struct platform_device *atmel_default_console_device;	/* the serial console device */
-@@ -1648,13 +1651,18 @@ static int __init atmel_console_init(void)
+@@ -1649,13 +1652,18 @@ static int __init atmel_console_init(void)
  		struct atmel_uart_data *pdata =
  			atmel_default_console_device->dev.platform_data;
  		int id = pdata->num;
@@ -528,7 +527,7 @@ index 922e85a..69ff5a8 100644
  		register_console(&atmel_console);
  	}
  
-@@ -1786,7 +1794,12 @@ static int atmel_serial_probe(struct platform_device *pdev)
+@@ -1787,7 +1795,12 @@ static int atmel_serial_probe(struct platform_device *pdev)
  	port->backup_imr = 0;
  	port->uart.line = ret;
  

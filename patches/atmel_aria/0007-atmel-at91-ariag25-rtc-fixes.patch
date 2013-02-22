@@ -6,12 +6,11 @@ Subject: [PATCH 7/7] atmel: at91: ariag25, rtc, fixes
 Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
 ---
- arch/arm/boot/dts/ariag25.dts     |  137 ++++++++++++++++++++++++++++---------
- arch/arm/boot/dts/at91sam9x5.dtsi |   12 ++--
- arch/arm/mach-at91/at91sam9x5.c   |    1 +
- drivers/dma/at_hdmac.c            |    2 +
- drivers/rtc/rtc-at91rm9200.c      |    8 +--
- 5 files changed, 117 insertions(+), 43 deletions(-)
+ arch/arm/boot/dts/ariag25.dts   |  137 +++++++++++++++++++++++++++++----------
+ arch/arm/mach-at91/at91sam9x5.c |    1 +
+ drivers/dma/at_hdmac.c          |    2 +
+ drivers/rtc/rtc-at91rm9200.c    |    8 +--
+ 4 files changed, 111 insertions(+), 37 deletions(-)
 
 diff --git a/arch/arm/boot/dts/ariag25.dts b/arch/arm/boot/dts/ariag25.dts
 index 89dd6dd..a74cd4b 100644
@@ -222,43 +221,6 @@ index 89dd6dd..a74cd4b 100644
  	};
  
  	rtc {
-diff --git a/arch/arm/boot/dts/at91sam9x5.dtsi b/arch/arm/boot/dts/at91sam9x5.dtsi
-index 464e34f..0833ab8 100644
---- a/arch/arm/boot/dts/at91sam9x5.dtsi
-+++ b/arch/arm/boot/dts/at91sam9x5.dtsi
-@@ -402,8 +402,8 @@
- 				compatible = "atmel,at91sam9260-usart";
- 				reg = <0xf801c000 0x200>;
- 				interrupts = <5 4 5>;
--				atmel,use-dma-rx;
--				atmel,use-dma-tx;
-+				/* atmel,use-dma-rx; */
-+				/* atmel,use-dma-tx; */
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&pinctrl_usart0>;
- 				status = "disabled";
-@@ -413,8 +413,8 @@
- 				compatible = "atmel,at91sam9260-usart";
- 				reg = <0xf8020000 0x200>;
- 				interrupts = <6 4 5>;
--				atmel,use-dma-rx;
--				atmel,use-dma-tx;
-+				/* atmel,use-dma-rx; */
-+				/* atmel,use-dma-tx; */
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&pinctrl_usart1>;
- 				status = "disabled";
-@@ -424,8 +424,8 @@
- 				compatible = "atmel,at91sam9260-usart";
- 				reg = <0xf8024000 0x200>;
- 				interrupts = <7 4 5>;
--				atmel,use-dma-rx;
--				atmel,use-dma-tx;
-+				/* atmel,use-dma-rx; */
-+				/* atmel,use-dma-tx; */
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&pinctrl_usart2>;
- 				status = "disabled";
 diff --git a/arch/arm/mach-at91/at91sam9x5.c b/arch/arm/mach-at91/at91sam9x5.c
 index 0bf88c9..bab06ce 100644
 --- a/arch/arm/mach-at91/at91sam9x5.c
@@ -285,7 +247,7 @@ index 13a02f4..9c8e0bc 100644
  #include <linux/dmaengine.h>
  #include <linux/dma-mapping.h>
 diff --git a/drivers/rtc/rtc-at91rm9200.c b/drivers/rtc/rtc-at91rm9200.c
-index 019d165..f41f71a 100644
+index 6ca117c..a77910d 100644
 --- a/drivers/rtc/rtc-at91rm9200.c
 +++ b/drivers/rtc/rtc-at91rm9200.c
 @@ -313,7 +313,7 @@ static const struct rtc_class_ops at91_rtc_ops = {
