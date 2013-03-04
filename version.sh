@@ -22,12 +22,12 @@ CCACHE=ccache
 config="at91_dt_defconfig"
 
 #Kernel/Build
-KERNEL_REL=3.8
-KERNEL_TAG=${KERNEL_REL}
-BUILD=armv5-x0.17
+KERNEL_REL=3.9
+KERNEL_TAG=${KERNEL_REL}-rc1
+BUILD=armv5-x0.18
 
 #v3.X-rcX + upto SHA
-KERNEL_SHA="b0af9cd9aab60ceb17d3ebabb9fdf4ff0a99cf50"
+#KERNEL_SHA="b0af9cd9aab60ceb17d3ebabb9fdf4ff0a99cf50"
 
 #git branch
 BRANCH="v3.9.x-at91"
