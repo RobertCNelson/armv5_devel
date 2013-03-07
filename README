@@ -39,7 +39,7 @@ Optional: Build Debian Package:
 
 Install Kernel Image to SD card: (requires MMC set in system.sh)
 
-./tools/install_image.sh
+./tools/install_kernel.sh
 
 Development/Hacking:
 
