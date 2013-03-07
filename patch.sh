@@ -86,6 +86,7 @@ atmel_aria () {
 	${git} "${DIR}/patches/atmel_aria/0004-rtc-serial-cleanup.patch"
 	${git} "${DIR}/patches/atmel_aria/0005-atmel-at91-ariag25-u-s-art-and-spi-cleanup.patch"
 	${git} "${DIR}/patches/atmel_aria/0006-atmel-at91-ariag25-rtc-fixes.patch"
+	${git} "${DIR}/patches/atmel_aria/0007-atmel-at91-ariag25-spi-fixes.patch"
 }
 
 arm
