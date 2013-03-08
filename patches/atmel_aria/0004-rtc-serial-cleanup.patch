@@ -72,10 +72,10 @@ index d5cdf06..85d46bd 100644
  
  	irq = platform_get_irq(pdev, 0);
 diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index e6ab071..5aea713 100644
+index 79fbe38..e5539f14 100644
 --- a/drivers/rtc/Kconfig
 +++ b/drivers/rtc/Kconfig
-@@ -960,7 +960,8 @@ config RTC_DRV_AT91RM9200
+@@ -970,7 +970,8 @@ config RTC_DRV_AT91RM9200
  	help
  	  Driver for the internal RTC (Realtime Clock) module found on
  	  Atmel AT91RM9200's and some  AT91SAM9 chips. On AT91SAM9 chips
@@ -86,7 +86,7 @@ index e6ab071..5aea713 100644
  config RTC_DRV_AT91SAM9
  	tristate "AT91SAM9x/AT91CAP9 RTT as RTC"
 diff --git a/drivers/rtc/rtc-at91rm9200.c b/drivers/rtc/rtc-at91rm9200.c
-index 434ebc3..6ca117c 100644
+index 27c0707..8ab4a0d 100644
 --- a/drivers/rtc/rtc-at91rm9200.c
 +++ b/drivers/rtc/rtc-at91rm9200.c
 @@ -10,6 +10,7 @@
@@ -395,8 +395,8 @@ index 434ebc3..6ca117c 100644
  
  	rtc_device_unregister(rtc);
  	platform_set_drvdata(pdev, NULL);
-@@ -337,6 +508,8 @@ static int __exit at91_rtc_remove(struct platform_device *pdev)
- 	return 0;
+@@ -345,6 +516,8 @@ static void at91_rtc_shutdown(struct platform_device *pdev)
+ 					AT91_RTC_CALEV);
  }
  
 +#endif	/* CONFIG_OF */
@@ -404,7 +404,7 @@ index 434ebc3..6ca117c 100644
  #ifdef CONFIG_PM
  
  /* AT91RM9200 RTC Power management control */
-@@ -348,13 +521,17 @@ static int at91_rtc_suspend(struct device *dev)
+@@ -356,13 +529,17 @@ static int at91_rtc_suspend(struct device *dev)
  	/* this IRQ is shared with DBGU and other hardware which isn't
  	 * necessarily doing PM like we are...
  	 */
@@ -426,7 +426,7 @@ index 434ebc3..6ca117c 100644
  	}
  	return 0;
  }
-@@ -363,9 +540,12 @@ static int at91_rtc_resume(struct device *dev)
+@@ -371,9 +548,12 @@ static int at91_rtc_resume(struct device *dev)
  {
  	if (at91_rtc_imr) {
  		if (device_may_wakeup(dev))
@@ -441,7 +441,7 @@ index 434ebc3..6ca117c 100644
  	}
  	return 0;
  }
-@@ -381,6 +561,26 @@ static const struct dev_pm_ops at91_rtc_pm = {
+@@ -389,6 +569,26 @@ static const struct dev_pm_ops at91_rtc_pm = {
  #define at91_rtc_pm_ptr	NULL
  #endif
  
@@ -467,8 +467,8 @@ index 434ebc3..6ca117c 100644
 +
  static struct platform_driver at91_rtc_driver = {
  	.remove		= __exit_p(at91_rtc_remove),
- 	.driver		= {
-@@ -395,6 +595,8 @@ static int __init at91_rtc_init(void)
+ 	.shutdown	= at91_rtc_shutdown,
+@@ -404,6 +604,8 @@ static int __init at91_rtc_init(void)
  	return platform_driver_probe(&at91_rtc_driver, at91_rtc_probe);
  }
  

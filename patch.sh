@@ -70,8 +70,15 @@ atmel_spi () {
 	${git} "${DIR}/patches/atmel_spi/0016-ARM-dts-add-pinctrl-property-for-spi-node-for-atmel-.patch"
 }
 
+atmel_rtc () {
+	echo "dir: atmel_rtc"
+	${git} "${DIR}/patches/atmel_rtc/0001-ARM-at91-rtc-fix-boot-after-RTC-wake-up.patch"
+	${git} "${DIR}/patches/atmel_rtc/0002-Revert-arm-at91-move-at91rm9200-rtc-header-in-driver.patch"
+	${git} "${DIR}/patches/atmel_rtc/0003-ARM-at91-fix-hanged-boot.patch"
+}
+
 atmel_mci () {
-	echo "Atmel: MCI"
+	echo "dir: atmel_mci"
 	${git} "${DIR}/patches/atmel_mci/0001-mmc-atmel-mci-remove-not-needed-DMA-capability-test.patch"
 	${git} "${DIR}/patches/atmel_mci/0002-mmc-atmel-mci-support-8-bit-buswidth.patch"
 	${git} "${DIR}/patches/atmel_mci/0003-mmc-atmel-mci-increase-dma-threshold.patch"
@@ -79,7 +86,7 @@ atmel_mci () {
 }
 
 atmel_aria () {
-	echo "Atmel: aria g25"
+	echo "dir: atmel_aria"
 	${git} "${DIR}/patches/atmel_aria/0001-arm-at91-sam9x5-enable-uart0-uart1.patch"
 	${git} "${DIR}/patches/atmel_aria/0002-arm-at91-add-ariag25-device-tree.patch"
 	${git} "${DIR}/patches/atmel_aria/0003-arm-at91-ariag25-add-leds-onewire.patch"
@@ -91,6 +98,7 @@ atmel_aria () {
 
 arm
 atmel_spi
+atmel_rtc
 atmel_mci
 atmel_aria
 
