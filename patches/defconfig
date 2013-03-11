@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 3.9.0-rc1 Kernel Configuration
+# Linux/arm 3.9.0-rc2 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_HAVE_PWM=y
@@ -918,6 +918,7 @@ CONFIG_MICREL_PHY=y
 # CONFIG_USB_RTL8150 is not set
 CONFIG_USB_USBNET=m
 CONFIG_USB_NET_AX8817X=m
+CONFIG_USB_NET_AX88179_178A=m
 CONFIG_USB_NET_CDCETHER=m
 CONFIG_USB_NET_CDC_EEM=m
 CONFIG_USB_NET_CDC_NCM=m
@@ -2289,6 +2290,7 @@ CONFIG_MISC_FILESYSTEMS=y
 # CONFIG_ADFS_FS is not set
 # CONFIG_AFFS_FS is not set
 CONFIG_ECRYPT_FS=m
+# CONFIG_ECRYPT_FS_MESSAGING is not set
 # CONFIG_HFS_FS is not set
 # CONFIG_HFSPLUS_FS is not set
 # CONFIG_BEFS_FS is not set
