@@ -6,10 +6,6 @@ Supported Boards:
 
 Dependencies: GCC ARM Cross ToolChain
 
-Ubuntu:
-sudo apt-get install gcc-arm-linux-gnueabi
-set: "CC=arm-linux-gnueabi-" in system.sh
-
 Linaro:
 http://www.linaro.org/downloads/
 
