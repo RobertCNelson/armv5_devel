@@ -93,8 +93,8 @@ Missing mkimage command.
 function debian_regs
 {
 	unset deb_pkgs
+	dpkg -l | grep bc >/dev/null || deb_pkgs+="bc "
 	dpkg -l | grep build-essential >/dev/null || deb_pkgs+="build-essential "
-	dpkg -l | grep ccache >/dev/null || deb_pkgs+="ccache "
 	dpkg -l | grep device-tree-compiler >/dev/null || deb_pkgs+="device-tree-compiler "
 	dpkg -l | grep lsb-release >/dev/null || deb_pkgs+="lsb-release "
 	dpkg -l | grep lzma >/dev/null || deb_pkgs+="lzma "
