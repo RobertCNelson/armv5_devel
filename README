@@ -2,8 +2,6 @@ This just a simple set of scripts to rebuild a known working kernel for ARM devi
 
 Script Bugs: "bugs@rcn-ee.com"
 
-Supported Boards:
-
 Dependencies: GCC ARM Cross ToolChain
 
 Linaro:
