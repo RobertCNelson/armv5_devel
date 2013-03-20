@@ -17,8 +17,6 @@ if [ "${GIT_NOEDIT}" ] ; then
 	GIT_OPTS+="--no-edit"
 fi
 
-CCACHE=ccache
-
 config="at91_dt_defconfig"
 
 #Kernel/Build
