@@ -2,13 +2,7 @@ This just a simple set of scripts to rebuild a known working kernel for ARM devi
 
 Script Bugs: "bugs@rcn-ee.com"
 
-Supported Boards:
-
 Dependencies: GCC ARM Cross ToolChain
-
-Ubuntu:
-sudo apt-get install gcc-arm-linux-gnueabi
-set: "CC=arm-linux-gnueabi-" in system.sh
 
 Linaro:
 http://www.linaro.org/downloads/
@@ -39,7 +33,7 @@ Optional: Build Debian Package:
 
 Install Kernel Image to SD card: (requires MMC set in system.sh)
 
-./tools/install_image.sh
+./tools/install_kernel.sh
 
 Development/Hacking:
 
