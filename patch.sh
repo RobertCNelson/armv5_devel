@@ -95,6 +95,8 @@ atmel_aria () {
 	${git} "${DIR}/patches/atmel_aria/0006-atmel-at91-ariag25-rtc-fixes.patch"
 	${git} "${DIR}/patches/atmel_aria/0007-atmel-at91-ariag25-spi-fixes.patch"
 	${git} "${DIR}/patches/atmel_aria/0008-atmel-at91-ariag25-spi-n-watchdog-fixes.patch"
+	${git} "${DIR}/patches/atmel_aria/0009-ARM-at91sam9x5-enable-i2c.patch"
+	${git} "${DIR}/patches/atmel_aria/0010-at91sam9x5ek-i2c2-and-mii-are-muxed-to-the-same-pins.patch"
 }
 
 arm
