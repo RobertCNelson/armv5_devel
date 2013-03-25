@@ -101,7 +101,7 @@ atmel_aria () {
 
 arm
 atmel_spi
-atmel_rtc
+#atmel_rtc
 atmel_mci
 atmel_aria
 

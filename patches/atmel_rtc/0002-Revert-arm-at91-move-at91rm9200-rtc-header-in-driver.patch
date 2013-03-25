@@ -11,19 +11,19 @@ RTC-interrupts must be disabled at early boot.
 
 Signed-off-by: Johan Hovold <jhovold@gmail.com>
 ---
- arch/arm/mach-at91/include/mach/at91_rtc.h |   75 ++++++++++++++++++++++++++++
+ arch/arm/mach-at91/include/mach/at91_rtc.h |   74 ++++++++++++++++++++++++++++
  drivers/rtc/rtc-at91rm9200.c               |    2 +-
- drivers/rtc/rtc-at91rm9200.h               |   75 ----------------------------
- 3 files changed, 76 insertions(+), 76 deletions(-)
+ drivers/rtc/rtc-at91rm9200.h               |   74 ----------------------------
+ 3 files changed, 75 insertions(+), 75 deletions(-)
  create mode 100644 arch/arm/mach-at91/include/mach/at91_rtc.h
  delete mode 100644 drivers/rtc/rtc-at91rm9200.h
 
 diff --git a/arch/arm/mach-at91/include/mach/at91_rtc.h b/arch/arm/mach-at91/include/mach/at91_rtc.h
 new file mode 100644
-index 0000000..da1945e
+index 0000000..5f940b6
 --- /dev/null
 +++ b/arch/arm/mach-at91/include/mach/at91_rtc.h
-@@ -0,0 +1,75 @@
+@@ -0,0 +1,74 @@
 +/*
 + * arch/arm/mach-at91/include/mach/at91_rtc.h
 + *
@@ -90,7 +90,6 @@ index 0000000..da1945e
 +#define	AT91_RTC_SCCR		0x1c			/* Status Clear Command Register */
 +#define	AT91_RTC_IER		0x20			/* Interrupt Enable Register */
 +#define	AT91_RTC_IDR		0x24			/* Interrupt Disable Register */
-+#define	AT91_RTC_IMR		0x28			/* Interrupt Mask Register */
 +
 +#define	AT91_RTC_VER		0x2c			/* Valid Entry Register */
 +#define		AT91_RTC_NVTIM		(1 <<  0)		/* Non valid Time */
@@ -100,7 +99,7 @@ index 0000000..da1945e
 +
 +#endif
 diff --git a/drivers/rtc/rtc-at91rm9200.c b/drivers/rtc/rtc-at91rm9200.c
-index dbfcb65..27c0707 100644
+index 6160e20..a52495e 100644
 --- a/drivers/rtc/rtc-at91rm9200.c
 +++ b/drivers/rtc/rtc-at91rm9200.c
 @@ -31,7 +31,7 @@
@@ -114,10 +113,10 @@ index dbfcb65..27c0707 100644
  	__raw_readl(at91_rtc_regs + field)
 diff --git a/drivers/rtc/rtc-at91rm9200.h b/drivers/rtc/rtc-at91rm9200.h
 deleted file mode 100644
-index da1945e..0000000
+index 5f940b6..0000000
 --- a/drivers/rtc/rtc-at91rm9200.h
 +++ /dev/null
-@@ -1,75 +0,0 @@
+@@ -1,74 +0,0 @@
 -/*
 - * arch/arm/mach-at91/include/mach/at91_rtc.h
 - *
@@ -184,7 +183,6 @@ index da1945e..0000000
 -#define	AT91_RTC_SCCR		0x1c			/* Status Clear Command Register */
 -#define	AT91_RTC_IER		0x20			/* Interrupt Enable Register */
 -#define	AT91_RTC_IDR		0x24			/* Interrupt Disable Register */
--#define	AT91_RTC_IMR		0x28			/* Interrupt Mask Register */
 -
 -#define	AT91_RTC_VER		0x2c			/* Valid Entry Register */
 -#define		AT91_RTC_NVTIM		(1 <<  0)		/* Non valid Time */
