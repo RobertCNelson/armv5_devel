@@ -22,10 +22,10 @@ config="at91_dt_defconfig"
 #Kernel/Build
 KERNEL_REL=3.9
 KERNEL_TAG=${KERNEL_REL}-rc4
-BUILD=armv5-x0.29
+BUILD=armv5-x0.30
 
 #v3.X-rcX + upto SHA
-#KERNEL_SHA="47b3bc907328db968bc9b43c41f48f8d1e140750"
+KERNEL_SHA="9064171268d838b8f283fe111ef086b9479d059a"
 
 #git branch
 BRANCH="v3.9.x-at91"

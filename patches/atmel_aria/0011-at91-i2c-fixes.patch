@@ -1,0 +1,99 @@
+From 371a4779659db1a016d373d82ec3802ad8136c2a Mon Sep 17 00:00:00 2001
+From: Douglas Gilbert <dgilbert@interlog.com>
+Date: Thu, 28 Mar 2013 09:55:16 -0500
+Subject: [PATCH 11/11] at91: i2c fixes
+
+Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+---
+ arch/arm/boot/dts/ariag25.dts     |   21 ++++++++++++++++++---
+ arch/arm/boot/dts/at91sam9x5.dtsi |   14 +++++++-------
+ 2 files changed, 25 insertions(+), 10 deletions(-)
+
+diff --git a/arch/arm/boot/dts/ariag25.dts b/arch/arm/boot/dts/ariag25.dts
+index 2b8e6e6..a3006da 100644
+--- a/arch/arm/boot/dts/ariag25.dts
++++ b/arch/arm/boot/dts/ariag25.dts
+@@ -1,7 +1,7 @@
+ /*
+  * ariag25.dts - Device Tree file for Acme Systems Aria G25 (AT91SAM9G25 based)
+  * Compile with dtc in <kernel_src/arch/arm/boot/dts> folder:
+- *  'dtc -O dtb -o ariag25.dtb ariag25.dts'			 [dpg 20130308]
++ *  'dtc -O dtb -o ariag25.dtb ariag25.dts'			 [dpg 20130327]
+  *
+  * N.B. The 'interrupts' entry explained in:
+  *     <kernel_src>/Documentation/devicetree/bindings/arm/atmel-aic.txt
+@@ -112,8 +112,9 @@
+ 
+ 			macb0: ethernet@f802c000 {
+ 				phy-mode = "rmii";
+-				/* following can be overwritten by uboot 'ftd set' command */
+-				local-mac-address = [00 04 25 dd 10 01];
++				/* local-mac-address overwritten by uboot 'ftd set' */
++				/* Acme recommends using 00 04 25 as first 3 bytes */
++				local-mac-address = [00 00 00 00 00 00];
+ 				status = "okay";
+ 			};
+ 
+@@ -209,6 +210,20 @@
+ 
+ 	};
+ 
++	i2c@2 {
++		/* uses kernel i2c-gpio driver, any two gpios can be used */
++		/* override PC0, PC1 given in at91sam9x5.dtsi */
++		gpios = <&pioC 2 2 /* sda: PC2 */
++			 &pioC 3 0 /* scl: PC3 */
++			>;
++		/* Despite appearances this line: 'i2c-gpio,sda-open-drain;' */
++	 	/* in at91sam9x5.dtsi doesn't set the SDA gpio line in */
++		/* multi-driver (open drain) mode. The user needs to do it. */
++
++		/* Uncomment following line to use this */
++		/* status = "okay"; */
++	};
++
+ 	onewire@0 {
+ 		compatible = "w1-gpio";
+ 
+diff --git a/arch/arm/boot/dts/at91sam9x5.dtsi b/arch/arm/boot/dts/at91sam9x5.dtsi
+index 619fb24..a6be48a 100644
+--- a/arch/arm/boot/dts/at91sam9x5.dtsi
++++ b/arch/arm/boot/dts/at91sam9x5.dtsi
+@@ -345,26 +345,26 @@
+ 
+ 				i2c0 {
+ 					pinctrl_i2c0: i2c0-0 {
+-						/* set multi-drive (open drain) [0x2] */
++						/* no pull-up and no multi-drive (open drain) */
+ 						atmel,pins =
+-							<0 30 0x1 0x2	/* PA30 periph A TWD0 pin */
+-							 0 31 0x1 0x2>;	/* PA31 periph A TWCK0 pin */
++							<0 30 0x1 0x0	/* PA30 periph A TWD0 pin */
++							 0 31 0x1 0x0>;	/* PA31 periph A TWCK0 pin */
+ 					};
+ 				};
+ 
+ 				i2c1 {
+ 					pinctrl_i2c1: i2c1-0 {
+ 						atmel,pins =
+-							<2 0 0x3 0x2	/* PC0 periph C TWD1 pin */
+-							 2 1 0x3 0x2>;	/* PC1 periph C TWCK1 pin */
++							<2 0 0x3 0x0	/* PC0 periph C TWD1 pin */
++							 2 1 0x3 0x0>;	/* PC1 periph C TWCK1 pin */
+ 					};
+ 				};
+ 
+ 				i2c2 {
+ 					pinctrl_i2c2: i2c2-0 {
+ 						atmel,pins =
+-							<1 4 0x2 0x2	/* PB4 periph B TWD2 pin */
+-							 1 5 0x2 0x2>;	/* PB5 periph B TWCK1 pin */
++							<1 4 0x2 0x0	/* PB4 periph B TWD2 pin */
++							 1 5 0x2 0x0>;	/* PB5 periph B TWCK1 pin */
+ 					};
+ 				};
+ 
+-- 
+1.7.10.4
+

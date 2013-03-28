@@ -1,5 +1,5 @@
 From 95e94c584caa1f8101312622ccf53cfefaae8162 Mon Sep 17 00:00:00 2001
-From: Robert Nelson <robertcnelson@gmail.com>
+From: Douglas Gilbert <dgilbert@interlog.com>
 Date: Thu, 21 Mar 2013 09:30:04 -0500
 Subject: [PATCH 9/9] ARM: at91sam9x5: enable i2c
 
