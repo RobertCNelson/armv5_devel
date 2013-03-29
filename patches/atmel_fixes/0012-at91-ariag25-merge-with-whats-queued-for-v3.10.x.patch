@@ -1,0 +1,245 @@
+From 9b4c23100a251a9e528f15c2c2237af5d630aa2d Mon Sep 17 00:00:00 2001
+From: Robert Nelson <robertcnelson@gmail.com>
+Date: Fri, 29 Mar 2013 14:57:08 -0500
+Subject: [PATCH 12/12] at91: ariag25: merge with whats queued for v3.10.x
+
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+---
+ arch/arm/boot/dts/ariag25.dts |  128 ++++++++++++++++++-----------------------
+ 1 file changed, 56 insertions(+), 72 deletions(-)
+
+diff --git a/arch/arm/boot/dts/ariag25.dts b/arch/arm/boot/dts/ariag25.dts
+index a3006da..6aea685 100644
+--- a/arch/arm/boot/dts/ariag25.dts
++++ b/arch/arm/boot/dts/ariag25.dts
+@@ -1,31 +1,34 @@
+ /*
+  * ariag25.dts - Device Tree file for Acme Systems Aria G25 (AT91SAM9G25 based)
+- * Compile with dtc in <kernel_src/arch/arm/boot/dts> folder:
+- *  'dtc -O dtb -o ariag25.dtb ariag25.dts'			 [dpg 20130327]
+  *
+- * N.B. The 'interrupts' entry explained in:
+- *     <kernel_src>/Documentation/devicetree/bindings/arm/atmel-aic.txt
++ * Copyright (C) 2013 Douglas Gilbert <dgilbert@interlog.com>,
++ *                    Robert Nelson <robertcnelson@gmail.com>
++ *
++ * Licensed under GPLv2 or later.
+  */
+ /dts-v1/;
+ /include/ "at91sam9g25.dtsi"
+ 
+ / {
+ 	model = "Acme Systems Aria G25";
+-	compatible = "atmel,at91sam9g25ek", "atmel,at91sam9x5ek", "atmel,at91sam9x5", "atmel,at91sam9";
++	compatible = "acme,ariag25", "atmel,at91sam9x5ek",
++		     "atmel,at91sam9x5", "atmel,at91sam9";
+ 
+-	/* at91sam9x5.dtsi defines serial0=&dbgu; serial1=&usart0; serial2=&usart1;
+-	 * serial3 = &usart2; */
+ 	aliases {
++		serial0 = &dbgu;
++		serial1 = &usart0;
++		serial2 = &usart1;
++		serial3 = &usart2;
+ 		serial4 = &usart3;
+ 		serial5 = &uart0;
+-		/* serial6 = &uart1; */
+ 	};
+ 
+ 	chosen {
+-		bootargs = "console=ttyS0,115200 root=/dev/mtdblock1 rw rootfstype=ubifs ubi.mtd=1 root=ubi0:rootfs";
++		bootargs = "console=ttyS0,115200 root=/dev/mmcblk0p2 rw rootwait";
+ 	};
+ 
+ 	memory {
++		/* 128 MB, change this for 256 MB revision */
+ 		reg = <0x20000000 0x8000000>;
+ 	};
+ 
+@@ -42,20 +45,29 @@
+ 
+ 	ahb {
+ 		apb {
++			mmc0: mmc@f0008000 {
++				/* N.B. Aria has no SD card detect (CD), assumed present */
+ 
+-			pinctrl@fffff400 {
+-				w1_0 {
+-                                        pinctrl_w1_0: w1_0-0 {
+-                                                atmel,pins =
+-                                                        <0 21 0x0 0x1>;   /* PA21 PIO, pull-up */
+-                                        };
++				pinctrl-0 = <
++					&pinctrl_mmc0_slot0_clk_cmd_dat0
++					&pinctrl_mmc0_slot0_dat1_3>;
++				status = "okay";
++				slot@0 {
++					reg = <0>;
++					bus-width = <4>;
+ 				};
+ 			};
+ 
+-			dbgu: serial@fffff200 {
++			i2c0: i2c@f8010000 {
++				status = "okay";
++			};
++
++			i2c1: i2c@f8014000 {
+ 				status = "okay";
+ 			};
+ 
++			/* TWD2+TCLK2 hidden behind ethernet, so no i2c2 */
++
+ 			usart0: serial@f801c000 {
+ 				pinctrl-0 = <&pinctrl_usart0
+ 					     &pinctrl_usart0_rts
+@@ -82,8 +94,6 @@
+ 				compatible = "atmel,at91sam9260-usart";
+ 				reg = <0xf8028000 0x200>;
+ 				interrupts = <8 4 5>;
+-				/* atmel,use-dma-rx; */
+-				/* atmel,use-dma-tx; */
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&pinctrl_usart3
+ 					     /* &pinctrl_usart3_rts */
+@@ -92,53 +102,23 @@
+ 				status = "okay";
+ 			};
+ 
+-			uart0: serial@f8040000 {
+-				compatible = "atmel,at91sam9260-usart";
+-				reg = <0xf8040000 0x200>;
+-				interrupts = <15 4 5>;
+-				pinctrl-names = "default";
+-				pinctrl-0 = <&pinctrl_uart0>;
+-				status = "okay";
+-			};
+-
+-			/* uart1: serial@f8044000 { */
+-				/* compatible = "atmel,at91sam9260-usart"; */
+-				/* reg = <0xf8044000 0x200>; */
+-				/* interrupts = <16 4 5>; */
+-				/* pinctrl-names = "default"; */
+-				/* pinctrl-0 = <&pinctrl_uart1>; */
+-				/* status = "okay"; */
+-			/* }; */
+-
+ 			macb0: ethernet@f802c000 {
+ 				phy-mode = "rmii";
+-				/* local-mac-address overwritten by uboot 'ftd set' */
+-				/* Acme recommends using 00 04 25 as first 3 bytes */
++				/*
++				 * following can be overwritten by bootloader:
++				 * for example u-boot 'ftd set' command
++				 */
+ 				local-mac-address = [00 00 00 00 00 00];
+ 				status = "okay";
+ 			};
+ 
+-			i2c0: i2c@f8010000 {
+-				status = "okay";
+-			};
+-
+-			i2c1: i2c@f8014000 {
+-				status = "okay";
+-			};
+-
+-			/* TWD2+TCLK2 hidden behind ethernet, so no i2c2 */
+-
+-			mmc0: mmc@f0008000 {
+-				/* N.B. Aria has no SD card detect (CD), assumed present */
+-
+-				pinctrl-0 = <
+-					&pinctrl_mmc0_slot0_clk_cmd_dat0
+-					&pinctrl_mmc0_slot0_dat1_3>;
++			uart0: serial@f8040000 {
++				compatible = "atmel,at91sam9260-usart";
++				reg = <0xf8040000 0x200>;
++				interrupts = <15 4 5>;
++				pinctrl-names = "default";
++				pinctrl-0 = <&pinctrl_uart0>;
+ 				status = "okay";
+-				slot@0 {
+-					reg = <0>;
+-					bus-width = <4>;
+-				};
+ 			};
+ 
+ 			spi0: spi@f0000000 {
+@@ -172,7 +152,19 @@
+ 			adc0: adc@f804c000 {
+ 				status = "okay";
+ 				atmel,adc-channels-used = <0xf>;
+-                                atmel,adc-num-channels = <4>;
++				atmel,adc-num-channels = <4>;
++			};
++
++			dbgu: serial@fffff200 {
++				status = "okay";
++			};
++
++			pinctrl@fffff400 {
++				w1_0 {
++					pinctrl_w1_0: w1_0-0 {
++						atmel,pins = <0 21 0x0 0x1>; /* PA21 PIO, pull-up */
++					};
++				};
+ 			};
+ 
+ 			watchdog@fffffe40 {
+@@ -182,15 +174,14 @@
+ 				status = "okay";
+ 			};
+ 
++			rtc@fffffeb0 {
++				status = "okay";
++			};
+ 		};
+ 
+ 		usb0: ohci@00600000 {
+ 			status = "okay";
+ 			num-ports = <3>;
+-			/* The following looks suspect */
+-			/* atmel,vbus-gpio = <&pioD 19 1 */
+-					   /* &pioD 20 1 */
+-					  /* >; */
+ 		};
+ 
+ 		usb1: ehci@00700000 {
+@@ -204,7 +195,7 @@
+ 		/* little green LED in middle of Aria G25 module */
+ 		aria_led {
+ 			label = "aria_led";
+-			gpios = <&pioB 8 0>;	/* PB8 */
++			gpios = <&pioB 8 0>; /* PB8 */
+ 			linux,default-trigger = "heartbeat";
+ 		};
+ 
+@@ -214,7 +205,7 @@
+ 		/* uses kernel i2c-gpio driver, any two gpios can be used */
+ 		/* override PC0, PC1 given in at91sam9x5.dtsi */
+ 		gpios = <&pioC 2 2 /* sda: PC2 */
+-			 &pioC 3 0 /* scl: PC3 */
++		 &pioC 3 0 /* scl: PC3 */
+ 			>;
+ 		/* Despite appearances this line: 'i2c-gpio,sda-open-drain;' */
+ 	 	/* in at91sam9x5.dtsi doesn't set the SDA gpio line in */
+@@ -226,15 +217,8 @@
+ 
+ 	onewire@0 {
+ 		compatible = "w1-gpio";
+-
+-		/* bit banging w1 at PA21 with internal pull-up */
+ 		gpios = <&pioA 21 1>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_w1_0>;
+ 	};
+-
+-	rtc {
+-		status = "okay";
+-	};
+-
+ };
+-- 
+1.7.10.4
+

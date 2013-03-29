@@ -70,11 +70,9 @@ atmel_spi () {
 	${git} "${DIR}/patches/atmel_spi/0016-ARM-dts-add-pinctrl-property-for-spi-node-for-atmel-.patch"
 }
 
-atmel_rtc () {
-	echo "dir: atmel_rtc"
-	${git} "${DIR}/patches/atmel_rtc/0001-ARM-at91-rtc-fix-boot-after-RTC-wake-up.patch"
-	${git} "${DIR}/patches/atmel_rtc/0002-Revert-arm-at91-move-at91rm9200-rtc-header-in-driver.patch"
-	${git} "${DIR}/patches/atmel_rtc/0003-ARM-at91-fix-hanged-boot.patch"
+atmel_aria () {
+	echo "dir: atmel_aria"
+	${git} "${DIR}/patches/atmel_aria/0001-ARM-at91-add-Acme-Systems-Aria-G25-board.patch"
 }
 
 atmel_mci () {
@@ -85,25 +83,26 @@ atmel_mci () {
 	${git} "${DIR}/patches/atmel_mci/0004-atmel-mci-replace-flush_dcache_page-with-flush_kerne.patch"
 }
 
-atmel_aria () {
-	echo "dir: atmel_aria"
-	${git} "${DIR}/patches/atmel_aria/0001-arm-at91-sam9x5-enable-uart0-uart1.patch"
-	${git} "${DIR}/patches/atmel_aria/0002-arm-at91-add-ariag25-device-tree.patch"
-	${git} "${DIR}/patches/atmel_aria/0003-arm-at91-ariag25-add-leds-onewire.patch"
-	${git} "${DIR}/patches/atmel_aria/0004-rtc-serial-cleanup.patch"
-	${git} "${DIR}/patches/atmel_aria/0005-atmel-at91-ariag25-u-s-art-and-spi-cleanup.patch"
-	${git} "${DIR}/patches/atmel_aria/0006-atmel-at91-ariag25-rtc-fixes.patch"
-	${git} "${DIR}/patches/atmel_aria/0007-atmel-at91-ariag25-spi-fixes.patch"
-	${git} "${DIR}/patches/atmel_aria/0008-atmel-at91-ariag25-spi-n-watchdog-fixes.patch"
-	${git} "${DIR}/patches/atmel_aria/0009-ARM-at91sam9x5-enable-i2c.patch"
-	${git} "${DIR}/patches/atmel_aria/0010-at91sam9x5ek-i2c2-and-mii-are-muxed-to-the-same-pins.patch"
-	${git} "${DIR}/patches/atmel_aria/0011-at91-i2c-fixes.patch"
+atmel_fixes () {
+	echo "dir: atmel_fixes"
+	${git} "${DIR}/patches/atmel_fixes/0001-arm-at91-sam9x5-enable-uart0-uart1.patch"
+	${git} "${DIR}/patches/atmel_fixes/0002-arm-at91-add-ariag25-device-tree.patch"
+	${git} "${DIR}/patches/atmel_fixes/0003-arm-at91-ariag25-add-leds-onewire.patch"
+	${git} "${DIR}/patches/atmel_fixes/0004-rtc-serial-cleanup.patch"
+	${git} "${DIR}/patches/atmel_fixes/0005-atmel-at91-ariag25-u-s-art-and-spi-cleanup.patch"
+	${git} "${DIR}/patches/atmel_fixes/0006-atmel-at91-ariag25-rtc-fixes.patch"
+	${git} "${DIR}/patches/atmel_fixes/0007-atmel-at91-ariag25-spi-fixes.patch"
+	${git} "${DIR}/patches/atmel_fixes/0008-atmel-at91-ariag25-spi-n-watchdog-fixes.patch"
+	${git} "${DIR}/patches/atmel_fixes/0009-ARM-at91sam9x5-enable-i2c.patch"
+	${git} "${DIR}/patches/atmel_fixes/0010-at91sam9x5ek-i2c2-and-mii-are-muxed-to-the-same-pins.patch"
+	${git} "${DIR}/patches/atmel_fixes/0011-at91-i2c-fixes.patch"
+	${git} "${DIR}/patches/atmel_fixes/0012-at91-ariag25-merge-with-whats-queued-for-v3.10.x.patch"
 }
 
 arm
 atmel_spi
-#atmel_rtc
+#atmel_aria
 atmel_mci
-atmel_aria
+atmel_fixes
 
 echo "patch.sh ran successful"
