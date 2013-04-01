@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 3.9.0-rc4 Kernel Configuration
+# Linux/arm 3.9.0-rc5 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_HAVE_PWM=y
@@ -2377,7 +2377,6 @@ CONFIG_STRICT_DEVMEM=y
 CONFIG_ARM_UNWIND=y
 CONFIG_DEBUG_USER=y
 # CONFIG_DEBUG_LL is not set
-CONFIG_DEBUG_IMX_UART_PORT=1
 CONFIG_DEBUG_LL_INCLUDE="mach/debug-macro.S"
 # CONFIG_OC_ETM is not set
 
