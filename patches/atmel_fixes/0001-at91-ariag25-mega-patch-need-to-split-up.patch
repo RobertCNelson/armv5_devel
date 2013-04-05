@@ -5,8 +5,6 @@ Subject: [PATCH] at91: ariag25 mega patch: need to split up
 
 Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
 ---
- arch/arm/boot/dts/Makefile          |    1 +
- arch/arm/boot/dts/ariag25.dts       |   49 ++++++++++
  arch/arm/boot/dts/at91sam9g25ek.dts |    7 ++
  arch/arm/boot/dts/at91sam9x5.dtsi   |   39 ++++++++
  arch/arm/boot/dts/at91sam9x5ek.dtsi |    6 +-
@@ -17,94 +15,8 @@ Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
  drivers/rtc/Kconfig                 |    3 +-
  drivers/rtc/rtc-at91rm9200.c        |  177 +++++++++++++++++++++++++++++++++--
  drivers/tty/serial/atmel_serial.c   |   19 +++-
- 12 files changed, 314 insertions(+), 23 deletions(-)
+ 10 files changed, 264 insertions(+), 23 deletions(-)
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 9c62558..7a8402c 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -26,6 +26,7 @@ dtb-$(CONFIG_ARCH_AT91) += pm9g45.dtb
- # sam9n12
- dtb-$(CONFIG_ARCH_AT91) += at91sam9n12ek.dtb
- # sam9x5
-+dtb-$(CONFIG_ARCH_AT91) += ariag25.dtb
- dtb-$(CONFIG_ARCH_AT91) += at91sam9g15ek.dtb
- dtb-$(CONFIG_ARCH_AT91) += at91sam9g25ek.dtb
- dtb-$(CONFIG_ARCH_AT91) += at91sam9g35ek.dtb
-diff --git a/arch/arm/boot/dts/ariag25.dts b/arch/arm/boot/dts/ariag25.dts
-index b43266f..cc77dbc 100644
---- a/arch/arm/boot/dts/ariag25.dts
-+++ b/arch/arm/boot/dts/ariag25.dts
-@@ -121,6 +121,34 @@
- 				status = "okay";
- 			};
- 
-+			spi0: spi@f0000000 {
-+				status = "okay";
-+				cs-gpios = <&pioA 14 0>, <0>, <0>, <0>;
-+				// anything@0 {
-+					// compatible = "spidev";
-+					// // spi-max-frequency = <50000000>;
-+					// spi-max-frequency = <1000000>;
-+					// reg = <0>;
-+				// };
-+				// m25p80@0 {
-+					// compatible = "spidev";
-+					// spi-max-frequency = <50000000>;
-+					// reg = <0>;
-+				// };
-+
-+				mmc-slot@0 {
-+					compatible = "mmc-spi-slot";
-+					reg = <0>;
-+					voltage-ranges = <3300 3300>;
-+					// Use one of next 3 lines, comment out other 2
-+					gpios = <&pioA 26 0>;    /* CD to PA26 */
-+					// broken-cd;
-+					// non-removable;
-+					cd-inverted;
-+					spi-max-frequency = <8000000>;
-+				 };
-+			};
-+
- 			adc0: adc@f804c000 {
- 				status = "okay";
- 				atmel,adc-channels-used = <0xf>;
-@@ -139,6 +167,13 @@
- 				};
- 			};
- 
-+			watchdog@fffffe40 {
-+				compatible = "atmel,at91sam9260-wdt";
-+				reg = <0xfffffe40 0x10>;
-+				timeout-sec = <16>;
-+				status = "okay";
-+			};
-+
- 			rtc@fffffeb0 {
- 				status = "okay";
- 			};
-@@ -166,6 +201,20 @@
- 
- 	};
- 
-+	i2c@2 {
-+		/* uses kernel i2c-gpio driver, any two gpios can be used */
-+		/* override PC0, PC1 given in at91sam9x5.dtsi */
-+		gpios = <&pioC 2 2 /* sda: PC2 */
-+		 &pioC 3 0 /* scl: PC3 */
-+			>;
-+		/* Despite appearances this line: 'i2c-gpio,sda-open-drain;' */
-+		/* in at91sam9x5.dtsi doesn't set the SDA gpio line in */
-+		/* multi-driver (open drain) mode. The user needs to do it. */
-+
-+		/* Uncomment following line to use this */
-+		/* status = "okay"; */
-+	};
-+
- 	onewire@0 {
- 		compatible = "w1-gpio";
- 		gpios = <&pioA 21 1>;
 diff --git a/arch/arm/boot/dts/at91sam9g25ek.dts b/arch/arm/boot/dts/at91sam9g25ek.dts
 index c5ab16f..8c6c77f 100644
 --- a/arch/arm/boot/dts/at91sam9g25ek.dts

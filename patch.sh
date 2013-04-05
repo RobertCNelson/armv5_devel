@@ -73,6 +73,7 @@ atmel_spi () {
 atmel_aria () {
 	echo "dir: atmel_aria"
 	${git} "${DIR}/patches/atmel_aria/0001-ARM-at91-add-Acme-Systems-Aria-G25-board.patch"
+	${git} "${DIR}/patches/atmel_aria/0002-at91-at91-ariag25-rename-usart-build.patch"
 }
 
 atmel_mci () {
