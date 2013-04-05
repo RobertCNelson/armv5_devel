@@ -50,12 +50,19 @@ arm () {
 	${git} "${DIR}/patches/arm/0001-deb-pkg-Simplify-architecture-matching-for-cross-bui.patch"
 }
 
+mxs_mmc () {
+	echo "dir: mxs_mmc"
+	${git} "${DIR}/patches/mxs_mmc/0001-mmc-mxs-mmc-Add-support-for-non-removable-cards.patch"
+	${git} "${DIR}/patches/mxs_mmc/0002-ARM-dts-imx23-olinuxino-Set-the-sdcard-as-non-remova.patch"
+}
+
 freescale_mxs () {
 	echo "dir: freescale_mxs"
 	${git} "${DIR}/patches/freescale_mxs/0001-ARM-mxs-select-USB_ARCH_HAS_EHCI.patch"
 }
 
 arm
+mxs_mmc
 #freescale_mxs
 
 echo "patch.sh ran successful"
