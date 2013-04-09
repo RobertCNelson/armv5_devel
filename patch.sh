@@ -86,7 +86,9 @@ atmel_mci () {
 
 atmel_fixes () {
 	echo "dir: atmel_fixes"
-	${git} "${DIR}/patches/atmel_fixes/0001-at91-ariag25-mega-patch-need-to-split-up.patch"
+	#In our case, we are using Device Tree's...
+	${git} "${DIR}/patches/atmel_fixes/0001-Revert-Revert-drivers-rtc-rtc-at91rm9200.c-use-a-var.patch"
+	${git} "${DIR}/patches/atmel_fixes/0002-at91-ariag25-mega-patch-need-to-split-up.patch"
 }
 
 arm

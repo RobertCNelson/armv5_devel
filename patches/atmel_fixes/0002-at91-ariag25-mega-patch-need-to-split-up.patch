@@ -1,7 +1,7 @@
-From 6b6075d62f90bfdc8ea84e97bc7aaaa825defcca Mon Sep 17 00:00:00 2001
+From f2526aa52e54d5b957d02c40c77276651d1dac51 Mon Sep 17 00:00:00 2001
 From: Robert Nelson <robertcnelson@gmail.com>
 Date: Mon, 1 Apr 2013 15:01:16 -0500
-Subject: [PATCH] at91: ariag25 mega patch: need to split up
+Subject: [PATCH 2/2] at91: ariag25 mega patch: need to split up
 
 Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
 ---
