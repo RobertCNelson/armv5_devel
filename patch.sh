@@ -89,6 +89,7 @@ atmel_fixes () {
 	#In our case, we are using Device Tree's...
 	${git} "${DIR}/patches/atmel_fixes/0001-Revert-Revert-drivers-rtc-rtc-at91rm9200.c-use-a-var.patch"
 	${git} "${DIR}/patches/atmel_fixes/0002-at91-ariag25-mega-patch-need-to-split-up.patch"
+	${git} "${DIR}/patches/atmel_fixes/0003-ARM-at91-dts-at91sam9g20ek_2mmc-fix-card-detection.patch"
 }
 
 arm
