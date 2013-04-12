@@ -91,6 +91,7 @@ atmel_fixes () {
 	${git} "${DIR}/patches/atmel_fixes/0002-at91-ariag25-mega-patch-need-to-split-up.patch"
 	${git} "${DIR}/patches/atmel_fixes/0003-ARM-at91-dts-at91sam9g20ek_2mmc-fix-card-detection.patch"
 	${git} "${DIR}/patches/atmel_fixes/0004-add-at91-foxg20.patch"
+	${git} "${DIR}/patches/atmel_fixes/0005-at91-dts-fix-rtc.patch"
 }
 
 arm

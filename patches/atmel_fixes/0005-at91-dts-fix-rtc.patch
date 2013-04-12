@@ -1,0 +1,72 @@
+From e9415b42d30353814b7c35dc4746c8dfb338e25d Mon Sep 17 00:00:00 2001
+From: Douglas Gilbert <dgilbert@interlog.com>
+Date: Fri, 12 Apr 2013 10:10:34 -0500
+Subject: [PATCH 5/5] at91: dts: fix rtc
+
+Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+---
+ arch/arm/boot/dts/at91-ariag25.dts  |    8 ++++----
+ arch/arm/boot/dts/at91sam9g25ek.dts |    7 ++-----
+ arch/arm/boot/dts/at91sam9x5.dtsi   |    2 +-
+ 3 files changed, 7 insertions(+), 10 deletions(-)
+
+diff --git a/arch/arm/boot/dts/at91-ariag25.dts b/arch/arm/boot/dts/at91-ariag25.dts
+index f6df7a7..2356133 100644
+--- a/arch/arm/boot/dts/at91-ariag25.dts
++++ b/arch/arm/boot/dts/at91-ariag25.dts
+@@ -184,10 +184,6 @@
+ 				timeout-sec = <16>;
+ 				status = "okay";
+ 			};
+-
+-			rtc@fffffeb0 {
+-				status = "okay";
+-			};
+ 		};
+ 
+ 		usb0: ohci@00600000 {
+@@ -226,6 +222,10 @@
+ 		/* status = "okay"; */
+ 	};
+ 
++	rtc@fffffeb0 {
++		status = "okay";
++	};
++
+ 	onewire@0 {
+ 		compatible = "w1-gpio";
+ 		gpios = <&pioA 21 1>;
+diff --git a/arch/arm/boot/dts/at91sam9g25ek.dts b/arch/arm/boot/dts/at91sam9g25ek.dts
+index 8c6c77f..6d85e7d 100644
+--- a/arch/arm/boot/dts/at91sam9g25ek.dts
++++ b/arch/arm/boot/dts/at91sam9g25ek.dts
+@@ -14,10 +14,7 @@
+ 	model = "Atmel AT91SAM9G25-EK";
+ 	compatible = "atmel,at91sam9g25ek", "atmel,at91sam9x5ek", "atmel,at91sam9x5", "atmel,at91sam9";
+ 
+-	rtc {
+-		compatible = "atmel,at91sam9x5-rtc";
+-
+-		reg = <0xfffffeb0 0x40>;
+-		interrupts = <1 4 7>;
++	rtc@fffffeb0 {
++		status = "okay";
+ 	};
+ };
+diff --git a/arch/arm/boot/dts/at91sam9x5.dtsi b/arch/arm/boot/dts/at91sam9x5.dtsi
+index a6be48a..32d8b83 100644
+--- a/arch/arm/boot/dts/at91sam9x5.dtsi
++++ b/arch/arm/boot/dts/at91sam9x5.dtsi
+@@ -678,7 +678,7 @@
+ 		status = "disabled";
+ 	};
+ 
+-	rtc {
++	rtc@fffffeb0 {
+ 		compatible = "atmel,at91sam9x5-rtc";
+ 		reg = <0xfffffeb0 0x40>;
+ 		interrupts = <1 4 7>;
+-- 
+1.7.10.4
+
