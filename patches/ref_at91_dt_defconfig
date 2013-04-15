@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 3.9.0-rc6 Kernel Configuration
+# Linux/arm 3.9.0-rc7 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -1185,7 +1185,6 @@ CONFIG_WATCHDOG_CORE=y
 # Watchdog Device Drivers
 #
 # CONFIG_SOFT_WATCHDOG is not set
-# CONFIG_AT91RM9200_WATCHDOG is not set
 CONFIG_AT91SAM9X_WATCHDOG=y
 # CONFIG_DW_WATCHDOG is not set
 # CONFIG_MAX63XX_WATCHDOG is not set
