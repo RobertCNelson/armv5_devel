@@ -165,7 +165,7 @@ mmc_detect_n_mount () {
 			mmc_partition_discover
 			mmc_unmount
 		fi
-		i=$(($i+1))
+	i=$(($i+1))
 	done
 
 	echo "-----------------------------"
