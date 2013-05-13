@@ -84,20 +84,23 @@ atmel_mci () {
 	${git} "${DIR}/patches/atmel_mci/0004-atmel-mci-replace-flush_dcache_page-with-flush_kerne.patch"
 }
 
+atmel_rtc () {
+	echo "dir: atmel_rtc"
+	#In our case, we are using Device Tree's...
+	${git} "${DIR}/patches/atmel_rtc/0001-Revert-Revert-drivers-rtc-rtc-at91rm9200.c-use-a-var.patch"
+}
+
+
 atmel_fixes () {
 	echo "dir: atmel_fixes"
-	#In our case, we are using Device Tree's...
-	${git} "${DIR}/patches/atmel_fixes/0001-Revert-Revert-drivers-rtc-rtc-at91rm9200.c-use-a-var.patch"
-	${git} "${DIR}/patches/atmel_fixes/0002-at91-ariag25-mega-patch-need-to-split-up.patch"
-	${git} "${DIR}/patches/atmel_fixes/0003-ARM-at91-dts-at91sam9g20ek_2mmc-fix-card-detection.patch"
-	${git} "${DIR}/patches/atmel_fixes/0004-add-at91-foxg20.patch"
-	${git} "${DIR}/patches/atmel_fixes/0005-at91-dts-fix-rtc.patch"
+	${git} "${DIR}/patches/atmel_fixes/0001-at91-merge-mega-patch.patch"
 }
 
 arm
-atmel_spi
-atmel_aria
+#atmel_spi
+#atmel_aria
 atmel_mci
+#atmel_rtc
 atmel_fixes
 
 echo "patch.sh ran successful"
