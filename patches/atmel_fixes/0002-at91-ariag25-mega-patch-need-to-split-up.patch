@@ -13,9 +13,9 @@ Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
  drivers/mmc/host/atmel-mci.c        |    1 +
  drivers/mmc/host/of_mmc_spi.c       |   28 ++++--
  drivers/rtc/Kconfig                 |    3 +-
- drivers/rtc/rtc-at91rm9200.c        |  177 +++++++++++++++++++++++++++++++++--
+ drivers/rtc/rtc-at91rm9200.c        |  173 +++++++++++++++++++++++++++++++++--
  drivers/tty/serial/atmel_serial.c   |   19 +++-
- 10 files changed, 264 insertions(+), 23 deletions(-)
+ 10 files changed, 261 insertions(+), 22 deletions(-)
 
 diff --git a/arch/arm/boot/dts/at91sam9g25ek.dts b/arch/arm/boot/dts/at91sam9g25ek.dts
 index c5ab16f..8c6c77f 100644
@@ -110,7 +110,7 @@ index 347b438..a6be48a 100644
 +	};
  };
 diff --git a/arch/arm/boot/dts/at91sam9x5ek.dtsi b/arch/arm/boot/dts/at91sam9x5ek.dtsi
-index 09f5e66..baeeabc 100644
+index 400d115..dd8c89f 100644
 --- a/arch/arm/boot/dts/at91sam9x5ek.dtsi
 +++ b/arch/arm/boot/dts/at91sam9x5ek.dtsi
 @@ -65,9 +65,9 @@
@@ -150,7 +150,7 @@ index a200d8a..69510e1 100644
  	CLKDEV_CON_DEV_ID(NULL, "f8014000.i2c", &twi1_clk),
  	CLKDEV_CON_DEV_ID(NULL, "f8018000.i2c", &twi2_clk),
 diff --git a/drivers/dma/at_hdmac.c b/drivers/dma/at_hdmac.c
-index 6e13f26..1237e0d 100644
+index 88cfc61..6ba396e 100644
 --- a/drivers/dma/at_hdmac.c
 +++ b/drivers/dma/at_hdmac.c
 @@ -14,6 +14,8 @@
@@ -163,10 +163,10 @@ index 6e13f26..1237e0d 100644
  #include <linux/dmaengine.h>
  #include <linux/dma-mapping.h>
 diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
-index d5cdf06..85d46bd 100644
+index a77e50d..ef2b86e 100644
 --- a/drivers/mmc/host/atmel-mci.c
 +++ b/drivers/mmc/host/atmel-mci.c
-@@ -2350,6 +2350,7 @@ static int __init atmci_probe(struct platform_device *pdev)
+@@ -2356,6 +2356,7 @@ static int __init atmci_probe(struct platform_device *pdev)
  			dev_err(&pdev->dev, "platform data not available\n");
  			return PTR_ERR(pdata);
  		}
@@ -239,7 +239,7 @@ index 79fbe38..e5539f14 100644
  config RTC_DRV_AT91SAM9
  	tristate "AT91SAM9x/AT91CAP9 RTT as RTC"
 diff --git a/drivers/rtc/rtc-at91rm9200.c b/drivers/rtc/rtc-at91rm9200.c
-index 0a9f27e..1f1028d 100644
+index c62af605..9473a52 100644
 --- a/drivers/rtc/rtc-at91rm9200.c
 +++ b/drivers/rtc/rtc-at91rm9200.c
 @@ -10,6 +10,7 @@
@@ -418,32 +418,21 @@ index 0a9f27e..1f1028d 100644
  		dev_err(&pdev->dev, "no irq resource defined\n");
  		return -ENXIO;
  	}
-@@ -299,11 +432,13 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
+@@ -299,11 +432,11 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
  					AT91_RTC_CALEV);
  	at91_rtc_imr = 0;
  
 -	ret = request_irq(irq, at91_rtc_interrupt,
-+	at91_rtc_imr = 0;
-+
 +	ret = request_irq(at91_rtc_irq, at91_rtc_interrupt,
  				IRQF_SHARED,
  				"at91_rtc", pdev);
  	if (ret) {
 -		dev_err(&pdev->dev, "IRQ %d already in use.\n", irq);
 +		dev_err(&pdev->dev, "IRQ %d already in use.\n", at91_rtc_irq);
- 		return ret;
+ 		goto err_unmap;
  	}
  
-@@ -316,7 +451,7 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
- 	rtc = rtc_device_register(pdev->name, &pdev->dev,
- 				&at91_rtc_ops, THIS_MODULE);
- 	if (IS_ERR(rtc)) {
--		free_irq(irq, pdev);
-+		free_irq(at91_rtc_irq, pdev);
- 		return PTR_ERR(rtc);
- 	}
- 	platform_set_drvdata(pdev, rtc);
-@@ -337,7 +472,7 @@ static int __exit at91_rtc_remove(struct platform_device *pdev)
+@@ -344,7 +477,7 @@ static int __exit at91_rtc_remove(struct platform_device *pdev)
  					AT91_RTC_SECEV | AT91_RTC_TIMEV |
  					AT91_RTC_CALEV);
  	at91_rtc_imr = 0;
@@ -451,8 +440,8 @@ index 0a9f27e..1f1028d 100644
 +	free_irq(at91_rtc_irq, pdev);
  
  	rtc_device_unregister(rtc);
- 	platform_set_drvdata(pdev, NULL);
-@@ -345,6 +480,8 @@ static int __exit at91_rtc_remove(struct platform_device *pdev)
+ 	iounmap(at91_rtc_regs);
+@@ -353,6 +486,8 @@ static int __exit at91_rtc_remove(struct platform_device *pdev)
  	return 0;
  }
  
@@ -461,7 +450,7 @@ index 0a9f27e..1f1028d 100644
  #ifdef CONFIG_PM
  
  /* AT91RM9200 RTC Power management control */
-@@ -360,7 +497,7 @@ static int at91_rtc_suspend(struct device *dev)
+@@ -368,7 +503,7 @@ static int at91_rtc_suspend(struct device *dev)
  	at91_rtc_bkpimr = at91_rtc_imr & (AT91_RTC_ALARM|AT91_RTC_SECEV);
  	if (at91_rtc_bkpimr) {
  		if (device_may_wakeup(dev)) {
@@ -470,7 +459,7 @@ index 0a9f27e..1f1028d 100644
  		} else {
  			at91_rtc_write(AT91_RTC_IDR, at91_rtc_bkpimr);
  			at91_rtc_imr &= ~at91_rtc_bkpimr;
-@@ -373,7 +510,7 @@ static int at91_rtc_resume(struct device *dev)
+@@ -381,7 +516,7 @@ static int at91_rtc_resume(struct device *dev)
  {
  	if (at91_rtc_bkpimr) {
  		if (device_may_wakeup(dev)) {
@@ -479,7 +468,7 @@ index 0a9f27e..1f1028d 100644
  		} else {
  			at91_rtc_imr |= at91_rtc_bkpimr;
  			at91_rtc_write(AT91_RTC_IER, at91_rtc_bkpimr);
-@@ -393,6 +530,26 @@ static const struct dev_pm_ops at91_rtc_pm = {
+@@ -401,6 +536,26 @@ static const struct dev_pm_ops at91_rtc_pm = {
  #define at91_rtc_pm_ptr	NULL
  #endif
  
@@ -506,7 +495,7 @@ index 0a9f27e..1f1028d 100644
  static struct platform_driver at91_rtc_driver = {
  	.remove		= __exit_p(at91_rtc_remove),
  	.driver		= {
-@@ -407,6 +564,8 @@ static int __init at91_rtc_init(void)
+@@ -415,6 +570,8 @@ static int __init at91_rtc_init(void)
  	return platform_driver_probe(&at91_rtc_driver, at91_rtc_probe);
  }
  
