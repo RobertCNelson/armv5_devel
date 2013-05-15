@@ -96,11 +96,17 @@ atmel_fixes () {
 	${git} "${DIR}/patches/atmel_fixes/0001-at91-merge-mega-patch.patch"
 }
 
+ariag25_fixes () {
+	echo "dir: ariag25_fixes"
+	${git} "${DIR}/patches/ariag25_fixes/0001-at91-ariag25-add-watchdog.patch"
+}
+
 arm
 #atmel_spi
 #atmel_aria
 atmel_mci
 #atmel_rtc
 atmel_fixes
+ariag25_fixes
 
 echo "patch.sh ran successful"

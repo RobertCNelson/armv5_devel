@@ -1,0 +1,32 @@
+From 6c1ec342ce33d94a66aff21ac5e327841bf9828e Mon Sep 17 00:00:00 2001
+From: Douglas Gilbert <dgilbert@interlog.com>
+Date: Wed, 15 May 2013 16:42:27 -0500
+Subject: [PATCH] at91: ariag25: add watchdog
+
+Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+---
+ arch/arm/boot/dts/at91-ariag25.dts |    7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/arm/boot/dts/at91-ariag25.dts b/arch/arm/boot/dts/at91-ariag25.dts
+index d5f674f..d30c24f 100644
+--- a/arch/arm/boot/dts/at91-ariag25.dts
++++ b/arch/arm/boot/dts/at91-ariag25.dts
+@@ -138,6 +138,13 @@
+ 					};
+ 				};
+ 			};
++
++			watchdog@fffffe40 {
++				compatible = "atmel,at91sam9260-wdt";
++				reg = <0xfffffe40 0x10>;
++				timeout-sec = <16>;
++				status = "okay";
++			};
+ 		};
+ 
+ 		usb0: ohci@00600000 {
+-- 
+1.7.10.4
+
