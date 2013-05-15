@@ -94,6 +94,7 @@ atmel_rtc () {
 atmel_fixes () {
 	echo "dir: atmel_fixes"
 	${git} "${DIR}/patches/atmel_fixes/0001-at91-merge-mega-patch.patch"
+	${git} "${DIR}/patches/atmel_fixes/0002-net-macb-fix-ISR-clear-on-write-behavior-only-for-so.patch"
 }
 
 ariag25_fixes () {
