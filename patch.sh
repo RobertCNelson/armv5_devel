@@ -50,32 +50,6 @@ arm () {
 	${git} "${DIR}/patches/arm/0001-deb-pkg-Simplify-architecture-matching-for-cross-bui.patch"
 }
 
-atmel_spi () {
-	echo "dir: atmel_spi"
-	${git} "${DIR}/patches/atmel_spi/0001-spi-spi-atmel-fix-probing-failure-after-xfer-speed_h.patch"
-	${git} "${DIR}/patches/atmel_spi/0002-spi-spi-atmel-detect-the-capabilities-of-SPI-core-by.patch"
-	${git} "${DIR}/patches/atmel_spi/0003-spi-spi-atmel-add-support-transfer-on-CS1-2-3-not-on.patch"
-	${git} "${DIR}/patches/atmel_spi/0004-spi-spi-atmel-add-physical-base-address.patch"
-	${git} "${DIR}/patches/atmel_spi/0005-spi-spi-atmel-call-unmapping-on-transfers-buffers.patch"
-	${git} "${DIR}/patches/atmel_spi/0006-spi-spi-atmel-status-information-passed-through-cont.patch"
-	${git} "${DIR}/patches/atmel_spi/0007-spi-spi-atmel-add-flag-to-controller-data-for-lock-o.patch"
-	${git} "${DIR}/patches/atmel_spi/0008-spi-spi-atmel-add-dmaengine-support.patch"
-	${git} "${DIR}/patches/atmel_spi/0009-spi-spi-atmel-fix-spi-atmel-driver-to-adapt-to-slave.patch"
-	${git} "${DIR}/patches/atmel_spi/0010-spi-spi-atmel-correct-16-bits-transfers-using-PIO.patch"
-	${git} "${DIR}/patches/atmel_spi/0011-spi-spi-atmel-correct-16-bits-transfers-with-DMA.patch"
-	${git} "${DIR}/patches/atmel_spi/0012-spi-spi-atmel-add-pinctrl-support-for-atmel-spi.patch"
-	${git} "${DIR}/patches/atmel_spi/0013-ARM-at91-add-clocks-for-spi-dt-entries.patch"
-	${git} "${DIR}/patches/atmel_spi/0014-ARM-dts-add-spi-nodes-for-atmel-SoC.patch"
-	${git} "${DIR}/patches/atmel_spi/0015-ARM-dts-add-spi-nodes-for-the-atmel-boards.patch"
-	${git} "${DIR}/patches/atmel_spi/0016-ARM-dts-add-pinctrl-property-for-spi-node-for-atmel-.patch"
-}
-
-atmel_aria () {
-	echo "dir: atmel_aria"
-	${git} "${DIR}/patches/atmel_aria/0001-ARM-at91-add-Acme-Systems-Aria-G25-board.patch"
-	${git} "${DIR}/patches/atmel_aria/0002-at91-at91-ariag25-rename-usart-build.patch"
-}
-
 atmel_mci () {
 	echo "dir: atmel_mci"
 	${git} "${DIR}/patches/atmel_mci/0001-mmc-atmel-mci-remove-not-needed-DMA-capability-test.patch"
@@ -84,29 +58,20 @@ atmel_mci () {
 	${git} "${DIR}/patches/atmel_mci/0004-atmel-mci-replace-flush_dcache_page-with-flush_kerne.patch"
 }
 
-atmel_rtc () {
-	echo "dir: atmel_rtc"
-	#In our case, we are using Device Tree's...
-	${git} "${DIR}/patches/atmel_rtc/0001-Revert-Revert-drivers-rtc-rtc-at91rm9200.c-use-a-var.patch"
-}
-
-
 atmel_fixes () {
 	echo "dir: atmel_fixes"
 	${git} "${DIR}/patches/atmel_fixes/0001-at91-merge-mega-patch.patch"
 	${git} "${DIR}/patches/atmel_fixes/0002-net-macb-fix-ISR-clear-on-write-behavior-only-for-so.patch"
+	${git} "${DIR}/patches/atmel_fixes/0003-v2-RTC-for-at91sam9x5-family.patch"
 }
 
 ariag25_fixes () {
 	echo "dir: ariag25_fixes"
-	${git} "${DIR}/patches/ariag25_fixes/0001-at91-ariag25-add-watchdog.patch"
+	${git} "${DIR}/patches/ariag25_fixes/0001-at91-ariag25-add-watchdog-spi.patch"
 }
 
 arm
-#atmel_spi
-#atmel_aria
 atmel_mci
-#atmel_rtc
 atmel_fixes
 ariag25_fixes
 

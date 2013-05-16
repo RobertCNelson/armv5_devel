@@ -1,0 +1,215 @@
+From b1f13e22ca29bce68a5f2a5cfcec282b97a1020c Mon Sep 17 00:00:00 2001
+From: Douglas Gilbert = <[mailto:dgilbert@interlog.com]>
+Date: Thu, 16 May 2013 14:10:52 -0500
+Subject: [PATCH 3/3] v2 RTC for at91sam9x5 family
+
+Deja vu. The "broken AT91_RTC_IMR" patch has been reworked based on lk 3.10=
+.0-rc1 .
+
+ChangeLog:
+   - checks in probe() function if AT91_RTC_IMR is broken.
+     If so, uses a shadow imr
+   - apart from that check, SoCs with a good IMR register
+     take the same paths through rtc-at91rm9200.c as before
+   - SoCs with a broken IMR take a spinlock while changing
+     the state of IER or IDR (and the shadow), mainly to
+     disable interrupts **.
+
+** same technique used in arch/arm/mach-at91/clock.c
+
+Tested on an Aria G25 (at91sam9g25 based).
+
+Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+---
+ drivers/rtc/rtc-at91rm9200.c |   90 ++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 74 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/rtc/rtc-at91rm9200.c b/drivers/rtc/rtc-at91rm9200.c
+index 0eab77b..5f722c0 100644
+--- a/drivers/rtc/rtc-at91rm9200.c
++++ b/drivers/rtc/rtc-at91rm9200.c
+@@ -27,6 +27,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/ioctl.h>
+ #include <linux/completion.h>
++#include <linux/spinlock.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+@@ -43,10 +44,67 @@
+ #define AT91_RTC_EPOCH		1900UL	/* just like arch/arm/common/rtctime.c */
+ 
+ static DECLARE_COMPLETION(at91_rtc_updated);
++
++static DEFINE_SPINLOCK(at91_rtc_broken_imr);
++
+ static unsigned int at91_alarm_year = AT91_RTC_EPOCH;
+ static void __iomem *at91_rtc_regs;
+ static int irq;
+ 
++static bool has_broken_imr;
++static int shadow_rtc_imr;
++
++
++
++static u32 at91_rtc_read_imr(void)
++{
++	if (has_broken_imr)
++		return shadow_rtc_imr;
++	else
++		return at91_rtc_read(AT91_RTC_IMR);
++}
++
++static void at91_rtc_write_ier(u32 val)
++{
++	if (has_broken_imr) {
++		unsigned long flags;
++
++		spin_lock_irqsave(&at91_rtc_broken_imr, flags);
++		shadow_rtc_imr |= val;
++		at91_rtc_write(AT91_RTC_IER, val);
++		spin_unlock_irqrestore(&at91_rtc_broken_imr, flags);
++	} else
++		at91_rtc_write(AT91_RTC_IER, val);
++}
++
++static void at91_rtc_write_idr(u32 val)
++{
++	if (has_broken_imr) {
++		unsigned long flags;
++
++		spin_lock_irqsave(&at91_rtc_broken_imr, flags);
++		shadow_rtc_imr &= ~val;
++		at91_rtc_write(AT91_RTC_IDR, val);
++		spin_unlock_irqrestore(&at91_rtc_broken_imr, flags);
++	} else
++		at91_rtc_write(AT91_RTC_IDR, val);
++}
++
++/*
++ * Check if AT91_RTC_IMR correctly reports AT91_RTC_CALEV enabled. Then
++ * disable all known rtc interrupts.
++ */
++static void at91_rtc_check_imr_and_disable(void)
++{
++	at91_rtc_write(AT91_RTC_IER, AT91_RTC_ACKUPD);
++	has_broken_imr = ! (AT91_RTC_ACKUPD & at91_rtc_read(AT91_RTC_IMR));
++	at91_rtc_write(AT91_RTC_IDR, AT91_RTC_ACKUPD | AT91_RTC_ALARM |
++				     AT91_RTC_SECEV | AT91_RTC_TIMEV |
++				     AT91_RTC_CALEV);
++	if (has_broken_imr)
++		shadow_rtc_imr = 0;
++}
++
+ /*
+  * Decode time/date into rtc_time structure
+  */
+@@ -110,9 +168,9 @@ static int at91_rtc_settime(struct device *dev, struct rtc_time *tm)
+ 	cr = at91_rtc_read(AT91_RTC_CR);
+ 	at91_rtc_write(AT91_RTC_CR, cr | AT91_RTC_UPDCAL | AT91_RTC_UPDTIM);
+ 
+-	at91_rtc_write(AT91_RTC_IER, AT91_RTC_ACKUPD);
++	at91_rtc_write_ier(AT91_RTC_ACKUPD);
+ 	wait_for_completion(&at91_rtc_updated);	/* wait for ACKUPD interrupt */
+-	at91_rtc_write(AT91_RTC_IDR, AT91_RTC_ACKUPD);
++	at91_rtc_write_idr(AT91_RTC_ACKUPD);
+ 
+ 	at91_rtc_write(AT91_RTC_TIMR,
+ 			  bin2bcd(tm->tm_sec) << 0
+@@ -169,7 +227,7 @@ static int at91_rtc_setalarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 	tm.tm_min = alrm->time.tm_min;
+ 	tm.tm_sec = alrm->time.tm_sec;
+ 
+-	at91_rtc_write(AT91_RTC_IDR, AT91_RTC_ALARM);
++	at91_rtc_write_idr(AT91_RTC_ALARM);
+ 	at91_rtc_write(AT91_RTC_TIMALR,
+ 		  bin2bcd(tm.tm_sec) << 0
+ 		| bin2bcd(tm.tm_min) << 8
+@@ -182,7 +240,7 @@ static int at91_rtc_setalarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 
+ 	if (alrm->enabled) {
+ 		at91_rtc_write(AT91_RTC_SCCR, AT91_RTC_ALARM);
+-		at91_rtc_write(AT91_RTC_IER, AT91_RTC_ALARM);
++		at91_rtc_write_ier(AT91_RTC_ALARM);
+ 	}
+ 
+ 	dev_dbg(dev, "%s(): %4d-%02d-%02d %02d:%02d:%02d\n", __func__,
+@@ -198,9 +256,9 @@ static int at91_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
+ 
+ 	if (enabled) {
+ 		at91_rtc_write(AT91_RTC_SCCR, AT91_RTC_ALARM);
+-		at91_rtc_write(AT91_RTC_IER, AT91_RTC_ALARM);
++		at91_rtc_write_ier(AT91_RTC_ALARM);
+ 	} else
+-		at91_rtc_write(AT91_RTC_IDR, AT91_RTC_ALARM);
++		at91_rtc_write_idr(AT91_RTC_ALARM);
+ 
+ 	return 0;
+ }
+@@ -229,7 +287,7 @@ static irqreturn_t at91_rtc_interrupt(int irq, void *dev_id)
+ 	unsigned int rtsr;
+ 	unsigned long events = 0;
+ 
+-	rtsr = at91_rtc_read(AT91_RTC_SR) & at91_rtc_read(AT91_RTC_IMR);
++	rtsr = at91_rtc_read(AT91_RTC_SR) & at91_rtc_read_imr();
+ 	if (rtsr) {		/* this interrupt is shared!  Is it ours? */
+ 		if (rtsr & AT91_RTC_ALARM)
+ 			events |= (RTC_AF | RTC_IRQF);
+@@ -289,10 +347,9 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
+ 	at91_rtc_write(AT91_RTC_CR, 0);
+ 	at91_rtc_write(AT91_RTC_MR, 0);		/* 24 hour mode */
+ 
++	/* AT91_RTC_IMR register is broken on some SoCs using this driver */
+ 	/* Disable all interrupts */
+-	at91_rtc_write(AT91_RTC_IDR, AT91_RTC_ACKUPD | AT91_RTC_ALARM |
+-					AT91_RTC_SECEV | AT91_RTC_TIMEV |
+-					AT91_RTC_CALEV);
++	at91_rtc_check_imr_and_disable();
+ 
+ 	ret = request_irq(irq, at91_rtc_interrupt,
+ 				IRQF_SHARED,
+@@ -316,7 +373,8 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
+ 	}
+ 	platform_set_drvdata(pdev, rtc);
+ 
+-	dev_info(&pdev->dev, "AT91 Real Time Clock driver.\n");
++	dev_info(&pdev->dev, "AT91 Real Time Clock driver.%s\n",
++		 (has_broken_imr ? " [AT91_RTC_IMR broken]" : ""));
+ 	return 0;
+ 
+ err_free_irq:
+@@ -335,9 +393,9 @@ static int __exit at91_rtc_remove(struct platform_device *pdev)
+ 	struct rtc_device *rtc = platform_get_drvdata(pdev);
+ 
+ 	/* Disable all interrupts */
+-	at91_rtc_write(AT91_RTC_IDR, AT91_RTC_ACKUPD | AT91_RTC_ALARM |
+-					AT91_RTC_SECEV | AT91_RTC_TIMEV |
+-					AT91_RTC_CALEV);
++	at91_rtc_write_idr(AT91_RTC_ACKUPD | AT91_RTC_ALARM |
++			   AT91_RTC_SECEV | AT91_RTC_TIMEV |
++			   AT91_RTC_CALEV);
+ 	free_irq(irq, pdev);
+ 
+ 	rtc_device_unregister(rtc);
+@@ -364,7 +422,7 @@ static int at91_rtc_suspend(struct device *dev)
+ 		if (device_may_wakeup(dev))
+ 			enable_irq_wake(irq);
+ 		else
+-			at91_rtc_write(AT91_RTC_IDR, at91_rtc_imr);
++			at91_rtc_write_idr(at91_rtc_imr);
+ 	}
+ 	return 0;
+ }
+@@ -375,7 +433,7 @@ static int at91_rtc_resume(struct device *dev)
+ 		if (device_may_wakeup(dev))
+ 			disable_irq_wake(irq);
+ 		else
+-			at91_rtc_write(AT91_RTC_IER, at91_rtc_imr);
++			at91_rtc_write_ier(at91_rtc_imr);
+ 	}
+ 	return 0;
+ }
+-- 
+1.7.10.4
+
