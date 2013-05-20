@@ -52,8 +52,8 @@ arm () {
 
 mxs_mmc () {
 	echo "dir: mxs_mmc"
-	${git} "${DIR}/patches/mxs_mmc/0001-mmc-mxs-mmc-Add-support-for-non-removable-cards.patch"
-	${git} "${DIR}/patches/mxs_mmc/0002-ARM-dts-imx23-olinuxino-Set-the-sdcard-as-non-remova.patch"
+#	${git} "${DIR}/patches/mxs_mmc/0001-mmc-mxs-mmc-Add-support-for-non-removable-cards.patch"
+#	${git} "${DIR}/patches/mxs_mmc/0002-ARM-dts-imx23-olinuxino-Set-the-sdcard-as-non-remova.patch"
 }
 
 freescale_mxs () {
@@ -62,7 +62,7 @@ freescale_mxs () {
 }
 
 arm
-mxs_mmc
+#mxs_mmc
 #freescale_mxs
 
 echo "patch.sh ran successful"
