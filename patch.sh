@@ -58,7 +58,7 @@ mxs_mmc () {
 
 freescale_mxs () {
 	echo "dir: freescale_mxs"
-	${git} "${DIR}/patches/freescale_mxs/0001-ARM-mxs-select-USB_ARCH_HAS_EHCI.patch"
+	${git} "${DIR}/patches/freescale_mxs/0001-WIP-i2c-audio-support.patch"
 }
 
 arm
