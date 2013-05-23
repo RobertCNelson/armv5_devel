@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 3.10.0-rc1 Kernel Configuration
+# Linux/arm 3.10.0-rc2 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -74,7 +74,9 @@ CONFIG_HZ_PERIODIC=y
 CONFIG_TICK_CPU_ACCOUNTING=y
 # CONFIG_IRQ_TIME_ACCOUNTING is not set
 # CONFIG_BSD_PROCESS_ACCT is not set
-# CONFIG_TASKSTATS is not set
+CONFIG_TASKSTATS=y
+CONFIG_TASK_DELAY_ACCT=y
+# CONFIG_TASK_XACCT is not set
 
 #
 # RCU Subsystem
@@ -608,7 +610,8 @@ CONFIG_REGMAP_SPI=m
 #
 # Bus devices
 #
-# CONFIG_CONNECTOR is not set
+CONFIG_CONNECTOR=y
+CONFIG_PROC_EVENTS=y
 CONFIG_MTD=y
 # CONFIG_MTD_TESTS is not set
 # CONFIG_MTD_REDBOOT_PARTS is not set
@@ -1238,6 +1241,7 @@ CONFIG_GPIO_SYSFS=y
 # USB GPIO expanders:
 #
 CONFIG_W1=y
+CONFIG_W1_CON=y
 
 #
 # 1-wire Bus Masters
@@ -1402,6 +1406,7 @@ CONFIG_FB_MODE_HELPERS=y
 #
 # Frame buffer hardware drivers
 #
+# CONFIG_FB_UVESA is not set
 # CONFIG_FB_S1D13XXX is not set
 CONFIG_FB_ATMEL=y
 # CONFIG_FB_SMSCUFX is not set
