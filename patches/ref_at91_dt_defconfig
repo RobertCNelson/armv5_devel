@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 3.10.0-rc2 Kernel Configuration
+# Linux/arm 3.10.0-rc3 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -1334,6 +1334,7 @@ CONFIG_FB_ATMEL=y
 # CONFIG_FB_METRONOME is not set
 # CONFIG_FB_BROADSHEET is not set
 # CONFIG_FB_AUO_K190X is not set
+# CONFIG_FB_SIMPLE is not set
 # CONFIG_EXYNOS_VIDEO is not set
 CONFIG_BACKLIGHT_LCD_SUPPORT=y
 # CONFIG_LCD_CLASS_DEVICE is not set
