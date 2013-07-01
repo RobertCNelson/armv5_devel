@@ -23,13 +23,13 @@ linaro_toolchain="arm9_gcc_4_7"
 #Kernel/Build
 KERNEL_REL=3.10
 KERNEL_TAG=${KERNEL_REL}
-BUILD=armv5-x0.16
+BUILD=armv5-x0
 
 #v3.X-rcX + upto SHA
 #KERNEL_SHA=""
 
 #git branch
-BRANCH="v3.10.x-at91"
+BRANCH="v3.11.x-at91"
 
 BUILDREV=1.0
 DISTRO=cross
