@@ -21,15 +21,15 @@ linaro_toolchain="arm9_gcc_4_7"
 #linaro_toolchain="cortex_gcc_4_8"
 
 #Kernel/Build
-KERNEL_REL=3.10
-KERNEL_TAG=${KERNEL_REL}.1
-BUILD=imxv5-x0.4
+KERNEL_REL=3.11
+KERNEL_TAG=${KERNEL_REL}-rc1
+BUILD=imxv5-x0.1
 
 #v3.X-rcX + upto SHA
-#KERNEL_SHA="2c2c0e52314ef812a2aa9f7d32b3162584bee92b"
+#KERNEL_SHA=""
 
 #git branch
-BRANCH="v3.10.x-imxv5"
+BRANCH="v3.11.x-imxv5"
 
 BUILDREV=1.0
 DISTRO=cross
