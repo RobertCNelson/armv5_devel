@@ -66,8 +66,14 @@ freescale_mxs () {
 	${git} "${DIR}/patches/freescale_mxs/0001-WIP-i2c-audio-support.patch"
 }
 
+dts () {
+	echo "dir: dts"
+	${git} "${DIR}/patches/dts/0001-ARM-dts-imx23-olinuxino-enable-Low-Resolution-ADC.patch"
+}
+
 arm
 #mxs_mmc
 #freescale_mxs
+dts
 
 echo "patch.sh ran successful"
