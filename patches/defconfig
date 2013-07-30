@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 3.11.0-rc1 Kernel Configuration
+# Linux/arm 3.11.0-rc3 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -2118,7 +2118,6 @@ CONFIG_MXS_LRADC=y
 # CONFIG_ANDROID is not set
 # CONFIG_USB_WPAN_HCD is not set
 # CONFIG_WIMAX_GDM72XX is not set
-# CONFIG_CSR_WIFI is not set
 # CONFIG_CED1401 is not set
 # CONFIG_DGRP is not set
 CONFIG_CLKDEV_LOOKUP=y
@@ -2687,7 +2686,6 @@ CONFIG_CRYPTO_ECB=m
 #
 CONFIG_CRYPTO_CRC32C=y
 # CONFIG_CRYPTO_CRC32 is not set
-CONFIG_CRYPTO_CRCT10DIF=y
 # CONFIG_CRYPTO_GHASH is not set
 # CONFIG_CRYPTO_MD4 is not set
 CONFIG_CRYPTO_MD5=m
