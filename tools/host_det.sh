@@ -200,10 +200,24 @@ debian_regs () {
 				pkg="ia32-libs"
 				check_dpkg
 				;;
-			*)
+			wheezy|quantal)
 				pkg="ia32-libs"
 				check_dpkg
-				LC_ALL=C dpkg --list | awk '{print $2}' | grep "^${pkg}" >/dev/null || dpkg_multiarch=1
+				pkg="libncurses5:i386"
+				check_dpkg
+				dpkg_multiarch=1
+				;;
+			jessie|sid|raring|saucy)
+				#Fixme: this probally also covers quantal too...
+				pkg="libc6:i386"
+				check_dpkg
+				pkg="libstdc++6:i386"
+				check_dpkg
+				pkg="libncurses5:i386"
+				check_dpkg
+				pkg="zlib1g:i386"
+				check_dpkg
+				dpkg_multiarch=1
 				;;
 			esac
 
@@ -254,11 +268,11 @@ debian_regs () {
 BUILD_HOST=${BUILD_HOST:="$( detect_host )"}
 if [ $(which lsb_release) ] ; then
 	info "Detected build host [`lsb_release -sd`]"
-	info "host: [`dpkg --print-architecture`]"
+	info "host: [`uname -m`]"
 	info "git HEAD commit: [`git rev-parse HEAD`]"
 else
 	info "Detected build host [$BUILD_HOST]"
-	info "host: [`dpkg --print-architecture`]"
+	info "host: [`uname -m`]"
 	info "git HEAD commit: [`git rev-parse HEAD`]"
 fi
 case "$BUILD_HOST" in
