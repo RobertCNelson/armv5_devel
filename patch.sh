@@ -66,8 +66,7 @@ atmel_mci () {
 atmel_fixes () {
 	echo "dir: atmel_fixes"
 	${git} "${DIR}/patches/atmel_fixes/0001-at91-merge-mega-patch.patch"
-#	${git} "${DIR}/patches/atmel_fixes/0002-net-macb-fix-ISR-clear-on-write-behavior-only-for-so.patch"
-#	${git} "${DIR}/patches/atmel_fixes/0003-v2-RTC-for-at91sam9x5-family.patch"
+	${git} "${DIR}/patches/atmel_fixes/0002-ARM-at91-at91sam9x5-RTC-is-not-compatible-with-at91r.patch"
 }
 
 ariag25_fixes () {

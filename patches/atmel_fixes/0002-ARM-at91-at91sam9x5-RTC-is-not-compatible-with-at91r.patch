@@ -1,0 +1,31 @@
+From aa2a0da346cd45296e3f2b6b6c65594c835000c4 Mon Sep 17 00:00:00 2001
+From: Nicolas Ferre <nicolas.ferre@atmel.com>
+Date: Thu, 18 Apr 2013 08:13:21 +0000
+Subject: [PATCH 2/2] ARM: at91: at91sam9x5 RTC is not compatible with
+ at91rm9200 one
+
+Due to a bug with RTC IMR, we cannot consider at91sam9x5 RTC compatible
+with the previous one. Modify DT compatibility string, even if the driver
+is not yet modified to take it into account.
+
+Signed-off-by: Nicolas Ferre <nicolas.ferre@atmel.com>
+---
+ arch/arm/boot/dts/at91sam9x5.dtsi |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/at91sam9x5.dtsi b/arch/arm/boot/dts/at91sam9x5.dtsi
+index d1b5199..4227464 100644
+--- a/arch/arm/boot/dts/at91sam9x5.dtsi
++++ b/arch/arm/boot/dts/at91sam9x5.dtsi
+@@ -643,7 +643,7 @@
+ 			};
+ 
+ 			rtc@fffffeb0 {
+-				compatible = "atmel,at91rm9200-rtc";
++				compatible = "atmel,at91sam9x5-rtc";
+ 				reg = <0xfffffeb0 0x40>;
+ 				interrupts = <1 4 7>;
+ 				status = "disabled";
+-- 
+1.7.10.4
+
