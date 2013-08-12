@@ -29,8 +29,41 @@ detect_host () {
 	fi
 }
 
+check_rpm () {
+	pkg_test=$(LC_ALL=C rpm -q ${pkg})
+	if [ "x${pkg_test}" = "xpackage ${pkg} is not installed" ] ; then
+		rpm_pkgs="${rpm_pkgs}${pkg} "
+	fi
+}
+
 redhat_reqs () {
-	echo "RH Not implemented yet"
+	unset rpm_pkgs
+	pkg="redhat-lsb-core"
+	check_rpm
+	pkg="gcc"
+	check_rpm
+	pkg="ncurses-devel"
+	check_rpm
+	pkg="wget"
+	check_rpm
+
+	arch=$(uname -m)
+	if [ "x${arch}" = "xx86_64" ] ; then
+		pkg="ncurses-devel.i686"
+		check_rpm
+		pkg="libstdc++.i686"
+		check_rpm
+		pkg="zlib.i686"
+		check_rpm
+	fi
+
+	if [ "${rpm_pkgs}" ] ; then
+		echo "Fedora: missing dependicies, please install:"
+		echo "-----------------------------"
+		echo "yum install ${rpm_pkgs}"
+		echo "-----------------------------"
+		return 1
+	fi
 }
 
 suse_regs () {
@@ -98,8 +131,6 @@ debian_regs () {
 	check_dpkg
 	pkg="fakeroot"
 	check_dpkg
-	pkg="man-db"
-	check_dpkg
 	pkg="libncurses5-dev"
 	check_dpkg
 	pkg="lsb-release"
@@ -107,6 +138,8 @@ debian_regs () {
 	pkg="lzma"
 	check_dpkg
 	pkg="lzop"
+	check_dpkg
+	pkg="man-db"
 	check_dpkg
 
 	unset warn_dpkg_ia32
@@ -200,20 +233,12 @@ debian_regs () {
 				pkg="ia32-libs"
 				check_dpkg
 				;;
-			wheezy|quantal)
-				pkg="ia32-libs"
-				check_dpkg
-				pkg="libncurses5:i386"
-				check_dpkg
-				dpkg_multiarch=1
-				;;
-			jessie|sid|raring|saucy)
-				#Fixme: this probally also covers quantal too...
+			wheezy|jessie|sid|quantal|raring|saucy)
 				pkg="libc6:i386"
 				check_dpkg
-				pkg="libstdc++6:i386"
-				check_dpkg
 				pkg="libncurses5:i386"
+				check_dpkg
+				pkg="libstdc++6:i386"
 				check_dpkg
 				pkg="zlib1g:i386"
 				check_dpkg
@@ -277,7 +302,7 @@ else
 fi
 case "$BUILD_HOST" in
     redhat*)
-	    redhat_reqs
+	    redhat_reqs || error "Failed dependency check"
         ;;
     debian*)
 	    debian_regs || error "Failed dependency check"
