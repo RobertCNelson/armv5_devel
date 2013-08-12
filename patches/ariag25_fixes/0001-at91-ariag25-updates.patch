@@ -1,0 +1,105 @@
+From 11e4f0c695b33bed3d169af591f17f9020ca2bc6 Mon Sep 17 00:00:00 2001
+From: Douglas Gilbert <[mailto:dgilbert@interlog.com]>
+Date: Mon, 12 Aug 2013 10:36:25 -0500
+Subject: [PATCH] at91: ariag25 updates
+
+Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+---
+ arch/arm/boot/dts/at91-ariag25.dts |   39 +++++++++++++++++++++++++++++++++---
+ arch/arm/mach-at91/at91sam9x5.c    |    2 ++
+ 2 files changed, 38 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/at91-ariag25.dts b/arch/arm/boot/dts/at91-ariag25.dts
+index cce45f5..683fc76 100644
+--- a/arch/arm/boot/dts/at91-ariag25.dts
++++ b/arch/arm/boot/dts/at91-ariag25.dts
+@@ -109,7 +109,7 @@
+ 				 * following can be overwritten by bootloader:
+ 				 * for example u-boot 'ftd set' command
+ 				 */
+-				local-mac-address = [00 00 00 00 00 00];
++				local-mac-address = [00 04 25 ef 00 00];
+ 				status = "okay";
+ 			};
+ 
+@@ -119,13 +119,41 @@
+ 			 * Change to "okay" if you need additional serial ports
+ 			 */
+ 			uart0: serial@f8040000 {
+-				status = "disabled";
++				status = "okay";
+ 			};
+ 
+ 			uart1: serial@f8044000 {
+ 				status = "disabled";
+ 			};
+ 
++			spi0: spi@f0000000 {
++				status = "okay";
++				cs-gpios = <&pioA 14 0>, <0>, <0>, <0>;
++				anything@0 {
++					compatible = "spidev";
++					// spi-max-frequency = <50000000>;  // 50 MHz
++					spi-max-frequency = <5000000>;      // 5 MHz
++					reg = <0>;
++				};
++				// m25p80@0 {
++				// compatible = "spidev";
++				// spi-max-frequency = <50000000>;
++				// reg = <0>;
++				// };
++
++				mmc-slot@0 {
++					compatible = "mmc-spi-slot";
++					reg = <0>;
++					voltage-ranges = <3300 3300>;
++					// Use one of next 3 lines, comment out other 2
++					gpios = <&pioA 26 0>;    /* CD to PA26 */
++					// broken-cd;
++					// non-removable;
++					cd-inverted;
++					spi-max-frequency = <8000000>;
++				};
++			};
++
+ 			adc0: adc@f804c000 {
+ 				status = "okay";
+ 				atmel,adc-channels-used = <0xf>;
+@@ -139,7 +167,7 @@
+ 			pinctrl@fffff400 {
+ 				w1_0 {
+ 					pinctrl_w1_0: w1_0-0 {
+-						atmel,pins = <0 21 0x0 0x1>; /* PA21 PIO, pull-up */
++						atmel,pins = <AT91_PIOA 21 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP>;
+ 					};
+ 				};
+ 			};
+@@ -147,6 +175,11 @@
+ 			rtc@fffffeb0 {
+ 				status = "okay";
+ 			};
++
++			watchdog@fffffe40 {
++				/* timeout-sec = <14>; */
++				status = "okay";
++			};
+ 		};
+ 
+ 		usb0: ohci@00600000 {
+diff --git a/arch/arm/mach-at91/at91sam9x5.c b/arch/arm/mach-at91/at91sam9x5.c
+index 2abee66..916e5a1 100644
+--- a/arch/arm/mach-at91/at91sam9x5.c
++++ b/arch/arm/mach-at91/at91sam9x5.c
+@@ -227,6 +227,8 @@ static struct clk_lookup periph_clocks_lookups[] = {
+ 	CLKDEV_CON_DEV_ID("usart", "f8020000.serial", &usart1_clk),
+ 	CLKDEV_CON_DEV_ID("usart", "f8024000.serial", &usart2_clk),
+ 	CLKDEV_CON_DEV_ID("usart", "f8028000.serial", &usart3_clk),
++	CLKDEV_CON_DEV_ID("usart", "f8040000.serial", &uart0_clk),
++	CLKDEV_CON_DEV_ID("usart", "f8044000.serial", &uart1_clk),
+ 	CLKDEV_CON_DEV_ID("t0_clk", "f8008000.timer", &tcb0_clk),
+ 	CLKDEV_CON_DEV_ID("t0_clk", "f800c000.timer", &tcb0_clk),
+ 	CLKDEV_CON_DEV_ID("mci_clk", "f0008000.mmc", &mmc0_clk),
+-- 
+1.7.10.4
+

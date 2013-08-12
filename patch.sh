@@ -70,7 +70,7 @@ atmel_fixes () {
 
 ariag25_fixes () {
 	echo "dir: ariag25_fixes"
-#	${git} "${DIR}/patches/ariag25_fixes/0001-at91-ariag25-add-watchdog-spi.patch"
+	${git} "${DIR}/patches/ariag25_fixes/0001-at91-ariag25-updates.patch"
 }
 
 arm
