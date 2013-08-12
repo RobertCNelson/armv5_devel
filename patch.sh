@@ -55,25 +55,21 @@ arm () {
 	${git} "${DIR}/patches/arm/0001-deb-pkg-Simplify-architecture-matching-for-cross-bui.patch"
 }
 
-mxs_mmc () {
-	echo "dir: mxs_mmc"
-#	${git} "${DIR}/patches/mxs_mmc/0001-mmc-mxs-mmc-Add-support-for-non-removable-cards.patch"
-#	${git} "${DIR}/patches/mxs_mmc/0002-ARM-dts-imx23-olinuxino-Set-the-sdcard-as-non-remova.patch"
-}
-
-freescale_mxs () {
-	echo "dir: freescale_mxs"
-	${git} "${DIR}/patches/freescale_mxs/0001-WIP-i2c-audio-support.patch"
+mxs_audio () {
+	echo "dir: mxs_audio"
+	#From: https://github.com/ITserve/imx23-audio/commits/imx23-audio
+	${git} "${DIR}/patches/mxs_audio/0001-Added-ASoC-driver-for-i.MX233-s-builtin-ADC-DAC-code.patch"
+	${git} "${DIR}/patches/mxs_audio/0002-Added-DTS-with-mxs-builtin-entries-for-testing-the-a.patch"
 }
 
 dts () {
 	echo "dir: dts"
 	${git} "${DIR}/patches/dts/0001-ARM-dts-imx23-olinuxino-enable-Low-Resolution-ADC.patch"
+	${git} "${DIR}/patches/dts/0002-arm-dts-imx23-olinuxino-enable-mxs-builtin-audio.patch"
 }
 
 arm
-#mxs_mmc
-#freescale_mxs
+mxs_audio
 dts
 
 echo "patch.sh ran successful"
