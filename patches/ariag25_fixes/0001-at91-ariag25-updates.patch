@@ -3,12 +3,13 @@ From: Douglas Gilbert <[mailto:dgilbert@interlog.com]>
 Date: Mon, 12 Aug 2013 10:36:25 -0500
 Subject: [PATCH] at91: ariag25 updates
 
+v2: dropped at91sam9x5 usart fix, as merged mainline
+
 Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
 ---
  arch/arm/boot/dts/at91-ariag25.dts |   39 +++++++++++++++++++++++++++++++++---
- arch/arm/mach-at91/at91sam9x5.c    |    2 ++
- 2 files changed, 38 insertions(+), 3 deletions(-)
+ 1 file changed, 36 insertions(+), 3 deletions(-)
 
 diff --git a/arch/arm/boot/dts/at91-ariag25.dts b/arch/arm/boot/dts/at91-ariag25.dts
 index cce45f5..683fc76 100644
@@ -87,19 +88,6 @@ index cce45f5..683fc76 100644
  		};
  
  		usb0: ohci@00600000 {
-diff --git a/arch/arm/mach-at91/at91sam9x5.c b/arch/arm/mach-at91/at91sam9x5.c
-index 2abee66..916e5a1 100644
---- a/arch/arm/mach-at91/at91sam9x5.c
-+++ b/arch/arm/mach-at91/at91sam9x5.c
-@@ -227,6 +227,8 @@ static struct clk_lookup periph_clocks_lookups[] = {
- 	CLKDEV_CON_DEV_ID("usart", "f8020000.serial", &usart1_clk),
- 	CLKDEV_CON_DEV_ID("usart", "f8024000.serial", &usart2_clk),
- 	CLKDEV_CON_DEV_ID("usart", "f8028000.serial", &usart3_clk),
-+	CLKDEV_CON_DEV_ID("usart", "f8040000.serial", &uart0_clk),
-+	CLKDEV_CON_DEV_ID("usart", "f8044000.serial", &uart1_clk),
- 	CLKDEV_CON_DEV_ID("t0_clk", "f8008000.timer", &tcb0_clk),
- 	CLKDEV_CON_DEV_ID("t0_clk", "f800c000.timer", &tcb0_clk),
- 	CLKDEV_CON_DEV_ID("mci_clk", "f0008000.mmc", &mmc0_clk),
 -- 
 1.7.10.4
 
