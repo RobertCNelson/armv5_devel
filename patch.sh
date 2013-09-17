@@ -52,7 +52,7 @@ cleanup () {
 
 arm () {
 	echo "dir: arm"
-	${git} "${DIR}/patches/arm/0001-deb-pkg-Simplify-architecture-matching-for-cross-bui.patch"
+	${git} "${DIR}/patches/arm/0001-builddeb-just-force-armel.patch"
 }
 
 mxs_audio () {
@@ -64,7 +64,7 @@ mxs_audio () {
 
 dts () {
 	echo "dir: dts"
-	${git} "${DIR}/patches/dts/0001-ARM-dts-imx23-olinuxino-enable-Low-Resolution-ADC.patch"
+#	${git} "${DIR}/patches/dts/0001-ARM-dts-imx23-olinuxino-enable-Low-Resolution-ADC.patch"
 	${git} "${DIR}/patches/dts/0002-arm-dts-imx23-olinuxino-enable-mxs-builtin-audio.patch"
 }
 
