@@ -74,9 +74,15 @@ ariag25_fixes () {
 	${git} "${DIR}/patches/ariag25_fixes/0001-at91-ariag25-updates.patch"
 }
 
+fixes () {
+	echo "dir: fixes"
+	${git} "${DIR}/patches/fixes/0001-mtd-atmel_nand-fix-bug-driver-will-in-a-dead-lock-if.patch"
+}
+
 arm
 atmel_mci
 atmel_fixes
 ariag25_fixes
+fixes
 
 echo "patch.sh ran successful"
