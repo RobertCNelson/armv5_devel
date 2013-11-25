@@ -83,6 +83,6 @@ arm
 atmel_mci
 atmel_fixes
 ariag25_fixes
-fixes
+#fixes
 
 echo "patch.sh ran successful"
