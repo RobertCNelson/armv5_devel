@@ -76,13 +76,13 @@ ariag25_fixes () {
 
 fixes () {
 	echo "dir: fixes"
-	${git} "${DIR}/patches/fixes/0001-mtd-atmel_nand-fix-bug-driver-will-in-a-dead-lock-if.patch"
+	${git} "${DIR}/patches/fixes/0001-v2-ohci-at91-fix.patch"
 }
 
 arm
 atmel_mci
 atmel_fixes
 ariag25_fixes
-#fixes
+fixes
 
 echo "patch.sh ran successful"
