@@ -65,7 +65,9 @@ atmel_mci () {
 
 atmel_fixes () {
 	echo "dir: atmel_fixes"
-#	${git} "${DIR}/patches/atmel_fixes/0001-at91-merge-mega-patch.patch"
+	${git} "${DIR}/patches/atmel_fixes/0001-usb-ohci-at91-fix-irq-and-iomem-resource-retrieval.patch"
+	${git} "${DIR}/patches/atmel_fixes/0002-usb-ohci-at91-replace-request_mem_region-ioremap-by-.patch"
+	${git} "${DIR}/patches/atmel_fixes/0003-usb-ohci-at91-use-device-managed-clk-retrieval.patch"
 }
 
 ariag25_fixes () {
@@ -73,15 +75,9 @@ ariag25_fixes () {
 	${git} "${DIR}/patches/ariag25_fixes/0001-at91-ariag25-updates.patch"
 }
 
-fixes () {
-	echo "dir: fixes"
-	${git} "${DIR}/patches/fixes/0001-v2-ohci-at91-fix.patch"
-}
-
 arm
 atmel_mci
 atmel_fixes
 ariag25_fixes
-fixes
 
 echo "patch.sh ran successful"

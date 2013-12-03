@@ -1,0 +1,76 @@
+From 43e906bd589cdb921e8ec5e163789dda444c70a0 Mon Sep 17 00:00:00 2001
+From: Boris BREZILLON <b.brezillon@overkiz.com>
+Date: Tue, 3 Dec 2013 15:07:48 +0100
+Subject: [PATCH 2/3] usb: ohci-at91: replace request_mem_region + ioremap by
+ devm_request_and_ioremap
+
+Replace the request_mem_region + ioremap calls by the
+devm_request_and_ioremap call which does the same things but with device
+managed resources.
+
+Signed-off-by: Boris BREZILLON <b.brezillon@overkiz.com>
+Tested-by: Robert Nelson <robertcnelson@gmail.com>
+---
+ drivers/usb/host/ohci-at91.c | 24 +++++-------------------
+ 1 file changed, 5 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
+index 7aec6ca..c406f1e 100644
+--- a/drivers/usb/host/ohci-at91.c
++++ b/drivers/usb/host/ohci-at91.c
+@@ -157,24 +157,18 @@ static int usb_hcd_at91_probe(const struct hc_driver *driver,
+ 	hcd->rsrc_start = mem_r->start;
+ 	hcd->rsrc_len = resource_size(mem_r);
+ 
+-	if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len, hcd_name)) {
+-		pr_debug("request_mem_region failed\n");
+-		retval = -EBUSY;
+-		goto err1;
+-	}
+-
+-	hcd->regs = ioremap(hcd->rsrc_start, hcd->rsrc_len);
++	hcd->regs = devm_request_and_ioremap(&pdev->dev, mem_r);
+ 	if (!hcd->regs) {
+-		pr_debug("ioremap failed\n");
++		dev_dbg(dev, "devm_request_and_ioremap failed\n");
+ 		retval = -EIO;
+-		goto err2;
++		goto err;
+ 	}
+ 
+ 	iclk = clk_get(&pdev->dev, "ohci_clk");
+ 	if (IS_ERR(iclk)) {
+ 		dev_err(&pdev->dev, "failed to get ohci_clk\n");
+ 		retval = PTR_ERR(iclk);
+-		goto err3;
++		goto err;
+ 	}
+ 	fclk = clk_get(&pdev->dev, "uhpck");
+ 	if (IS_ERR(fclk)) {
+@@ -218,13 +212,7 @@ static int usb_hcd_at91_probe(const struct hc_driver *driver,
+  err4:
+ 	clk_put(iclk);
+ 
+- err3:
+-	iounmap(hcd->regs);
+-
+- err2:
+-	release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
+-
+- err1:
++ err:
+ 	usb_put_hcd(hcd);
+ 	return retval;
+ }
+@@ -247,8 +235,6 @@ static void usb_hcd_at91_remove(struct usb_hcd *hcd,
+ {
+ 	usb_remove_hcd(hcd);
+ 	at91_stop_hc(pdev);
+-	iounmap(hcd->regs);
+-	release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
+ 	usb_put_hcd(hcd);
+ 
+ 	if (IS_ENABLED(CONFIG_COMMON_CLK))
+-- 
+1.8.4.3
+
