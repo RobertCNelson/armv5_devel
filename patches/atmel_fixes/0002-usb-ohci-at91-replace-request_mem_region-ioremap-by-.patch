@@ -1,7 +1,7 @@
-From 43e906bd589cdb921e8ec5e163789dda444c70a0 Mon Sep 17 00:00:00 2001
+From 86574cf15f2a16fd7636c5af5fbb36fc8033d7d4 Mon Sep 17 00:00:00 2001
 From: Boris BREZILLON <b.brezillon@overkiz.com>
-Date: Tue, 3 Dec 2013 15:07:48 +0100
-Subject: [PATCH 2/3] usb: ohci-at91: replace request_mem_region + ioremap by
+Date: Tue, 3 Dec 2013 18:51:54 +0100
+Subject: [PATCH 2/4] usb: ohci-at91: replace request_mem_region + ioremap by
  devm_request_and_ioremap
 
 Replace the request_mem_region + ioremap calls by the
@@ -9,13 +9,13 @@ devm_request_and_ioremap call which does the same things but with device
 managed resources.
 
 Signed-off-by: Boris BREZILLON <b.brezillon@overkiz.com>
-Tested-by: Robert Nelson <robertcnelson@gmail.com>
+Acked-by: Nicolas Ferre <nicolas.ferre@atmel.com>
 ---
  drivers/usb/host/ohci-at91.c | 24 +++++-------------------
  1 file changed, 5 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
-index 7aec6ca..c406f1e 100644
+index 7aec6ca..8528895 100644
 --- a/drivers/usb/host/ohci-at91.c
 +++ b/drivers/usb/host/ohci-at91.c
 @@ -157,24 +157,18 @@ static int usb_hcd_at91_probe(const struct hc_driver *driver,
@@ -29,7 +29,7 @@ index 7aec6ca..c406f1e 100644
 -	}
 -
 -	hcd->regs = ioremap(hcd->rsrc_start, hcd->rsrc_len);
-+	hcd->regs = devm_request_and_ioremap(&pdev->dev, mem_r);
++	hcd->regs = devm_request_and_ioremap(dev, mem_r);
  	if (!hcd->regs) {
 -		pr_debug("ioremap failed\n");
 +		dev_dbg(dev, "devm_request_and_ioremap failed\n");

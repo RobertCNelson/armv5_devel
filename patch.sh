@@ -67,7 +67,8 @@ atmel_fixes () {
 	echo "dir: atmel_fixes"
 	${git} "${DIR}/patches/atmel_fixes/0001-usb-ohci-at91-fix-irq-and-iomem-resource-retrieval.patch"
 	${git} "${DIR}/patches/atmel_fixes/0002-usb-ohci-at91-replace-request_mem_region-ioremap-by-.patch"
-	${git} "${DIR}/patches/atmel_fixes/0003-usb-ohci-at91-use-device-managed-clk-retrieval.patch"
+	${git} "${DIR}/patches/atmel_fixes/0003-usb-ohci-at91-use-dev-variable-instead-of-pdev-dev.patch"
+	${git} "${DIR}/patches/atmel_fixes/0004-usb-ohci-at91-use-device-managed-clk-retrieval.patch"
 }
 
 ariag25_fixes () {

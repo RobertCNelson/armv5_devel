@@ -1,53 +1,52 @@
-From a798f7c55051428fdc0e525f07886b7cce0fa84c Mon Sep 17 00:00:00 2001
+From d430db38b8b8f3cd968967c190b292068d1ddfda Mon Sep 17 00:00:00 2001
 From: Boris BREZILLON <b.brezillon@overkiz.com>
-Date: Tue, 3 Dec 2013 15:07:49 +0100
-Subject: [PATCH 3/3] usb: ohci-at91: use device managed clk retrieval
+Date: Tue, 3 Dec 2013 18:51:56 +0100
+Subject: [PATCH 4/4] usb: ohci-at91: use device managed clk retrieval
 
 Replace clk_get calls by devm_clk_get calls.
 
 Signed-off-by: Boris BREZILLON <b.brezillon@overkiz.com>
-Tested-by: Robert Nelson <robertcnelson@gmail.com>
+Acked-by: Nicolas Ferre <nicolas.ferre@atmel.com>
 ---
- drivers/usb/host/ohci-at91.c | 32 ++++++++------------------------
- 1 file changed, 8 insertions(+), 24 deletions(-)
+ drivers/usb/host/ohci-at91.c | 30 +++++++-----------------------
+ 1 file changed, 7 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
-index c406f1e..3652962 100644
+index 2a86e32..7b2ccd3 100644
 --- a/drivers/usb/host/ohci-at91.c
 +++ b/drivers/usb/host/ohci-at91.c
 @@ -164,30 +164,30 @@ static int usb_hcd_at91_probe(const struct hc_driver *driver,
  		goto err;
  	}
  
--	iclk = clk_get(&pdev->dev, "ohci_clk");
+-	iclk = clk_get(dev, "ohci_clk");
 +	iclk = devm_clk_get(dev, "ohci_clk");
  	if (IS_ERR(iclk)) {
--		dev_err(&pdev->dev, "failed to get ohci_clk\n");
-+		dev_err(dev, "failed to get ohci_clk\n");
+ 		dev_err(dev, "failed to get ohci_clk\n");
  		retval = PTR_ERR(iclk);
  		goto err;
  	}
--	fclk = clk_get(&pdev->dev, "uhpck");
+-	fclk = clk_get(dev, "uhpck");
 +	fclk = devm_clk_get(dev, "uhpck");
  	if (IS_ERR(fclk)) {
- 		dev_err(&pdev->dev, "failed to get uhpck\n");
+ 		dev_err(dev, "failed to get uhpck\n");
  		retval = PTR_ERR(fclk);
 -		goto err4;
 +		goto err;
  	}
--	hclk = clk_get(&pdev->dev, "hclk");
+-	hclk = clk_get(dev, "hclk");
 +	hclk = devm_clk_get(dev, "hclk");
  	if (IS_ERR(hclk)) {
- 		dev_err(&pdev->dev, "failed to get hclk\n");
+ 		dev_err(dev, "failed to get hclk\n");
  		retval = PTR_ERR(hclk);
 -		goto err5;
 +		goto err;
  	}
  	if (IS_ENABLED(CONFIG_COMMON_CLK)) {
--		uclk = clk_get(&pdev->dev, "usb_clk");
-+		uclk = devm_clk_get(&pdev->dev, "usb_clk");
+-		uclk = clk_get(dev, "usb_clk");
++		uclk = devm_clk_get(dev, "usb_clk");
  		if (IS_ERR(uclk)) {
- 			dev_err(&pdev->dev, "failed to get uclk\n");
+ 			dev_err(dev, "failed to get uclk\n");
  			retval = PTR_ERR(uclk);
 -			goto err6;
 +			goto err;
