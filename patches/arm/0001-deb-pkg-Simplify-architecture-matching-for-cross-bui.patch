@@ -12,19 +12,17 @@ built arch.
 
 Signed-off-by: maximilian attems <max@xxxxxxx>
 ---
- scripts/package/builddeb |   81 ++++++++++++++++++++++------------------------
- 1 file changed, 38 insertions(+), 43 deletions(-)
+ scripts/package/builddeb | 78 +++++++++++++++++++++++-------------------------
+ 1 file changed, 38 insertions(+), 40 deletions(-)
 
 diff --git a/scripts/package/builddeb b/scripts/package/builddeb
-index acb8650..a5f197b 100644
+index 90e521f..1b2fc99 100644
 --- a/scripts/package/builddeb
 +++ b/scripts/package/builddeb
-@@ -25,44 +25,8 @@ create_package() {
- 	chown -R root:root "$pdir"
- 	chmod -R go-w "$pdir"
+@@ -27,42 +27,9 @@ create_package() {
  
--	# Attempt to find the correct Debian architecture
--	local forcearch="" debarch=""
+ 	# Attempt to find the correct Debian architecture
+ 	local forcearch="" debarch=""
 -	case "$UTS_MACHINE" in
 -	i386|ia64|alpha)
 -		debarch="$UTS_MACHINE" ;;
@@ -39,9 +37,9 @@ index acb8650..a5f197b 100644
 -	parisc*)
 -		debarch=hppa ;;
 -	mips*)
--		debarch=mips$(grep -q CPU_LITTLE_ENDIAN=y .config && echo el) ;;
+-		debarch=mips$(grep -q CPU_LITTLE_ENDIAN=y $KCONFIG_CONFIG && echo el) ;;
 -	arm*)
--		debarch=arm$(grep -q CONFIG_AEABI=y .config && echo el) ;;
+-		debarch=arm$(grep -q CONFIG_AEABI=y $KCONFIG_CONFIG && echo el) ;;
 -	*)
 -		echo "" >&2
 -		echo "** ** **  WARNING  ** ** **" >&2
@@ -58,16 +56,16 @@ index acb8650..a5f197b 100644
 -	if [ -n "$debarch" ] ; then
 -		forcearch="-DArchitecture=$debarch"
 -	fi
--
+ 
  	# Create the package
 -	dpkg-gencontrol -isp $forcearch -p$pname -P"$pdir"
 +	dpkg-gencontrol -p$pname -P"$pdir"
  	dpkg --build "$pdir" ..
  }
  
-@@ -83,6 +47,38 @@ fwpackagename=linux-firmware-image
- kernel_headers_packagename=linux-headers-$version
+@@ -85,6 +52,38 @@ kernel_headers_packagename=linux-headers-$version
  libc_headers_packagename=linux-libc-dev
+ dbg_packagename=$packagename-dbg
  
 +# Attempt to find the correct Debian architecture
 +case "$UTS_MACHINE" in
@@ -84,9 +82,9 @@ index acb8650..a5f197b 100644
 +parisc*)
 +	debarch=hppa ;;
 +mips*)
-+	debarch=mips$(grep -q CPU_LITTLE_ENDIAN=y .config && echo el) ;;
++	debarch=mips$(grep -q CPU_LITTLE_ENDIAN=y $KCONFIG_CONFIG && echo el) ;;
 +arm*)
-+	debarch=arm$(grep -q CONFIG_AEABI=y .config && echo el) ;;
++	debarch=arm$(grep -q CONFIG_AEABI=y $KCONFIG_CONFIG && echo el) ;;
 +*)
 +	echo "" >&2
 +	echo "** ** **  WARNING  ** ** **" >&2
@@ -104,7 +102,7 @@ index acb8650..a5f197b 100644
  if [ "$ARCH" = "um" ] ; then
  	packagename=user-mode-linux-$version
  fi
-@@ -234,8 +230,8 @@ else
+@@ -269,8 +268,8 @@ else
  Package: $packagename
  Provides: linux-image, linux-image-2.6, linux-modules-$version
  Suggests: $fwpackagename
@@ -115,8 +113,8 @@ index acb8650..a5f197b 100644
   This package contains the Linux kernel, modules and corresponding other
   files, version: $version.
  EOF
-@@ -252,15 +248,14 @@ mkdir -p "$destdir"
- (cd $objtree; tar -c -f - -T "$objtree/debian/hdrobjfiles") | (cd $destdir; tar -xf -)
+@@ -288,15 +287,14 @@ mkdir -p "$destdir"
+ (cd $objtree; cp $KCONFIG_CONFIG $destdir/.config) # copy .config manually to be where it's expected to be
  ln -sf "/usr/src/linux-headers-$version" "$kernel_headers_dir/lib/modules/$version/build"
  rm -f "$objtree/debian/hdrsrcfiles" "$objtree/debian/hdrobjfiles"
 -arch=$(dpkg --print-architecture)
@@ -135,5 +133,5 @@ index acb8650..a5f197b 100644
   This is useful for people who need to build external modules
  EOF
 -- 
-1.7.10.4
+1.8.4.rc3
 
