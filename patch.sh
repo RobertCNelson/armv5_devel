@@ -75,7 +75,7 @@ ariag25_fixes () {
 
 fixes () {
 	echo "dir: fixes"
-	${git} "${DIR}/patches/fixes/0001-mtd-atmel_nand-fix-bug-driver-will-in-a-dead-lock-if.patch"
+#	${git} "${DIR}/patches/fixes/0001-mtd-atmel_nand-fix-bug-driver-will-in-a-dead-lock-if.patch"
 }
 
 arm
