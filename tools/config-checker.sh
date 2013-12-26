@@ -8,7 +8,6 @@ check_config_builtin () {
 	if [ "x${test_config}" = "x" ] ; then
 		echo "Config: [${config}=y] not enabled"
 		echo "echo ${config}=y >> ./KERNEL/.config"
-		exit
 	fi
 }
 
@@ -28,7 +27,6 @@ check_config () {
 		echo "Config: [${config}] not enabled"
 		echo "echo ${config}=y >> ./KERNEL/.config"
 		echo "echo ${config}=m >> ./KERNEL/.config"
-		exit
 	fi
 }
 
