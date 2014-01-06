@@ -27,8 +27,8 @@ linaro_toolchain="arm9_gcc_4_7"
 
 #Kernel/Build
 KERNEL_REL=3.13
-KERNEL_TAG=${KERNEL_REL}-rc4
-BUILD=imxv5-r3
+KERNEL_TAG=${KERNEL_REL}-rc7
+BUILD=imxv5-r4
 
 #v3.X-rcX + upto SHA
 #KERNEL_SHA=""
