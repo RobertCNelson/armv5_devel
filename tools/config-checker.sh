@@ -6,8 +6,6 @@ check_config_builtin () {
 	unset test_config
 	test_config=$(grep "${config}=y" ${DIR}/patches/defconfig || true)
 	if [ "x${test_config}" = "x" ] ; then
-		echo "#------------------------------------"
-		echo "#Config: [${config}=y] not enabled"
 		echo "echo ${config}=y >> ./KERNEL/.config"
 	fi
 }
@@ -16,14 +14,11 @@ check_config_module () {
 	unset test_config
 	test_config=$(grep "${config}=y" ${DIR}/patches/defconfig || true)
 	if [ "x${test_config}" = "x${config}=y" ] ; then
-		echo "#------------------------------------"
 		echo "sed -i -e 's:${config}=y:${config}=m:g' ./KERNEL/.config"
 	else
 		unset test_config
 		test_config=$(grep "${config}=" ${DIR}/patches/defconfig || true)
 		if [ "x${test_config}" = "x" ] ; then
-			echo "#------------------------------------"
-			echo "#Config: [${config}] not enabled"
 			echo "echo ${config}=m >> ./KERNEL/.config"
 		fi
 	fi
@@ -33,8 +28,6 @@ check_config () {
 	unset test_config
 	test_config=$(grep "${config}=" ${DIR}/patches/defconfig || true)
 	if [ "x${test_config}" = "x" ] ; then
-		echo "#------------------------------------"
-		echo "#Config: [${config}] not enabled"
 		echo "echo ${config}=y >> ./KERNEL/.config"
 		echo "echo ${config}=m >> ./KERNEL/.config"
 	fi
@@ -44,8 +37,6 @@ check_config_disabled () {
 	unset test_config
 	test_config=$(grep "${config} is not set" ${DIR}/patches/defconfig || true)
 	if [ "x${test_config}" = "x" ] ; then
-		echo "#------------------------------------"
-		echo "#Disable config: [${config}]"
 		unset test_config
 		test_config=$(grep "${config}=y" ${DIR}/patches/defconfig || true)
 		if [ "x${test_config}" = "x${config}=y" ] ; then
@@ -53,6 +44,14 @@ check_config_disabled () {
 		else
 			echo "sed -i -e 's:${config}=m:# ${config} is not set:g' ./KERNEL/.config"
 		fi
+	fi
+}
+
+check_if_set_then_set_module () {
+	unset test_config
+	test_config=$(grep "${if_config}=y" ${DIR}/patches/defconfig || true)
+	if [ "x${test_config}" = "x${if_config}=y" ] ; then
+		check_config_module
 	fi
 }
 
@@ -197,6 +196,8 @@ check_config_builtin
 #check_config_disabled
 
 #zram
+config="CONFIG_STAGING"
+check_config_builtin
 config="CONFIG_ZSMALLOC"
 check_config_builtin
 config="CONFIG_ZRAM"
