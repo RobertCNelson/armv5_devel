@@ -71,6 +71,22 @@ check_if_set_then_disable () {
 	fi
 }
 
+#Basic:
+config="CONFIG_LOCALVERSION_AUTO"
+check_config_disabled
+
+#Modules
+config="CONFIG_MODULES"
+check_config_builtin
+config="CONFIG_MODULE_FORCE_LOAD"
+check_config_builtin
+config="CONFIG_MODULE_UNLOAD"
+check_config_builtin
+config="CONFIG_MODULE_FORCE_UNLOAD"
+check_config_builtin
+config="CONFIG_MODVERSIONS"
+check_config_builtin
+
 ###CONFIG_ARCH_MULTIPLATFORM
 if_config="CONFIG_ARCH_MULTIPLATFORM"
 
