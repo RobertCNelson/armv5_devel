@@ -76,7 +76,7 @@ ariag25_fixes () {
 	${git} "${DIR}/patches/ariag25_fixes/0001-at91-ariag25-updates.patch"
 }
 
-arm
+#arm
 atmel_mci
 #atmel_fixes
 ariag25_fixes
