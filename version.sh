@@ -28,8 +28,8 @@ toolchain="arm9_gcc_4_7"
 
 #Kernel/Build
 KERNEL_REL=3.12
-KERNEL_TAG=${KERNEL_REL}.10
-BUILD=armv5-r18
+KERNEL_TAG=${KERNEL_REL}.13
+BUILD=armv5-r19
 
 #v3.X-rcX + upto SHA
 #KERNEL_SHA=""
