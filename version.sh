@@ -28,8 +28,8 @@ toolchain="gcc_arm_embedded_4_8"
 
 #Kernel/Build
 KERNEL_REL=3.14
-KERNEL_TAG=${KERNEL_REL}-rc2
-BUILD=armv5-r1
+KERNEL_TAG=${KERNEL_REL}-rc4
+BUILD=armv5-r2
 
 #v3.X-rcX + upto SHA
 #KERNEL_SHA="dea4f48a0a301b23c65af8e4fe8ccf360c272fbf"
