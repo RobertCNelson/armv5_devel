@@ -50,11 +50,6 @@ cleanup () {
 	exit
 }
 
-arm () {
-	echo "dir: arm"
-	${git} "${DIR}/patches/arm/0001-deb-pkg-Simplify-architecture-matching-for-cross-bui.patch"
-}
-
 atmel_mci () {
 	echo "dir: atmel_mci"
 	${git} "${DIR}/patches/atmel_mci/0001-mmc-atmel-mci-remove-not-needed-DMA-capability-test.patch"
@@ -63,22 +58,12 @@ atmel_mci () {
 	${git} "${DIR}/patches/atmel_mci/0004-atmel-mci-replace-flush_dcache_page-with-flush_kerne.patch"
 }
 
-atmel_fixes () {
-	echo "dir: atmel_fixes"
-#	${git} "${DIR}/patches/atmel_fixes/0001-usb-ohci-at91-fix-irq-and-iomem-resource-retrieval.patch"
-	${git} "${DIR}/patches/atmel_fixes/0002-usb-ohci-at91-replace-request_mem_region-ioremap-by-.patch"
-	${git} "${DIR}/patches/atmel_fixes/0003-usb-ohci-at91-use-dev-variable-instead-of-pdev-dev.patch"
-	${git} "${DIR}/patches/atmel_fixes/0004-usb-ohci-at91-use-device-managed-clk-retrieval.patch"
-}
-
 ariag25_fixes () {
 	echo "dir: ariag25_fixes"
 	${git} "${DIR}/patches/ariag25_fixes/0001-at91-ariag25-updates.patch"
 }
 
-#arm
 atmel_mci
-#atmel_fixes
 ariag25_fixes
 
 echo "patch.sh ran successful"
