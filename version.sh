@@ -20,16 +20,16 @@ fi
 config="at91_dt_defconfig"
 
 #toolchain="arm9_gcc_4_7"
-toolchain="gcc_arm_embedded_4_8"
-#toolchain="gcc_linaro_eabi_4_8"
+#toolchain="gcc_arm_embedded_4_8"
+toolchain="gcc_linaro_eabi_4_8"
 #toolchain="gcc_linaro_gnueabi_4_6"
 #toolchain="gcc_linaro_gnueabihf_4_7"
 #toolchain="gcc_linaro_gnueabihf_4_8"
 
 #Kernel/Build
 KERNEL_REL=3.13
-KERNEL_TAG=${KERNEL_REL}.6
-BUILD=armv5-r16
+KERNEL_TAG=${KERNEL_REL}.7
+BUILD=armv5-r17
 
 #v3.X-rcX + upto SHA
 #KERNEL_SHA=""
