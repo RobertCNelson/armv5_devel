@@ -20,10 +20,10 @@ fi
 config="at91_dt_defconfig"
 
 #toolchain="arm9_gcc_4_7"
-toolchain="gcc_arm_embedded_4_8"
-#toolchain="cortex_gcc_4_6"
-#toolchain="cortex_gcc_4_7"
-#toolchain="cortex_gcc_4_8"
+#toolchain="gcc_arm_embedded_4_8"
+toolchain="gcc_linaro_eabi_4_8"
+#toolchain="gcc_linaro_gnueabi_4_6"
+#toolchain="gcc_linaro_gnueabihf_4_7"
 #toolchain="gcc_linaro_gnueabihf_4_8"
 
 #Kernel/Build
@@ -32,7 +32,7 @@ KERNEL_TAG=${KERNEL_REL}-rc7
 BUILD=armv5-r5
 
 #v3.X-rcX + upto SHA
-#KERNEL_SHA="dea4f48a0a301b23c65af8e4fe8ccf360c272fbf"
+#KERNEL_SHA=""
 
 #git branch
 BRANCH="v3.14.x-at91"
