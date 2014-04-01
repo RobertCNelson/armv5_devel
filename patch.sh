@@ -68,8 +68,17 @@ dts () {
 	${git} "${DIR}/patches/dts/0002-arm-dts-imx23-olinuxino-enable-mxs-builtin-audio.patch"
 }
 
+fixes () {
+	echo "dir: fixes"
+	${git} "${DIR}/patches/fixes/0001-Revert-mmc-mxs-use-mmc_of_parse-to-parse-devicetree-.patch"
+	${git} "${DIR}/patches/fixes/0002-Revert-mmc-mxs-use-mmc_gpio_get_ro-for-detecting-rea.patch"
+	${git} "${DIR}/patches/fixes/0003-Revert-mmc-mxs-use-standard-flag-for-cd-inverted.patch"
+	${git} "${DIR}/patches/fixes/0004-Revert-mmc-mxs-use-standard-flag-for-broken-card-det.patch"
+}
+
 arm
 mxs_audio
 dts
+fixes
 
 echo "patch.sh ran successful"
