@@ -50,20 +50,11 @@ cleanup () {
 	exit
 }
 
-atmel_mci () {
-	echo "dir: atmel_mci"
-	${git} "${DIR}/patches/atmel_mci/0001-mmc-atmel-mci-remove-not-needed-DMA-capability-test.patch"
-	${git} "${DIR}/patches/atmel_mci/0002-mmc-atmel-mci-support-8-bit-buswidth.patch"
-	${git} "${DIR}/patches/atmel_mci/0003-mmc-atmel-mci-increase-dma-threshold.patch"
-	${git} "${DIR}/patches/atmel_mci/0004-atmel-mci-replace-flush_dcache_page-with-flush_kerne.patch"
-}
-
 ariag25_fixes () {
 	echo "dir: ariag25_fixes"
 	${git} "${DIR}/patches/ariag25_fixes/0001-at91-ariag25-updates.patch"
 }
 
-atmel_mci
 ariag25_fixes
 
 echo "patch.sh ran successful"

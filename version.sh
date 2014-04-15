@@ -27,15 +27,15 @@ toolchain="gcc_linaro_eabi_4_8"
 #toolchain="gcc_linaro_gnueabihf_4_8"
 
 #Kernel/Build
-KERNEL_REL=3.14
-KERNEL_TAG=${KERNEL_REL}.1
-BUILD=armv5-r7
+KERNEL_REL=3.15
+KERNEL_TAG=${KERNEL_REL}-rc1
+BUILD=armv5-r0
 
 #v3.X-rcX + upto SHA
 #KERNEL_SHA=""
 
 #git branch
-BRANCH="v3.14.x-at91"
+BRANCH="v3.15.x-at91"
 
 BUILDREV=1.0
 DISTRO=cross
