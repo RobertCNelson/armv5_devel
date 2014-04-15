@@ -78,7 +78,7 @@ fixes () {
 #	${git} "${DIR}/patches/fixes/0001-mtd-atmel_nand-fix-bug-driver-will-in-a-dead-lock-if.patch"
 }
 
-arm
+#arm
 atmel_mci
 atmel_fixes
 ariag25_fixes
