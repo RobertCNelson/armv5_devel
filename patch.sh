@@ -68,7 +68,7 @@ dts () {
 	${git} "${DIR}/patches/dts/0002-arm-dts-imx23-olinuxino-enable-mxs-builtin-audio.patch"
 }
 
-arm
+#arm
 mxs_audio
 dts
 
