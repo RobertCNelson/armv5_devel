@@ -50,11 +50,6 @@ cleanup () {
 	exit
 }
 
-arm () {
-	echo "dir: arm"
-#	${git} "${DIR}/patches/arm/0001-deb-pkg-Simplify-architecture-matching-for-cross-bui.patch"
-}
-
 mxs_audio () {
 	echo "dir: mxs_audio"
 	#From: https://github.com/ITserve/imx23-audio/commits/imx23-audio
@@ -74,9 +69,9 @@ fixes () {
 	${git} "${DIR}/patches/fixes/0002-Revert-mmc-mxs-use-mmc_gpio_get_ro-for-detecting-rea.patch"
 	${git} "${DIR}/patches/fixes/0003-Revert-mmc-mxs-use-standard-flag-for-cd-inverted.patch"
 	${git} "${DIR}/patches/fixes/0004-Revert-mmc-mxs-use-standard-flag-for-broken-card-det.patch"
+	${git} "${DIR}/patches/fixes/0005-ARM-mxs-boot-regression-select-CLKSRC_OF.patch"
 }
 
-arm
 mxs_audio
 dts
 fixes
