@@ -1,6 +1,6 @@
 #!/bin/sh -e
 #
-# Copyright (c) 2009-2013 Robert Nelson <robertcnelson@gmail.com>
+# Copyright (c) 2009-2014 Robert Nelson <robertcnelson@gmail.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ mmc_write_rootfs () {
 		sudo rm -rf "${location}/lib/modules/${KERNEL_UTS}" || true
 	fi
 
-	sudo tar ${UNTAR} "${DIR}/deploy/${KERNEL_UTS}-modules.tar.gz" -C "${location}"
+	sudo tar ${UNTAR} "${DIR}/deploy/${KERNEL_UTS}-modules.tar.gz" -C "${location}/"
 	sync
 
 	echo "Installing ${KERNEL_UTS}-firmware.tar.gz to ${partition}"
@@ -58,13 +58,14 @@ mmc_write_rootfs () {
 	if [ "${ZRELADDR}" ] ; then
 		if [ ! -f "${location}/boot/SOC.sh" ] ; then
 			if [ -f "${location}/boot/uImage" ] ; then
-			#Possibly Angstrom: dump a newer uImage if one exists..
+				#Possibly Angstrom: dump a newer uImage if one exists..
 				if [ -f "${location}/boot/uImage_bak" ] ; then
 					sudo rm -f "${location}/boot/uImage_bak" || true
 				fi
 
 				sudo mv "${location}/boot/uImage" "${location}/boot/uImage_bak"
 				sudo mkimage -A arm -O linux -T kernel -C none -a ${ZRELADDR} -e ${ZRELADDR} -n ${KERNEL_UTS} -d "${DIR}/deploy/${KERNEL_UTS}.zImage" "${location}/boot/uImage"
+				sync
 			fi
 		fi
 	fi
@@ -74,6 +75,7 @@ mmc_write_rootfs () {
 			sudo rm -f "${location}/boot/config-${KERNEL_UTS}" || true
 		fi
 		sudo cp -v "${DIR}/deploy/config-${KERNEL_UTS}" "${location}/boot/config-${KERNEL_UTS}"
+		sync
 	fi
 }
 
@@ -250,6 +252,7 @@ if [ -f "${DIR}/system.sh" ] ; then
 			unset PARTITION_PREFIX
 			echo ${MMC} | grep mmcblk >/dev/null && PARTITION_PREFIX="p"
 			check_mmc
+			sync
 		fi
 	else
 		echo "ERROR: arch/arm/boot/zImage not found, Please run build_kernel.sh before running this script..."
