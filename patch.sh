@@ -66,7 +66,7 @@ freescale_mxs () {
 	${git} "${DIR}/patches/freescale_mxs/0001-WIP-i2c-audio-support.patch"
 }
 
-arm
+#arm
 #mxs_mmc
 #freescale_mxs
 
