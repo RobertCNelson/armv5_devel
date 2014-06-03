@@ -28,8 +28,8 @@ toolchain="gcc_linaro_eabi_4_8"
 
 #Kernel/Build
 KERNEL_REL=3.14
-KERNEL_TAG=${KERNEL_REL}.3
-BUILD=imxv5-r4
+KERNEL_TAG=${KERNEL_REL}.5
+BUILD=imxv5-r5
 
 #v3.X-rcX + upto SHA
 #KERNEL_SHA=""
