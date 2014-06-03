@@ -19,11 +19,12 @@ fi
 
 config="mxs_defconfig"
 
-#toolchain="gcc_arm_embedded_4_7"
 toolchain="gcc_linaro_eabi_4_8"
+#toolchain="gcc_linaro_eabi_4_9"
 #toolchain="gcc_linaro_gnueabi_4_6"
 #toolchain="gcc_linaro_gnueabihf_4_7"
 #toolchain="gcc_linaro_gnueabihf_4_8"
+#toolchain="gcc_linaro_gnueabihf_4_9"
 
 #Kernel/Build
 KERNEL_REL=3.10
@@ -31,7 +32,7 @@ KERNEL_TAG=${KERNEL_REL}.39
 BUILD=imxv5-r8
 
 #v3.X-rcX + upto SHA
-#KERNEL_SHA="2c2c0e52314ef812a2aa9f7d32b3162584bee92b"
+#KERNEL_SHA=""
 
 #git branch
 BRANCH="v3.10.x-imxv5"
