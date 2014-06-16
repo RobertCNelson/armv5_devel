@@ -19,23 +19,23 @@ fi
 
 config="at91_dt_defconfig"
 
-toolchain="gcc_linaro_eabi_4_8"
-#toolchain="gcc_linaro_eabi_4_9"
+#toolchain="gcc_linaro_eabi_4_8"
+toolchain="gcc_linaro_eabi_4_9"
 #toolchain="gcc_linaro_gnueabi_4_6"
 #toolchain="gcc_linaro_gnueabihf_4_7"
 #toolchain="gcc_linaro_gnueabihf_4_8"
 #toolchain="gcc_linaro_gnueabihf_4_9"
 
 #Kernel/Build
-KERNEL_REL=3.15
-KERNEL_TAG=${KERNEL_REL}
-BUILD=armv5-r7
+KERNEL_REL=3.16
+KERNEL_TAG=${KERNEL_REL}-rc1
+BUILD=armv5-r0
 
 #v3.X-rcX + upto SHA
 #KERNEL_SHA=""
 
 #git branch
-BRANCH="v3.15.x-at91"
+BRANCH="v3.16.x-at91"
 
 BUILDREV=1.0
 DISTRO=cross
