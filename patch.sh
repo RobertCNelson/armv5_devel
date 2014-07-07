@@ -64,6 +64,9 @@ local_patch () {
 	${git} "${DIR}/patches/dir/0001-patch.patch"
 }
 
+#external_git
+#local_patch
+
 atmel_mci () {
 	echo "dir: atmel_mci"
 	${git} "${DIR}/patches/atmel_mci/0001-mmc-atmel-mci-remove-not-needed-DMA-capability-test.patch"
