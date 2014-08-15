@@ -64,6 +64,9 @@ local_patch () {
 	${git} "${DIR}/patches/dir/0001-patch.patch"
 }
 
+#external_git
+#local_patch
+
 ariag25_fixes () {
 	echo "dir: ariag25_fixes"
 	${git} "${DIR}/patches/ariag25_fixes/0001-at91-ariag25-updates.patch"
@@ -82,6 +85,7 @@ packaging () {
 	echo "dir: packaging"
 	${git} "${DIR}/patches/packaging/0001-packaging-sync-with-mainline.patch"
 	${git} "${DIR}/patches/packaging/0002-deb-pkg-install-dtbs-in-linux-image-package.patch"
+	#${git} "${DIR}/patches/packaging/0003-deb-pkg-no-dtbs_install.patch"
 }
 
 #packaging_setup
