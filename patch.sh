@@ -79,8 +79,8 @@ dts () {
 	${git} "${DIR}/patches/dts/0001-arm-dts-imx23-olinuxino-enable-mxs-builtin-audio.patch"
 }
 
-mxs_audio
-dts
+#mxs_audio
+#dts
 
 packaging_setup () {
 	cp -v "${DIR}/3rdparty/packaging/builddeb" "${DIR}/KERNEL/scripts/package"
