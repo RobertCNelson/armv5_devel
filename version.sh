@@ -33,7 +33,7 @@ BUILD=armv5-r6
 #KERNEL_SHA=""
 
 #git branch
-BRANCH="v3.16.x-at91"
+BRANCH="v3.17.x-at91"
 
 DISTRO=cross
 DEBARCH=armel
