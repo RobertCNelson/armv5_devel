@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 3.19.0-rc2 Kernel Configuration
+# Linux/arm 3.19.0-rc3 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -631,6 +631,7 @@ CONFIG_CFG80211=y
 CONFIG_CFG80211_DEFAULT_PS=y
 # CONFIG_CFG80211_DEBUGFS is not set
 # CONFIG_CFG80211_INTERNAL_REGDB is not set
+# CONFIG_CFG80211_WEXT is not set
 CONFIG_LIB80211=m
 # CONFIG_LIB80211_DEBUG is not set
 CONFIG_MAC80211=y
