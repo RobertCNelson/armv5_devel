@@ -25,15 +25,15 @@ toolchain="gcc_linaro_eabi_4_9"
 #toolchain="gcc_linaro_gnueabihf_4_9"
 
 #Kernel/Build
-KERNEL_REL=3.18
-KERNEL_TAG=${KERNEL_REL}.3
+KERNEL_REL=3.19
+KERNEL_TAG=${KERNEL_REL}-rc4
 BUILD=imxv5-r1
 
 #v3.X-rcX + upto SHA
 #KERNEL_SHA=""
 
 #git branch
-BRANCH="v3.18.x-imxv5"
+BRANCH="v3.19.x-imxv5"
 
 DISTRO=cross
 DEBARCH=armel
