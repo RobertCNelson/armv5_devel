@@ -67,11 +67,21 @@ local_patch () {
 #external_git
 #local_patch
 
+usb_fixes () {
+	echo "dir: usb"
+	${git} "${DIR}/patches/usb/0001-USB-ehci-atmel-rework-clk-handling.patch"
+	${git} "${DIR}/patches/usb/0002-USB-host-ohci-at91-remove-useless-uclk-clock.patch"
+	${git} "${DIR}/patches/usb/0003-USB-atmel-update-DT-bindings-documentation.patch"
+	${git} "${DIR}/patches/usb/0004-ARM-at91-dt-remove-useless-uhpck-clock-references-fr.patch"
+	${git} "${DIR}/patches/usb/0005-ARM-at91-dt-remove-useless-usb-clock.patch"
+}
+
 ariag25_fixes () {
 	echo "dir: ariag25_fixes"
 	${git} "${DIR}/patches/ariag25_fixes/0001-at91-ariag25-updates.patch"
 }
 
+usb_fixes
 ariag25_fixes
 
 packaging_setup () {

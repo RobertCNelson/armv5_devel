@@ -1,0 +1,97 @@
+From 6cb85a223c45a1d2f1d52dcfa19b860ca12966af Mon Sep 17 00:00:00 2001
+From: Boris Brezillon <boris.brezillon@free-electrons.com>
+Date: Tue, 17 Mar 2015 17:15:46 +0100
+Subject: [PATCH 1/5] USB: ehci-atmel: rework clk handling
+
+The EHCI IP only needs the UTMI/UPLL (uclk) and the peripheral (iclk)
+clocks to work properly. Remove the useless system clock (fclk).
+
+Avoid calling set_rate on the fixed rate UTMI/IPLL clock and remove
+useless IS_ENABLED(CONFIG_COMMON_CLK) tests (all at91 platforms have been
+moved to the CCF).
+
+This patch also fixes a bug introduced by 3440ef1 (ARM: at91/dt: fix USB
+high-speed clock to select UTMI), which was leaving the usb clock
+uninitialized and preventing the OHCI driver from setting the usb clock
+rate to 48MHz.
+This bug was caused by several things:
+1/ usb clock drivers set the CLK_SET_RATE_GATE flag, which means the rate
+   cannot be changed once the clock is prepared
+2/ The EHCI driver was retrieving and preparing/enabling the uhpck
+   clock which was in turn preparing its parent clock (the usb clock),
+   thus preventing any rate change because of 1/
+
+Signed-off-by: Boris Brezillon <boris.brezillon@free-electrons.com>
+---
+ drivers/usb/host/ehci-atmel.c | 30 +++++++++---------------------
+ 1 file changed, 9 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/usb/host/ehci-atmel.c b/drivers/usb/host/ehci-atmel.c
+index 663f790..be0964a 100644
+--- a/drivers/usb/host/ehci-atmel.c
++++ b/drivers/usb/host/ehci-atmel.c
+@@ -34,7 +34,6 @@ static const char hcd_name[] = "ehci-atmel";
+ 
+ struct atmel_ehci_priv {
+ 	struct clk *iclk;
+-	struct clk *fclk;
+ 	struct clk *uclk;
+ 	bool clocked;
+ };
+@@ -51,12 +50,9 @@ static void atmel_start_clock(struct atmel_ehci_priv *atmel_ehci)
+ {
+ 	if (atmel_ehci->clocked)
+ 		return;
+-	if (IS_ENABLED(CONFIG_COMMON_CLK)) {
+-		clk_set_rate(atmel_ehci->uclk, 48000000);
+-		clk_prepare_enable(atmel_ehci->uclk);
+-	}
++
++	clk_prepare_enable(atmel_ehci->uclk);
+ 	clk_prepare_enable(atmel_ehci->iclk);
+-	clk_prepare_enable(atmel_ehci->fclk);
+ 	atmel_ehci->clocked = true;
+ }
+ 
+@@ -64,10 +60,9 @@ static void atmel_stop_clock(struct atmel_ehci_priv *atmel_ehci)
+ {
+ 	if (!atmel_ehci->clocked)
+ 		return;
+-	clk_disable_unprepare(atmel_ehci->fclk);
++
+ 	clk_disable_unprepare(atmel_ehci->iclk);
+-	if (IS_ENABLED(CONFIG_COMMON_CLK))
+-		clk_disable_unprepare(atmel_ehci->uclk);
++	clk_disable_unprepare(atmel_ehci->uclk);
+ 	atmel_ehci->clocked = false;
+ }
+ 
+@@ -146,20 +141,13 @@ static int ehci_atmel_drv_probe(struct platform_device *pdev)
+ 		retval = -ENOENT;
+ 		goto fail_request_resource;
+ 	}
+-	atmel_ehci->fclk = devm_clk_get(&pdev->dev, "uhpck");
+-	if (IS_ERR(atmel_ehci->fclk)) {
+-		dev_err(&pdev->dev, "Error getting function clock\n");
+-		retval = -ENOENT;
++
++	atmel_ehci->uclk = devm_clk_get(&pdev->dev, "usb_clk");
++	if (IS_ERR(atmel_ehci->uclk)) {
++		dev_err(&pdev->dev, "failed to get uclk\n");
++		retval = PTR_ERR(atmel_ehci->uclk);
+ 		goto fail_request_resource;
+ 	}
+-	if (IS_ENABLED(CONFIG_COMMON_CLK)) {
+-		atmel_ehci->uclk = devm_clk_get(&pdev->dev, "usb_clk");
+-		if (IS_ERR(atmel_ehci->uclk)) {
+-			dev_err(&pdev->dev, "failed to get uclk\n");
+-			retval = PTR_ERR(atmel_ehci->uclk);
+-			goto fail_request_resource;
+-		}
+-	}
+ 
+ 	ehci = hcd_to_ehci(hcd);
+ 	/* registers start at offset 0x0 */
+-- 
+2.1.4
+
