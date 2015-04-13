@@ -69,7 +69,7 @@ local_patch () {
 
 usb_fixes () {
 	echo "dir: usb"
-	${git} "${DIR}/patches/usb/0001-USB-ehci-atmel-rework-clk-handling.patch"
+#	${git} "${DIR}/patches/usb/0001-USB-ehci-atmel-rework-clk-handling.patch"
 	${git} "${DIR}/patches/usb/0002-USB-host-ohci-at91-remove-useless-uclk-clock.patch"
 	${git} "${DIR}/patches/usb/0003-USB-atmel-update-DT-bindings-documentation.patch"
 	${git} "${DIR}/patches/usb/0004-ARM-at91-dt-remove-useless-uhpck-clock-references-fr.patch"
