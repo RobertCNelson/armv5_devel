@@ -37,6 +37,8 @@ check_rpm () {
 }
 
 redhat_reqs () {
+	pkgtool="yum"
+
 	#https://fedoraproject.org/wiki/Releases
 	unset rpm_pkgs
 	pkg="redhat-lsb-core"
@@ -83,7 +85,12 @@ redhat_reqs () {
 			pkg="uboot-tools"
 			check_rpm
 			;;
-		20|21|22)
+		22)
+			pkgtool="dnf"
+			pkg="uboot-tools"
+			check_rpm
+			;;
+		20|21)
 			pkg="uboot-tools"
 			check_rpm
 			;;
@@ -95,7 +102,7 @@ redhat_reqs () {
 		*)
 			echo "Warning: [uboot-tools] package check still in development"
 			echo "Please email to: bugs@rcn-ee.com"
-			echo "Success/Failure of [yum install uboot-tools]"
+			echo "Success/Failure of [${pkgtool} install uboot-tools]"
 			echo "RPM distro version: [${rpm_distro}]"
 			pkg="uboot-tools"
 			check_rpm
@@ -106,7 +113,7 @@ redhat_reqs () {
 	if [ "${rpm_pkgs}" ] ; then
 		echo "Red Hat, or derivatives: missing dependencies, please install:"
 		echo "-----------------------------"
-		echo "yum install ${rpm_pkgs}"
+		echo "${pkgtool} install ${rpm_pkgs}"
 		echo "-----------------------------"
 		return 1
 	fi
@@ -260,6 +267,16 @@ debian_regs () {
 			#Release:    7.0
 			#Codename:    belenos
 			deb_distro="trusty"
+		fi
+
+		#https://bugs.kali.org/changelog_page.php
+		if [ "x${deb_distro}" = "xmoto" ] ; then
+			#lsb_release -a
+			#Distributor ID:    Kali
+			#Description:    Kali GNU/Linux 1.1.0
+			#Release:    1.1.0
+			#Codename:    moto
+			deb_distro="wheezy"
 		fi
 
 		#Linux Mint: Compatibility Matrix
