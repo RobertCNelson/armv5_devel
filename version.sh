@@ -12,16 +12,16 @@ toolchain="gcc_linaro_eabi_4_9"
 #toolchain="gcc_linaro_gnueabihf_4_9"
 
 #Kernel/Build
-KERNEL_REL=4.0
-KERNEL_TAG=${KERNEL_REL}
-BUILD=armv5-r3
+KERNEL_REL=4.1
+KERNEL_TAG=${KERNEL_REL}-rc1
+BUILD=armv5-r0
 
 #v3.X-rcX + upto SHA
 #prev_KERNEL_SHA=""
 #KERNEL_SHA=""
 
 #git branch
-BRANCH="v4.0.x-at91"
+BRANCH="v4.1.x"
 
 DISTRO=cross
 DEBARCH=armel
