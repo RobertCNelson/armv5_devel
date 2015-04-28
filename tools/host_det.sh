@@ -37,6 +37,8 @@ check_rpm () {
 }
 
 redhat_reqs () {
+	pkgtool="yum"
+
 	#https://fedoraproject.org/wiki/Releases
 	unset rpm_pkgs
 	pkg="redhat-lsb-core"
@@ -65,7 +67,7 @@ redhat_reqs () {
 		echo "RPM distro version: [${rpm_distro}]"
 
 		case "${rpm_distro}" in
-		6.4|6.5)
+		6.4|6.5|6.6)
 			echo "-----------------------------"
 			echo "Warning: RHEL/CentOS [${rpm_distro}] has no [uboot-tools] pkg by default"
 			echo "add: [EPEL] repo: https://fedoraproject.org/wiki/EPEL"
@@ -78,19 +80,29 @@ redhat_reqs () {
 			echo "-----------------------------"
 			echo "Warning: RHEL/CentOS [${rpm_distro}] has no [uboot-tools] pkg by default"
 			echo "add: [EPEL] repo: https://fedoraproject.org/wiki/EPEL"
-			echo "http://download.fedoraproject.org/pub/epel/6/i386/repoview/epel-release.html"
+			echo "http://download.fedoraproject.org/pub/epel/7/x86_64/repoview/epel-release.html"
 			echo "-----------------------------"
-			#pkg="uboot-tools"
-			#check_rpm
+			pkg="uboot-tools"
+			check_rpm
 			;;
-		17|18|19|20|21)
+		22)
+			pkgtool="dnf"
+			pkg="uboot-tools"
+			check_rpm
+			;;
+		20|21)
+			pkg="uboot-tools"
+			check_rpm
+			;;
+		17|18|19)
+			#end of life...
 			pkg="uboot-tools"
 			check_rpm
 			;;
 		*)
 			echo "Warning: [uboot-tools] package check still in development"
 			echo "Please email to: bugs@rcn-ee.com"
-			echo "Success/Failure of [yum install uboot-tools]"
+			echo "Success/Failure of [${pkgtool} install uboot-tools]"
 			echo "RPM distro version: [${rpm_distro}]"
 			pkg="uboot-tools"
 			check_rpm
@@ -101,7 +113,7 @@ redhat_reqs () {
 	if [ "${rpm_pkgs}" ] ; then
 		echo "Red Hat, or derivatives: missing dependencies, please install:"
 		echo "-----------------------------"
-		echo "yum install ${rpm_pkgs}"
+		echo "${pkgtool} install ${rpm_pkgs}"
 		echo "-----------------------------"
 		return 1
 	fi
@@ -247,10 +259,36 @@ debian_regs () {
 			deb_distro="precise"
 		fi
 
+		if [ "x${deb_distro}" = "xbelenos" ] ; then
+			#http://listas.trisquel.info/pipermail/trisquel-announce/2014-November/000018.html
+			#lsb_release -a
+			#Distributor ID:    Trisquel
+			#Description:    Trisquel GNU/Linux 7.0, Belenos
+			#Release:    7.0
+			#Codename:    belenos
+			deb_distro="trusty"
+		fi
+
+		#https://bugs.kali.org/changelog_page.php
+		if [ "x${deb_distro}" = "xmoto" ] ; then
+			#lsb_release -a
+			#Distributor ID:    Kali
+			#Description:    Kali GNU/Linux 1.1.0
+			#Release:    1.1.0
+			#Codename:    moto
+			deb_distro="wheezy"
+		fi
+
 		#Linux Mint: Compatibility Matrix
+		#http://www.linuxmint.com/download_all.php (lists current versions)
 		#http://www.linuxmint.com/oldreleases.php
 		#http://packages.linuxmint.com/index.php
+		#http://mirrors.kernel.org/linuxmint-packages/dists/
 		case "${deb_distro}" in
+		betsy)
+			#LMDE 2
+			deb_distro="jessie"
+			;;
 		debian)
 			deb_distro="jessie"
 			;;
@@ -281,16 +319,29 @@ debian_regs () {
 		qiana)
 			deb_distro="trusty"
 			;;
+		rebecca)
+			#http://blog.linuxmint.com/?p=2688
+			deb_distro="trusty"
+			;;
+		esac
+
+		#Future Debian Code names:
+		case "${deb_distro}" in
+		buster)
+			#Debian 10
+			deb_distro="sid"
+			;;
 		esac
 
 		#https://wiki.ubuntu.com/Releases
 		unset error_unknown_deb_distro
 		case "${deb_distro}" in
-		squeeze|wheezy|jessie|sid)
+		squeeze|wheezy|jessie|stretch|sid)
 			unset warn_eol_distro
 			;;
-		utopic)
-			#14.10 (EOL: xyz)
+		utopic|vivid)
+			#14.10 (EOL: June 2015)
+			#15.04 (EOL: January 2016)
 			unset warn_eol_distro
 			;;
 		trusty)
