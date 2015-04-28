@@ -280,10 +280,15 @@ debian_regs () {
 		fi
 
 		#Linux Mint: Compatibility Matrix
+		#http://www.linuxmint.com/download_all.php (lists current versions)
 		#http://www.linuxmint.com/oldreleases.php
 		#http://packages.linuxmint.com/index.php
 		#http://mirrors.kernel.org/linuxmint-packages/dists/
 		case "${deb_distro}" in
+		betsy)
+			#LMDE 2
+			deb_distro="jessie"
+			;;
 		debian)
 			deb_distro="jessie"
 			;;
@@ -322,10 +327,6 @@ debian_regs () {
 
 		#Future Debian Code names:
 		case "${deb_distro}" in
-		stretch)
-			#Debian 9
-			deb_distro="sid"
-			;;
 		buster)
 			#Debian 10
 			deb_distro="sid"
@@ -335,7 +336,7 @@ debian_regs () {
 		#https://wiki.ubuntu.com/Releases
 		unset error_unknown_deb_distro
 		case "${deb_distro}" in
-		squeeze|wheezy|jessie|sid)
+		squeeze|wheezy|jessie|stretch|sid)
 			unset warn_eol_distro
 			;;
 		utopic|vivid)
