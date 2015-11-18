@@ -5,7 +5,7 @@ ARCH=$(uname -m)
 config="at91_dt_defconfig"
 
 #arm
-#KERNEL_ARCH=arm
+KERNEL_ARCH=arm
 #toolchain="gcc_linaro_eabi_4_8"
 toolchain="gcc_linaro_eabi_4_9"
 #toolchain="gcc_linaro_eabi_5"
