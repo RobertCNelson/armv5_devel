@@ -19,8 +19,8 @@ toolchain="gcc_linaro_eabi_5"
 #toolchain="gcc_linaro_aarch64_gnu_5"
 
 #Kernel/Build
-KERNEL_REL=4.3
-KERNEL_TAG=${KERNEL_REL}.3
+KERNEL_REL=4.4
+KERNEL_TAG=${KERNEL_REL}
 BUILD=imxv5-r0
 kernel_rt=".X-rtY"
 
@@ -29,7 +29,7 @@ kernel_rt=".X-rtY"
 #KERNEL_SHA=""
 
 #git branch
-BRANCH="v4.3.x-imxv5"
+BRANCH="v4.4.x-imxv5"
 
 DISTRO=cross
 DEBARCH=armel
