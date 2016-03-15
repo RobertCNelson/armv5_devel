@@ -4,6 +4,10 @@ ARCH=$(uname -m)
 
 config="at91_dt_defconfig"
 
+build_prefix="armv5-r"
+branch_prefix="v"
+branch_postfix=".x"
+
 #arm
 KERNEL_ARCH=arm
 #toolchain="gcc_linaro_eabi_4_8"
@@ -21,15 +25,15 @@ toolchain="gcc_linaro_eabi_5"
 #Kernel/Build
 KERNEL_REL=4.4
 KERNEL_TAG=${KERNEL_REL}
-BUILD=armv5-r1
-kernel_rt="-rt2"
+BUILD=${build_prefix}1
+kernel_rt=".X-rtY"
 
 #v4.X-rcX + upto SHA
 #prev_KERNEL_SHA=""
 #KERNEL_SHA=""
 
 #git branch
-BRANCH="v4.4.x"
+BRANCH="${branch_prefix}${KERNEL_REL}${branch_postfix}"
 
 DISTRO=cross
 DEBARCH=armel
