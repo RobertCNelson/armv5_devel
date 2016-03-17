@@ -4,7 +4,7 @@ ARCH=$(uname -m)
 
 config="at91_dt_defconfig"
 
-build_prefix="armv5-r"
+build_prefix="-armv5-r"
 branch_prefix="v"
 branch_postfix=".x"
 
