@@ -190,21 +190,6 @@ local_patch () {
 #rt
 #local_patch
 
-mxs_audio () {
-	echo "dir: mxs_audio"
-	#From: https://github.com/ITserve/imx23-audio/commits/imx23-audio
-	${git} "${DIR}/patches/mxs_audio/0001-Added-ASoC-driver-for-i.MX233-s-builtin-ADC-DAC-code.patch"
-	${git} "${DIR}/patches/mxs_audio/0002-Added-DTS-with-mxs-builtin-entries-for-testing-the-a.patch"
-}
-
-dts () {
-	echo "dir: dts"
-	${git} "${DIR}/patches/dts/0001-arm-dts-imx23-olinuxino-enable-mxs-builtin-audio.patch"
-}
-
-#mxs_audio
-#dts
-
 packaging () {
 	echo "dir: packaging"
 	#regenerate="enable"
