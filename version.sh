@@ -4,10 +4,15 @@ ARCH=$(uname -m)
 
 config="mxs_defconfig"
 
+build_prefix="-imxv5-r"
+branch_prefix="v"
+branch_postfix=".x-imxv5"
+
 #arm
 KERNEL_ARCH=arm
 #toolchain="gcc_linaro_eabi_4_8"
 toolchain="gcc_linaro_eabi_4_9"
+#toolchain="gcc_linaro_eabi_5"
 #toolchain="gcc_linaro_gnueabi_4_6"
 #toolchain="gcc_linaro_gnueabihf_4_7"
 #toolchain="gcc_linaro_gnueabihf_4_8"
@@ -20,7 +25,7 @@ toolchain="gcc_linaro_eabi_4_9"
 #Kernel/Build
 KERNEL_REL=4.2
 KERNEL_TAG=${KERNEL_REL}.8
-BUILD=imxv5-r1
+BUILD=${build_prefix}1
 kernel_rt=".X-rtY"
 
 #v4.X-rcX + upto SHA
@@ -28,7 +33,7 @@ kernel_rt=".X-rtY"
 #KERNEL_SHA=""
 
 #git branch
-BRANCH="v4.2.x-imxv5"
+BRANCH="${branch_prefix}${KERNEL_REL}${branch_postfix}"
 
 DISTRO=cross
 DEBARCH=armel
