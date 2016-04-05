@@ -4,7 +4,7 @@ ARCH=$(uname -m)
 
 config="mxs_defconfig"
 
-build_prefix="imxv5-r"
+build_prefix="-imxv5-r"
 branch_prefix="v"
 branch_postfix=".x-imxv5"
 
@@ -33,7 +33,7 @@ kernel_rt=".X-rtY"
 #KERNEL_SHA=""
 
 #git branch
-BRANCH="${branch_prefix}${KERNEL_REL}${branch_postfix}"
+#BRANCH="${branch_prefix}${KERNEL_REL}${branch_postfix}"
 
 DISTRO=cross
 DEBARCH=armel
