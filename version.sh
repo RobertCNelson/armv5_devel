@@ -4,7 +4,7 @@ ARCH=$(uname -m)
 
 config="mxs_defconfig"
 
-build_prefix="imxv5-r"
+build_prefix="-imxv5-r"
 branch_prefix="v"
 branch_postfix=".x-imxv5"
 
