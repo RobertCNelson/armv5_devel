@@ -27,8 +27,8 @@ toolchain="gcc_linaro_eabi_6"
 
 #Kernel/Build
 KERNEL_REL=4.8
-KERNEL_TAG=${KERNEL_REL}.6
-BUILD=${build_prefix}0
+KERNEL_TAG=${KERNEL_REL}.12
+BUILD=${build_prefix}1
 kernel_rt=".X-rtY"
 
 #v4.X-rcX + upto SHA
