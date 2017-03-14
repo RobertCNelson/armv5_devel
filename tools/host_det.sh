@@ -340,6 +340,11 @@ debian_regs () {
 			#http://blog.linuxmint.com/?p=2975
 			deb_distro="xenial"
 			;;
+		serena)
+			#18.1
+			#http://packages.linuxmint.com/index.php
+			deb_distro="xenial"
+			;;
 		esac
 
 		#Future Debian Code names:
@@ -368,8 +373,9 @@ debian_regs () {
 			warn_eol_distro=1
 			stop_pkg_search=1
 			;;
-		yakkety)
+		yakkety|zesty)
 			#16.10 yakkety: (EOL: July 2017)
+			#17.04 zesty: (EOL: January 2018)
 			unset warn_eol_distro
 			;;
 		xenial)
