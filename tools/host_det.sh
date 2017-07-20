@@ -177,7 +177,7 @@ debian_regs () {
 			#Release:        testing/unstable
 			#Codename:       n/a
 			if [ "x${deb_lsb_rs}" = "xtesting_unstable" ] ; then
-				deb_distro="stretch"
+				deb_distro="buster"
 			fi
 		fi
 
@@ -345,14 +345,15 @@ debian_regs () {
 			#http://packages.linuxmint.com/index.php
 			deb_distro="xenial"
 			;;
+		sonya)
+			#18.2
+			#http://packages.linuxmint.com/index.php
+			deb_distro="xenial"
+			;;
 		esac
 
 		#Future Debian Code names:
 		case "${deb_distro}" in
-		buster)
-			#Debian 10
-			deb_distro="sid"
-			;;
 		bullseye)
 			#Debian 11
 			deb_distro="sid"
@@ -362,10 +363,11 @@ debian_regs () {
 		#https://wiki.ubuntu.com/Releases
 		unset error_unknown_deb_distro
 		case "${deb_distro}" in
-		wheezy|jessie|stretch|sid)
+		wheezy|jessie|stretch|buster|sid)
 			#7 wheezy: https://wiki.debian.org/DebianWheezy
 			#8 jessie: https://wiki.debian.org/DebianJessie
 			#9 stretch: https://wiki.debian.org/DebianStretch
+			#10 buster: https://wiki.debian.org/DebianBuster
 			unset warn_eol_distro
 			;;
 		squeeze)
@@ -373,9 +375,10 @@ debian_regs () {
 			warn_eol_distro=1
 			stop_pkg_search=1
 			;;
-		yakkety|zesty)
+		yakkety|zesty|artful)
 			#16.10 yakkety: (EOL: July 2017)
 			#17.04 zesty: (EOL: January 2018)
+			#17.10 artful: (EOL: July 2019)
 			unset warn_eol_distro
 			;;
 		xenial)
@@ -554,6 +557,9 @@ if [ "x${ARCH}" = "xx86_64" ] ; then
 		ignore_32bit="true"
 		;;
 	gcc_linaro_eabi_6|gcc_linaro_gnueabihf_6|gcc_linaro_aarch64_gnu_6)
+		ignore_32bit="true"
+		;;
+	gcc_linaro_eabi_7|gcc_linaro_gnueabihf_7|gcc_linaro_aarch64_gnu_7)
 		ignore_32bit="true"
 		;;
 	*)
