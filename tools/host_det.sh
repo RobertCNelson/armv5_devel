@@ -121,7 +121,7 @@ Missing patch command,
 }
 
 check_dpkg () {
-	LC_ALL=C dpkg --list | awk '{print $2}' | grep "^${pkg}$" >/dev/null || deb_pkgs="${deb_pkgs}${pkg} "
+	LC_ALL=C dpkg-query -s ${pkg} &> /dev/null || deb_pkgs="${deb_pkgs}${pkg} "
 }
 
 debian_regs () {
@@ -350,6 +350,11 @@ debian_regs () {
 			#http://packages.linuxmint.com/index.php
 			deb_distro="xenial"
 			;;
+		sylvia)
+			#18.3
+			#http://packages.linuxmint.com/index.php
+			deb_distro="xenial"
+			;;
 		esac
 
 		#Future Debian Code names:
@@ -375,9 +380,10 @@ debian_regs () {
 			warn_eol_distro=1
 			stop_pkg_search=1
 			;;
-		zesty|artful)
+		zesty|artful|bionic)
 			#17.04 zesty: (EOL: January 2018)
-			#17.10 artful: (EOL: July 2019)
+			#17.10 artful: (EOL: July 2018)
+			#18.04 bionic: (EOL:) lts: bionic -> xyz
 			unset warn_eol_distro
 			;;
 		yakkety)
@@ -386,7 +392,7 @@ debian_regs () {
 			stop_pkg_search=1
 			;;
 		xenial)
-			#16.04 xenial: (EOL: April 2021) lts: xenial -> xyz
+			#16.04 xenial: (EOL: April 2021) lts: xenial -> bionic
 			unset warn_eol_distro
 			;;
 		utopic|vivid|wily)
