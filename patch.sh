@@ -220,7 +220,7 @@ ariag25_fixes () {
 	${git} "${DIR}/patches/ariag25_fixes/0001-at91-ariag25-updates.patch"
 }
 
-ariag25_fixes
+#ariag25_fixes
 
 packaging () {
 	echo "dir: packaging"
