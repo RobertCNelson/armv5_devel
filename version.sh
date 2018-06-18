@@ -30,7 +30,7 @@ toolchain="gcc_linaro_eabi_7"
 
 #Kernel
 KERNEL_REL=4.14
-KERNEL_TAG=${KERNEL_REL}-rc4
+KERNEL_TAG=${KERNEL_REL}.50
 kernel_rt=".X-rtY"
 #Kernel Build
 BUILD=${build_prefix}0
