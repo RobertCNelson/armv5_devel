@@ -31,11 +31,11 @@ toolchain="gcc_arm_gnueabihf_8"
 #toolchain="gcc_arm_aarch64_gnu_8"
 
 #Kernel
-KERNEL_REL=4.18
-KERNEL_TAG=${KERNEL_REL}.20
+KERNEL_REL=4.19
+KERNEL_TAG=${KERNEL_REL}.15
 kernel_rt=".X-rtY"
 #Kernel Build
-BUILD=${build_prefix}2
+BUILD=${build_prefix}0
 
 #v4.X-rcX + upto SHA
 #prev_KERNEL_SHA=""
