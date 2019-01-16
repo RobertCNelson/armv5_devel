@@ -1,10 +1,10 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 4.18.0-rc6 Kernel Configuration
+# Linux/arm 4.18.20 Kernel Configuration
 #
 
 #
-# Compiler: arm-eabi-gcc (Linaro GCC 7.3-2018.05) 7.3.1 20180425 [linaro-7.3-2018.05 revision d29120a424ecfbc167ef90065c0eeb7f91977701]
+# Compiler: arm-linux-gnueabihf-gcc (GNU Toolchain for the A-profile Architecture 8.2-2018.11 (arm-rel-8.26)) 8.2.1 20180802
 #
 CONFIG_ARM=y
 CONFIG_ARM_HAS_SG_CHAIN=y
@@ -23,7 +23,7 @@ CONFIG_ARM_PATCH_PHYS_VIRT=y
 CONFIG_GENERIC_BUG=y
 CONFIG_PGTABLE_LEVELS=2
 CONFIG_CC_IS_GCC=y
-CONFIG_GCC_VERSION=70301
+CONFIG_GCC_VERSION=80201
 CONFIG_CLANG_VERSION=0
 CONFIG_IRQ_WORK=y
 CONFIG_BUILDTIME_EXTABLE_SORT=y
@@ -2204,7 +2204,7 @@ CONFIG_USB_MASS_STORAGE=m
 # CONFIG_USB_G_DBGP is not set
 # CONFIG_TYPEC is not set
 # CONFIG_USB_LED_TRIG is not set
-# CONFIG_USB_ULPI_BUS is not set
+CONFIG_USB_ULPI_BUS=y
 # CONFIG_UWB is not set
 CONFIG_MMC=y
 CONFIG_PWRSEQ_EMMC=y
@@ -2912,6 +2912,9 @@ CONFIG_RESET_CONTROLLER=y
 # CONFIG_PHY_PXA_28NM_USB2 is not set
 # CONFIG_PHY_CPCAP_USB is not set
 # CONFIG_PHY_MAPPHONE_MDM6600 is not set
+# CONFIG_PHY_QCOM_USB_HS is not set
+# CONFIG_PHY_QCOM_USB_HSIC is not set
+# CONFIG_PHY_TUSB1210 is not set
 # CONFIG_POWERCAP is not set
 # CONFIG_MCB is not set
 
@@ -3485,7 +3488,6 @@ CONFIG_CRYPTO_AES=y
 # CONFIG_CRYPTO_SEED is not set
 # CONFIG_CRYPTO_SERPENT is not set
 # CONFIG_CRYPTO_SM4 is not set
-# CONFIG_CRYPTO_SPECK is not set
 # CONFIG_CRYPTO_TEA is not set
 # CONFIG_CRYPTO_TWOFISH is not set
 
