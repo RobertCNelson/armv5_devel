@@ -472,7 +472,12 @@ if [ "x${KERNEL_ARCH}" = "xarm64" ] ; then
 	check="aarch64"
 fi
 
-GCC_TEST=$(LC_ALL=C "${CC}gcc" -v 2>&1 | grep "Target:" | grep ${check} || true)
+if [ "x${check}" = "x" ] ; then
+	echo "ERROR: fix: scripts/gcc.sh..."
+	exit 2
+else
+	GCC_TEST=$(LC_ALL=C "${CC}gcc" -v 2>&1 | grep "Target:" | grep ${check} || true)
+fi
 
 if [ "x${GCC_TEST}" = "x" ] ; then
 	echo "-----------------------------"
