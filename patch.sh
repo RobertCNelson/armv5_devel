@@ -137,6 +137,5 @@ local_patch () {
 #external_git
 #rt
 #local_patch
-#dir 'fixes'
 
 echo "patch.sh ran successfully"
