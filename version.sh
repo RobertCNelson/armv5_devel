@@ -8,6 +8,7 @@ build_prefix="-imxv5-r"
 branch_prefix="v"
 branch_postfix=".x-imxv5"
 
+#https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/Documentation/process/changes.rst?h=v5.1-rc1
 #arm
 KERNEL_ARCH=arm
 DEBARCH=armel
@@ -39,11 +40,11 @@ toolchain="gcc_7_arm"
 #toolchain="gcc_12_riscv64"
 
 #Kernel
-KERNEL_REL=5.0
+KERNEL_REL=5.1
 KERNEL_TAG=${KERNEL_REL}.21
 kernel_rt=".X-rtY"
 #Kernel Build
-BUILD=${build_prefix}2
+BUILD=${build_prefix}1
 
 #v5.X-rcX + upto SHA
 #prev_KERNEL_SHA=""
