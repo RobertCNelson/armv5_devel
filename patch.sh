@@ -122,7 +122,6 @@ rt () {
 		${git_bin} add .
 		${git_bin} commit -a -m 'merge: CONFIG_PREEMPT_RT Patch Set' -m "patch-${rt_patch}.patch.xz" -s
 		${git_bin} format-patch -1 -o ../patches/rt/
-		echo "RT: patch-${rt_patch}.patch.xz" > ../patches/git/RT
 
 		exit 2
 	fi
@@ -138,6 +137,6 @@ local_patch () {
 #external_git
 #rt
 #local_patch
-dir 'fixes'
+#dir 'fixes'
 
 echo "patch.sh ran successfully"
