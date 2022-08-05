@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# Copyright (c) 2009-2018 Robert Nelson <robertcnelson@gmail.com>
+# Copyright (c) 2009-2022 Robert Nelson <robertcnelson@gmail.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -103,92 +103,12 @@ external_git () {
 	${git_bin} describe
 }
 
-aufs_fail () {
-	echo "aufs4 failed"
-	exit 2
-}
-
-aufs4 () {
-	echo "dir: aufs4"
-	#regenerate="enable"
-	if [ "x${regenerate}" = "xenable" ] ; then
-		wget https://raw.githubusercontent.com/sfjro/aufs4-standalone/aufs${KERNEL_REL}/aufs4-kbuild.patch
-		patch -p1 < aufs4-kbuild.patch || aufs_fail
-		rm -rf aufs4-kbuild.patch
-		${git_bin} add .
-		${git_bin} commit -a -m 'merge: aufs4-kbuild' -s
-
-		wget https://raw.githubusercontent.com/sfjro/aufs4-standalone/aufs${KERNEL_REL}/aufs4-base.patch
-		patch -p1 < aufs4-base.patch || aufs_fail
-		rm -rf aufs4-base.patch
-		${git_bin} add .
-		${git_bin} commit -a -m 'merge: aufs4-base' -s
-
-		wget https://raw.githubusercontent.com/sfjro/aufs4-standalone/aufs${KERNEL_REL}/aufs4-mmap.patch
-		patch -p1 < aufs4-mmap.patch || aufs_fail
-		rm -rf aufs4-mmap.patch
-		${git_bin} add .
-		${git_bin} commit -a -m 'merge: aufs4-mmap' -s
-
-		wget https://raw.githubusercontent.com/sfjro/aufs4-standalone/aufs${KERNEL_REL}/aufs4-standalone.patch
-		patch -p1 < aufs4-standalone.patch || aufs_fail
-		rm -rf aufs4-standalone.patch
-		${git_bin} add .
-		${git_bin} commit -a -m 'merge: aufs4-standalone' -s
-
-		${git_bin} format-patch -4 -o ../patches/aufs4/
-
-		cd ../
-		if [ ! -d ./aufs4-standalone ] ; then
-			${git_bin} clone -b aufs${KERNEL_REL} https://github.com/sfjro/aufs4-standalone --depth=1
-		else
-			rm -rf ./aufs4-standalone || true
-			${git_bin} clone -b aufs${KERNEL_REL} https://github.com/sfjro/aufs4-standalone --depth=1
-		fi
-		cd ./KERNEL/
-
-		cp -v ../aufs4-standalone/Documentation/ABI/testing/*aufs ./Documentation/ABI/testing/
-		mkdir -p ./Documentation/filesystems/aufs/
-		cp -rv ../aufs4-standalone/Documentation/filesystems/aufs/* ./Documentation/filesystems/aufs/
-		mkdir -p ./fs/aufs/
-		cp -v ../aufs4-standalone/fs/aufs/* ./fs/aufs/
-		cp -v ../aufs4-standalone/include/uapi/linux/aufs_type.h ./include/uapi/linux/
-
-		${git_bin} add .
-		${git_bin} commit -a -m 'merge: aufs4' -s
-		${git_bin} format-patch -5 -o ../patches/aufs4/
-
-		rm -rf ../aufs4-standalone/ || true
-
-		${git_bin} reset --hard HEAD~5
-
-		start_cleanup
-
-		${git} "${DIR}/patches/aufs4/0001-merge-aufs4-kbuild.patch"
-		${git} "${DIR}/patches/aufs4/0002-merge-aufs4-base.patch"
-		${git} "${DIR}/patches/aufs4/0003-merge-aufs4-mmap.patch"
-		${git} "${DIR}/patches/aufs4/0004-merge-aufs4-standalone.patch"
-		${git} "${DIR}/patches/aufs4/0005-merge-aufs4.patch"
-
-		wdir="aufs4"
-		number=5
-		cleanup
-	fi
-
-	${git} "${DIR}/patches/aufs4/0001-merge-aufs4-kbuild.patch"
-	${git} "${DIR}/patches/aufs4/0002-merge-aufs4-base.patch"
-	${git} "${DIR}/patches/aufs4/0003-merge-aufs4-mmap.patch"
-	${git} "${DIR}/patches/aufs4/0004-merge-aufs4-standalone.patch"
-	${git} "${DIR}/patches/aufs4/0005-merge-aufs4.patch"
-}
-
 rt_cleanup () {
 	echo "rt: needs fixup"
 	exit 2
 }
 
 rt () {
-	echo "dir: rt"
 	rt_patch="${KERNEL_REL}${kernel_rt}"
 
 	#${git_bin} revert --no-edit xyz
@@ -200,13 +120,14 @@ rt () {
 		rm -f patch-${rt_patch}.patch.xz
 		rm -f localversion-rt
 		${git_bin} add .
-		${git_bin} commit -a -m 'merge: CONFIG_PREEMPT_RT Patch Set' -s
+		${git_bin} commit -a -m 'merge: CONFIG_PREEMPT_RT Patch Set' -m "patch-${rt_patch}.patch.xz" -s
 		${git_bin} format-patch -1 -o ../patches/rt/
+		echo "RT: patch-${rt_patch}.patch.xz" > ../patches/git/RT
 
 		exit 2
 	fi
 
-	${git} "${DIR}/patches/rt/0001-merge-CONFIG_PREEMPT_RT-Patch-Set.patch"
+	dir 'rt'
 }
 
 local_patch () {
@@ -215,25 +136,8 @@ local_patch () {
 }
 
 #external_git
-#aufs4
 #rt
 #local_patch
+dir 'fixes'
 
-packaging () {
-	echo "dir: packaging"
-	#regenerate="enable"
-	if [ "x${regenerate}" = "xenable" ] ; then
-		cp -v "${DIR}/3rdparty/packaging/Makefile" "${DIR}/KERNEL/scripts/package"
-		cp -v "${DIR}/3rdparty/packaging/builddeb" "${DIR}/KERNEL/scripts/package"
-		#Needed for v4.11.x and less
-		patch -p1 < "${DIR}/patches/packaging/0002-Revert-deb-pkg-Remove-the-KBUILD_IMAGE-workaround.patch"
-		${git_bin} commit -a -m 'packaging: sync builddeb changes' -s
-		${git_bin} format-patch -1 -o "${DIR}/patches/packaging"
-		exit 2
-	else
-		${git} "${DIR}/patches/packaging/0001-packaging-sync-builddeb-changes.patch"
-	fi
-}
-
-#packaging
 echo "patch.sh ran successfully"

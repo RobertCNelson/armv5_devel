@@ -1,13 +1,13 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 4.20.2 Kernel Configuration
+# Linux/arm 4.20.17 Kernel Configuration
 #
 
 #
-# Compiler: arm-eabi-gcc (Linaro GCC 7.3-2018.05) 7.3.1 20180425 [linaro-7.3-2018.05 revision d29120a424ecfbc167ef90065c0eeb7f91977701]
+# Compiler: arm-linux-gnueabi-gcc (GCC) 7.5.0
 #
 CONFIG_CC_IS_GCC=y
-CONFIG_GCC_VERSION=70301
+CONFIG_GCC_VERSION=70500
 CONFIG_CLANG_VERSION=0
 CONFIG_IRQ_WORK=y
 CONFIG_BUILDTIME_EXTABLE_SORT=y
@@ -1548,7 +1548,6 @@ CONFIG_MFD_CORE=y
 # CONFIG_MFD_AS3722 is not set
 # CONFIG_PMIC_ADP5520 is not set
 # CONFIG_MFD_AAT2870_CORE is not set
-# CONFIG_MFD_AT91_USART is not set
 # CONFIG_MFD_ATMEL_FLEXCOM is not set
 # CONFIG_MFD_ATMEL_HLCDC is not set
 # CONFIG_MFD_BCM590XX is not set
