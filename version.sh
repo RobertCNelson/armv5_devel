@@ -40,9 +40,9 @@ toolchain="gcc_7_arm"
 #toolchain="gcc_12_riscv64"
 
 #Kernel
-KERNEL_REL=5.1
+KERNEL_REL=5.2
 KERNEL_TAG=${KERNEL_REL}.21
-kernel_rt=".X-rtY"
+kernel_rt=".21-rt15"
 #Kernel Build
 BUILD=${build_prefix}1
 
