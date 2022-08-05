@@ -1,6 +1,6 @@
 #!/bin/sh -e
 #
-# Copyright (c) 2009-2018 Robert Nelson <robertcnelson@gmail.com>
+# Copyright (c) 2009-2021 Robert Nelson <robertcnelson@gmail.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -56,6 +56,7 @@ copy_defconfig () {
 
 make_menuconfig () {
 	cd "${DIR}/KERNEL" || exit
+	make ARCH=${KERNEL_ARCH} CROSS_COMPILE="${CC}" oldconfig
 	make ARCH=${KERNEL_ARCH} CROSS_COMPILE="${CC}" menuconfig
 	if [ ! -f "${DIR}/.yakbuild" ] ; then
 		cp -v .config "${DIR}/patches/defconfig"
@@ -82,21 +83,13 @@ make_deb () {
 	build_opts="${build_opts} KDEB_SOURCENAME=linux-upstream"
 
 	echo "-----------------------------"
-	if grep -q bindeb-pkg "${DIR}/KERNEL/scripts/package/Makefile"; then
-		echo "make ${build_opts} CROSS_COMPILE="${CC}" bindeb-pkg"
-		echo "-----------------------------"
-		fakeroot make ${build_opts} CROSS_COMPILE="${CC}" bindeb-pkg
-	else
-		echo "make ${build_opts} CROSS_COMPILE="${CC}" deb-pkg"
-		echo "-----------------------------"
-		fakeroot make ${build_opts} CROSS_COMPILE="${CC}" deb-pkg
-	fi
+	echo "make ${build_opts} CROSS_COMPILE="${CC}" bindeb-pkg"
+	echo "-----------------------------"
+	make ${build_opts} CROSS_COMPILE="${CC}" bindeb-pkg
 
+	mv "${DIR}"/*.buildinfo "${DIR}/deploy/" || true
 	mv "${DIR}"/*.changes "${DIR}/deploy/" || true
 	mv "${DIR}"/*.deb "${DIR}/deploy/" || true
-	mv "${DIR}"/*.debian.tar.gz "${DIR}/deploy/" || true
-	mv "${DIR}"/*.dsc "${DIR}/deploy/" || true
-	mv "${DIR}"/*.orig.tar.gz "${DIR}/deploy/" || true
 
 	KERNEL_UTS=$(cat "${DIR}/KERNEL/include/generated/utsrelease.h" | awk '{print $3}' | sed 's/\"//g' )
 
@@ -115,27 +108,6 @@ fi
 
 if [ ! -f "${DIR}/system.sh" ] ; then
 	cp -v "${DIR}/system.sh.sample" "${DIR}/system.sh"
-fi
-
-if [ -f "${DIR}/branches.list" ] ; then
-	echo "-----------------------------"
-	echo "Please checkout one of the active branches:"
-	echo "-----------------------------"
-	cat "${DIR}/branches.list" | grep -v INACTIVE
-	echo "-----------------------------"
-	exit
-fi
-
-if [ -f "${DIR}/branch.expired" ] ; then
-	echo "-----------------------------"
-	echo "Support for this branch has expired."
-	unset response
-	echo -n "Do you wish to bypass this warning and support your self: (y/n)? "
-	read response
-	if [ "x${response}" != "xy" ] ; then
-		exit
-	fi
-	echo "-----------------------------"
 fi
 
 unset CC
