@@ -10,6 +10,7 @@ branch_postfix=".x-imxv5"
 
 #arm
 KERNEL_ARCH=arm
+DEBARCH=armel
 #toolchain="gcc_linaro_eabi_4_8"
 #toolchain="gcc_linaro_eabi_4_9"
 #toolchain="gcc_linaro_eabi_5"
@@ -37,7 +38,7 @@ kernel_rt=".X-rtY"
 #Kernel Build
 BUILD=${build_prefix}6
 
-#v4.X-rcX + upto SHA
+#v5.X-rcX + upto SHA
 #prev_KERNEL_SHA=""
 #KERNEL_SHA=""
 
@@ -45,5 +46,4 @@ BUILD=${build_prefix}6
 BRANCH="${branch_prefix}${KERNEL_REL}${branch_postfix}"
 
 DISTRO=xross
-DEBARCH=armel
 #
