@@ -8,7 +8,7 @@ build_prefix="-imxv5-r"
 branch_prefix="v"
 branch_postfix=".x-imxv5"
 
-#https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/Documentation/process/changes.rst?h=v5.15-rc1
+#https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/Documentation/process/changes.rst?h=v5.16-rc1
 #arm
 KERNEL_ARCH=arm
 DEBARCH=armel
@@ -40,9 +40,9 @@ toolchain="gcc_11_arm"
 #toolchain="gcc_12_riscv64"
 
 #Kernel
-KERNEL_REL=5.15
-KERNEL_TAG=${KERNEL_REL}.55
-kernel_rt=".55-rt48"
+KERNEL_REL=5.16
+KERNEL_TAG=${KERNEL_REL}.20
+kernel_rt=".2-rt19"
 #Kernel Build
 BUILD=${build_prefix}1
 
